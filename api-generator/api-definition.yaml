@@ -1,0 +1,33 @@
+openapi: 3.0.3
+info:
+  title: WadLoader3Api
+  description: WadLoader3Api
+  version: 1.0.0
+servers:
+  - url: 'localhost:8080'
+paths:
+  /hello/{name}:
+    get:
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Hello Response"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloDto'
+components:
+  schemas:
+    HelloDto:
+      type: object
+      properties:
+        name:
+          type: string
+        greeting:
+          type: string
+

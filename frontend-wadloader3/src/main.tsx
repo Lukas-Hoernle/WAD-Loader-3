@@ -8,11 +8,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { HelloPage } from "./components/HelloPage.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/test" element={<App />}>
-      <Route path="hello" element={<p>Hello World</p>} />
+    <Route path="/" element={<App />}>
+      <Route path="hello/:name" element={<HelloPage />} />
     </Route>
   )
 );
