@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.4.0",
+    "generators": {
+      "typescript-fetch": {
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/ts-client-api",
+        "glob": "api-definition.yaml",
+        "additionalProperties": {
+          "supportsES6": true,
+          "npmName": "wadloader3-api"
+        }
+      },
+      "spring-api-interface": {
+        "generatorName": "spring",
+        "output": "#{cwd}/spring-api-interface",
+        "glob": "api-definition.yaml",
+        "additionalProperties": {
+          "groupId": "com.luma",
+          "title": "wadloader3-api",
+          "artifactId": "wadloader3-api",
+          "basePackage": "com.luma",
+          "configPackage": "com.luma.configuration",
+          "apiPackage": "com.luma.api",
+          "invokerPackage": "com.luma.api",
+          "modelPackage": "com.luma.model",
+          "additionalModelTypeAnnotations": "@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor",
+          "skipDefaultInterface": true,
+          "interfaceOnly": true,
+          "useSpringBoot3": true
+        }
+      }
+    }
+  }
+}

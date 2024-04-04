@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.1"
+  },
+  "scripts": {
+    "generate": "npx openapi-generator-cli generate",
+    "update-client": "cd .\\ts-client-api && npm install && yalc publish",
+    "update-backend": "cd .\\spring-api-interface && mvn clean install pom.xml",
+    "update": "npm run update-client && npm run update-backend"
+  }
+}
