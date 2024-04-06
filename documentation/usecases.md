@@ -1,9 +1,17 @@
 # Detaillierte Problemstellung
 * Multiplayer Doom Spielen mit Mods ist schwierig weil:
-    * Jeder braucht alle Mods
+    * Jeder braucht alle Mods (gleiche Version)
     * Jeder muss die selben Mods in der gleichen Reihenfolge haben
     * Keine standardtisierte Lösung
-    * clientseitige Software Optional => kein lokaler install notwendig
+
+* Das verwalten vieler .wad-Dateinen ist unkonfortabel
+   * viele Dateien in einem Ordner order verteiltet auf mehrere Ordner: unübersichtlich
+   * manche Mods funktionieren nur zusammen mit anderen
+   * um mehrere Mods zu starten müssen diese als Kommandozeilenparameter der Doom-Engine übergeben werden
+      * gewissen technisches Verständniss notwendig
+      * nicht konfortabel
+   * man muss sich merken, welche Mods für welchen Speicherstand benötigt werden
+    
 
 # Use Cases
 * .wad Dateien Archiv (upload/download wads)
