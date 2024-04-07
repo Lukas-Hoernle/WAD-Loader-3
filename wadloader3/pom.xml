@@ -22,9 +22,14 @@
 			<artifactId>wadloader3-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<groupId>com.luma</groupId>
+			<artifactId>wadloader3-api</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 <!--		TODO add spring security-->
 <!--		TODO enable cors for localhost 5173 and 8080-->
@@ -49,6 +54,9 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+<!--		TODO enable cors for localhost 5173 and 8080-->
+<!--		TODO add login etc-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
