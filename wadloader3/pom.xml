@@ -34,7 +34,6 @@
 <!--		TODO add spring security-->
 <!--		TODO enable cors for localhost 5173 and 8080-->
 <!--		TODO add login etc-->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -54,8 +53,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-<!--		TODO enable cors for localhost 5173 and 8080-->
-<!--		TODO add login etc-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,10 +60,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+			<groupId>com.okta.spring</groupId>
+			<artifactId>okta-spring-boot-starter</artifactId>
+			<version>3.0.6</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
