@@ -3,21 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import {
-  Route,
-  RouterProvider,
-  createHashRouter,
-  createRoutesFromElements,
+    Route,
+    RouterProvider,
+    createRoutesFromElements, createBrowserRouter,
 } from "react-router-dom";
-import { HelloPage } from "./components/HelloPage.tsx";
 
-import { Auth0ProviderWithNavigate } from "./components/Auth0ProviderWithNavigate.tsx";
-
-const router = createHashRouter(
+const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Auth0ProviderWithNavigate />}>
-      <Route path="hello/" element={<App />}>
-        <Route path=":name" element={<HelloPage />} />
-      </Route>
+    <Route path="/" element={<App/>}>
     </Route>
   )
 );
