@@ -50,9 +50,10 @@ A(Upload WAD UC) --> B(click ''create WAD-pack'')
     C --> Z
     Z --> C
     C --> X(Change order of wads) 
-    C --> D(name .wad-pack) 
+    C --> D(enter name and description .wad-pack) 
     X --> D
-    D --> Y(select Iwad to use)
+    D --> P(select Iwad to use)
+    P --> Y(persist wadpack)
     Y --> E(get link to wadpack)
 ```
 
@@ -79,6 +80,7 @@ A(Open WadLoader) --> B(select ''wad-pack search'')
 
 # Muss-/Kann-kriterien
 * Muss Disclaimer haben, dass nur Mods mit allen Rechten hochgleaden werden dürfen
+* Optional Kommentare und Ranking System für WadPacks
 * Rest: siehe Use Cases
 
 # Technologieauswahl
