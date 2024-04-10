@@ -7,10 +7,12 @@ import {
     RouterProvider,
     createRoutesFromElements, createBrowserRouter,
 } from "react-router-dom";
+import { ShowElement } from "./components/ShowElement.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App/>}>
+      <Route path="/show/:id" element={<ShowElement />}/>
     </Route>
   )
 );
