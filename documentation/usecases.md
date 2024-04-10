@@ -33,13 +33,6 @@ A(open WadLoader3) -->B(Enter Name and Password for new User)
     B --> C(Create User)
 ```
 
-## Upload File UC
-```mermaid
-graph
-A(Login) -->B(Upload Wad from\nlocal FileSystem)
-    B --> C(Edit Name)
-```
-
 ## Upload WAD UC
 ```mermaid
 graph
