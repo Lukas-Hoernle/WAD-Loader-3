@@ -11,7 +11,7 @@ export function HelloPage() {
 
   useEffect(() => {
     console.log("Test");
-    api.helloNameGet({ name: name ?? "unkonwn" }).then(setGreeting);
+    api.helloApiNameGet({ name: name ?? "unkonwn" }).then(setGreeting);
   }, [api, name]);
 
   return <p>1{greeting && `${greeting.greeting} ${greeting.name}`}</p>;

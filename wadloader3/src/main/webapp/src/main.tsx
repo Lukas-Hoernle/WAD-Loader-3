@@ -5,15 +5,19 @@ import "./index.css";
 import {
   Route,
   RouterProvider,
-  createBrowserRouter,
+  createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
 import { HelloPage } from "./components/HelloPage.tsx";
+import { Login } from "./components/Login.tsx";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route path="hello/:name" element={<HelloPage />} />
+    <Route path="/">
+      <Route path="login" element={<Login />} />
+      <Route path="hello" element={<App />}>
+        <Route path=":name" element={<HelloPage />} />
+      </Route>
     </Route>
   )
 );

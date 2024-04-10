@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
-public class HelloController implements HelloApi {
+@CrossOrigin(origins = "https://localhost:3000")
+public class HelloController implements HelloApi  {
 
     @Override
-    public ResponseEntity<HelloDto> helloNameGet(String name) {
+    public ResponseEntity<HelloDto> helloApiNameGet(String name) {
 
         System.out.println(name);
 
         List<String> answers = List.of("Hallo", "Moin", "Servus");
         String response = answers.get((int) Math.round(Math.random() * 3));
-        return ResponseEntity.ok(HelloDto.builder().name(name).greeting(response).build());
+        return ResponseEntity.ok(new HelloDto(name, response));
     }
 }

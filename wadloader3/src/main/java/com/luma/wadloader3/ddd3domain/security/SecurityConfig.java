@@ -26,13 +26,13 @@ public class SecurityConfig {
         http
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.addAllowedOrigin("http://localhost:5173");
+                    corsConfiguration.addAllowedOrigin("http://localhost:3000");
                     return corsConfiguration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login", "/user/new").permitAll()
+                        .requestMatchers("/login", "/api/user/new").permitAll()
                         .anyRequest().authenticated()
                 ).authenticationProvider(authenticationProvider);
 

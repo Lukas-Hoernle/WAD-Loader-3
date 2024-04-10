@@ -8,16 +8,18 @@ import com.luma.wadloader3api.model.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://localhost:3000")
 public class UserController implements UserApi {
 
     private final UserRepo userRepo;
 
     @Override
-    public ResponseEntity<UserDto> userNewPost(@Valid NewUserDto newUserDto) {
+    public ResponseEntity<UserDto> userApiNewPost(@Valid NewUserDto newUserDto) {
         if (userRepo.existsByUsername(newUserDto.getName())) {
             return ResponseEntity.badRequest().build();
         }

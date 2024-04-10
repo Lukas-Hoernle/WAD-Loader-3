@@ -6,7 +6,23 @@ info:
 servers:
   - url: 'localhost:8080'
 paths:
-  /hello/{name}:
+  /user/api/new:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewUserDto"
+      responses:
+        201:
+          description: "A new User was created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        400:
+          description: "No User was created"
+  /hello/api/{name}:
     get:
       parameters:
         - name: name
@@ -15,7 +31,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        200:
           description: "Hello Response"
           content:
             application/json:
@@ -23,8 +39,28 @@ paths:
                 $ref: '#/components/schemas/HelloDto'
 components:
   schemas:
+    NewUserDto:
+      type: object
+      required:
+        - name
+        - password
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    UserDto:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
     HelloDto:
       type: object
+      required:
+        - name
+        - greeting
       properties:
         name:
           type: string

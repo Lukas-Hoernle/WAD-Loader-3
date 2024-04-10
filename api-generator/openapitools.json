@@ -26,7 +26,7 @@
           "apiPackage": "com.luma.wadloader3api.api",
           "invokerPackage": "com.luma.wadloader3api.api",
           "modelPackage": "com.luma.wadloader3api.model",
-          "additionalModelTypeAnnotations": "@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor",
+          "additionalModelTypeAnnotations": "@lombok.Builder;@lombok.NoArgsConstructor",
           "skipDefaultInterface": true,
           "interfaceOnly": true,
           "useSpringBoot3": true
