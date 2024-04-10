@@ -24,15 +24,16 @@
 * Download von einzelnen Dateien oder ganzen WadPacks
 * Erstellen von Shell-Kommando zum Starten von Wads
 * Optional start von Wads oder Wadspacks über lokalen handler
-# Use Cases# Usecase Upload File
+# Use Cases
 ## Create User UC
+
 ```mermaid
 graph
 A(open WadLoader3) -->B(Enter Name and Password for new User)
     B --> C(Create User)
 ```
 
-## Login UC
+## Upload File UC
 ```mermaid
 graph
 A(Login) -->B(Upload Wad from\nlocal FileSystem)
