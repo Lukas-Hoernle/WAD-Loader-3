@@ -28,7 +28,9 @@ replay_pid*
 /frontend-wadloader3/.yalc/
 /api-generator/package-lock.json
 /frontend-wadloader3/yalc.lock
-/db/
-/wadloader3/yalc.lock
+/wadloader3/.vite/
 /wadloader3/.yalc/
+/wadloader3/node_modules/
 /wadloader3/src/main/resources/application-local.properties
+/wadloader3/yalc.lock
+/db/
