@@ -12,6 +12,7 @@ import { ShowElement } from "./components/ShowElement.tsx";
 import { NewMessagePage } from "./components/NewMessagePage.tsx";
 import { CookiesProvider } from "react-cookie";
 import { LoginLayout } from "./components/LoginLayout.tsx";
+import { DefaultApiCallsPage } from "./components/DefaultApiCallsPage.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/entry" element={<div/>}/>
       <Route path="/show/:id" element={<ShowElement />} />
       <Route path="/new" element={<NewMessagePage />} />
+      <Route path="/test" element={<DefaultApiCallsPage />}/>
     </Route>
   )
 );

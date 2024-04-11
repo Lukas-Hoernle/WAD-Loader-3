@@ -32,7 +32,7 @@ export function LoginLayout({ children }: PropsWithChildren) {
       port = ":8080";
     }
     // redirect to a protected URL to trigger authentication
-    window.location.href = `//${window.location.hostname}${port}/api/private`;
+    window.location.href = `//${window.location.hostname}${port}/api`;
   };
 
   if (loading) {

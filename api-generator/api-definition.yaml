@@ -4,9 +4,9 @@ info:
   description: WadLoader3Api
   version: 1.0.0
 servers:
-  - url: 'localhost:8080'
+  - url: "http://localhost:8080"
 paths:
-  /user/api/new:
+  /api/user/new:
     post:
       requestBody:
         content:
@@ -22,7 +22,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
         400:
           description: "No User was created"
-  /hello/api/{name}:
+  /api/hello/{name}:
     get:
       parameters:
         - name: name
