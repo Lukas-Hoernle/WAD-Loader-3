@@ -6,19 +6,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
-
-@Entity
-@AllArgsConstructor
-@Builder
-@Table(name = "Users")
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
+@Builder
 public class User {
-    @Id
-    @Column(name = "username")
-    private String username;
 
-    @Column(name = "password")
-    private String password;
+    @Id
+    @Column(name = "id")
+    private String id;
+
+    @Column(name = "name")
+    private String name;
+
 }

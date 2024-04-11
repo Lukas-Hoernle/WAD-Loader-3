@@ -31,3 +31,4 @@ replay_pid*
 /db/
 /wadloader3/yalc.lock
 /wadloader3/.yalc/
+/wadloader3/src/main/resources/application-local.properties

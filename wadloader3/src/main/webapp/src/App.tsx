@@ -3,13 +3,16 @@ import "./App.css";
 import { Outlet } from "react-router-dom";
 
 function App() {
+
   const [messages, setMessages] = useState<{ id: number; message: string }[]>([]);
   const [loading, setLoading] = useState(false);
+
+
 
   useEffect(() => {
     setLoading(true);
 
-    fetch("api/messages")
+    fetch("/api/messages")
       .then((response) => response.json())
       .then((data) => {
         setMessages(data);
@@ -18,7 +21,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Loading.1..</p>;
   }
 
   return (
