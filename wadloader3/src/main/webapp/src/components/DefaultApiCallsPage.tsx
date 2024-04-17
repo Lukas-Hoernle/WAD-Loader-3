@@ -13,7 +13,7 @@ export function DefaultApiCallsPage() {
     api
       .apiHelloNameGet({ name: "my-test-name" })
       .then((res) => setGreeting(res));
-  }, [cookies]);
+  }, [cookies, api]);
 
   return greeting ? (
     <p>

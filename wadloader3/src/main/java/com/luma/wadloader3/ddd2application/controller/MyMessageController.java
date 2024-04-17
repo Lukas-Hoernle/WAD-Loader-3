@@ -2,7 +2,6 @@ package com.luma.wadloader3.ddd2application.controller;
 
 import com.luma.wadloader3.ddd3domain.model.MyMessage;
 import com.luma.wadloader3.ddd3domain.repository.MyMessageRepo;
-import com.luma.wadloader3.ddd3domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
