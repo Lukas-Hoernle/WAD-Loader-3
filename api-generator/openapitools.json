@@ -8,6 +8,9 @@
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/ts-client-api",
         "glob": "api-definition.yaml",
+        "global-property": {
+          "skipFormModel": false
+        },
         "additionalProperties": {
           "supportsES6": true,
           "npmName": "wadloader3-api"
@@ -17,6 +20,9 @@
         "generatorName": "spring",
         "output": "#{cwd}/spring-api-interface",
         "glob": "api-definition.yaml",
+        "global-property": {
+          "skipFormModel": false
+        },
         "additionalProperties": {
           "groupId": "com.luma",
           "title": "wadloader3-api",
