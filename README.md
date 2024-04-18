@@ -2,6 +2,27 @@
 
 Monorepo for online Doom-Wad Management System.
 
+## Todos
+
+Backend:
+* implement Api on the Server
+   * delegate logic in ApiController to WadPackService and WadService
+* implement logic
+* create endpoint to download WadPack
+* create Command to start and unzip wadpack
+* create endpoint to register new user
+
+Frontend:
+*  create "Upload-Wad" Page
+*  create "Edit Wad" Page 
+*  create "Create WadPack" Page
+*  create "Edit WadPack" Page
+*  create "Download" Page (one Page for Wads and WadPacks should be sufficient)
+*  create "New User Page"
+
+Api:
+* create DTO for Userregistration
+
 ## Setup
 
 Necessary setup to run the program.
