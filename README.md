@@ -7,7 +7,6 @@ Monorepo for online Doom-Wad Management System.
 Backend:
 * implement Api on the Server
    * delegate logic in ApiController to WadPackService and WadService
-* implement logic
 * create endpoint to download WadPack
 * create Command to start and unzip wadpack
 
@@ -16,7 +15,15 @@ Frontend:
 *  create "Edit Wad" Page 
 *  create "Create WadPack" Page
 *  create "Edit WadPack" Page
-*  create "Download" Page (one Page for Wads and WadPacks should be sufficient)
+*  create "Search/Download" Page (one Page for Wads and WadPacks at once should be sufficient)
+  * this page needs a search function for Wads/WadPacks
+    * based on the name
+    * based on the description    
+
+Optional:
+* Possibility to add Tags to Wads and WadPacks
+  * Wads/WadPacks should then be searchable by these packs
+* Comments for Wads/WadPacks 
 
 ## Setup
 
