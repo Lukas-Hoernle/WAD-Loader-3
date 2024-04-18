@@ -6,64 +6,168 @@ info:
 servers:
   - url: "http://localhost:8080"
 paths:
-  /api/user/new:
+  /api/wad:
     post:
+      description: "Create a new Wad"
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: "#/components/schemas/NewUserDto"
+              $ref: "#/components/schemas/NewWadDto"
       responses:
         201:
-          description: "A new User was created"
+          description: "Uploaded new Wad"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDto'
+                $ref: '#/components/schemas/WadDto'
         400:
-          description: "No User was created"
-  /api/hello/{name}:
+          description: "No Wad uploaded"
+  /api/wad/{id}:
     get:
+      description: "Get Wad by id"
       parameters:
-        - name: name
+        - name: id
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
-          description: "Hello Response"
+          description: "The Wad with 'id' id"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HelloDto'
+                $ref: '#/components/schemas/WadDto'
+  /api/wadpack:
+    post:
+      description: "Create a new WadPack"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewWadPackDto"
+      responses:
+        201:
+          description: "Created new WadPack"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WadPackDto'
+        400:
+          description: "No WadPack created"
+  /api/wadpack/{id}:
+    get:
+      description: "Get WadPack by id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "The WadPack with 'id' id"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WadPackDto'
+    delete:
+      description: "Delete a WadPack"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: "Deleted WadPack with 'id' id"
+        400:
+          description: "WadPack not deleted"
+    put:
+      description: "Update a WadPack"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "the updated WadPack"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWadPackDto'
+      responses:
+        200:
+          description: "Updated the WadPack"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WadPackDto'
 components:
   schemas:
-    NewUserDto:
+    WadDto:
       type: object
       required:
+        - id
         - name
-        - password
+        - description
       properties:
         name:
           type: string
-        password:
+        description:
           type: string
-    UserDto:
+        id:
+          type: integer
+    WadPackDto:
       type: object
       required:
         - name
+        - description
+        - wads
+        - id
       properties:
+        id:
+          type: integer
         name:
           type: string
-    HelloDto:
+        description:
+          type: string
+        wads:
+          type: array
+          items:
+            $ref: '#/components/schemas/WadDto'
+    NewWadPackDto:
       type: object
       required:
         - name
-        - greeting
+        - description
+        - wads
       properties:
         name:
           type: string
-        greeting:
+        description:
           type: string
-
+        wads:
+          type: array
+          items:
+            $ref: '#/components/schemas/WadDto'
+    NewWadDto:
+      type: object
+      required:
+        - name
+        - description
+        - file
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        file:
+          type: string
+          format: binary

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Configuration, DefaultApi } from "wadloader3-api";
 
 export function useApi() {
-  const api = useMemo(
+  return useMemo(
     () =>
       new DefaultApi(
         new Configuration({
@@ -14,6 +14,4 @@ export function useApi() {
       ),
     []
   );
-
-  return api;
 }
