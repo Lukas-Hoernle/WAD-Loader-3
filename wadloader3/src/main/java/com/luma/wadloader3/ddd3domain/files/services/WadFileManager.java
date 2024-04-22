@@ -7,9 +7,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * FileManager for WadFiles.
- * */
+ */
 public interface WadFileManager {
+    /**
+     * @param wadName the name of the wad
+     * @param wadFile the wad as a file
+     * @return {@link Either}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the saved file as
+     * {@link Either.Left} or the reason why the file could not be saved as {@link Either.Right}.
+     */
     Either<ErrorMessage, FilePath> saveFile(String wadName, MultipartFile wadFile);
 
+    /**
+     * @param name the name of the wad/file to get the path for.
+     * @return {@link Either}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the file as
+     * {@link Either.Left} or the reason why the file could not be found as {@link Either.Right}.
+     */
     Either<ErrorMessage, FilePath> findFileByName(String name);
 }
