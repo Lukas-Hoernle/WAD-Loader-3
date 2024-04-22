@@ -5,10 +5,21 @@ info:
   version: 1.0.0
 servers:
   - url: "http://localhost:8080"
+tags:
+  - name:
+      wadpack
+    description:
+      api managing wadpacks
+  - name:
+      wad
+    description:
+      api managing wads
 paths:
   /wad:
     post:
       description: "Create a new Wad"
+      tags:
+        - wad
       requestBody:
         required: true
         content:
@@ -27,6 +38,8 @@ paths:
   /wad/{id}:
     get:
       description: "Get Wad by id"
+      tags:
+        - wad
       parameters:
         - name: id
           in: path
@@ -43,6 +56,8 @@ paths:
   /wadpack:
     post:
       description: "Create a new WadPack"
+      tags:
+        - wadpack
       requestBody:
         required: true
         content:
@@ -61,6 +76,8 @@ paths:
   /wadpack/{id}:
     get:
       description: "Get WadPack by id"
+      tags:
+        - wadpack
       parameters:
         - name: id
           in: path
@@ -76,6 +93,8 @@ paths:
                 $ref: '#/components/schemas/WadPackDto'
     delete:
       description: "Delete a WadPack"
+      tags:
+        - wadpack
       parameters:
         - name: id
           in: path
@@ -89,6 +108,8 @@ paths:
           description: "WadPack not deleted"
     put:
       description: "Update a WadPack"
+      tags:
+        - wadpack
       parameters:
         - name: id
           in: path
