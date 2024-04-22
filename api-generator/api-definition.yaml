@@ -16,7 +16,7 @@ paths:
             schema:
               $ref: "#/components/schemas/NewWadDto"
       responses:
-        201:
+        200:
           description: "Uploaded new Wad"
           content:
             application/json:
@@ -50,7 +50,7 @@ paths:
             schema:
               $ref: "#/components/schemas/NewWadPackDto"
       responses:
-        201:
+        200:
           description: "Created new WadPack"
           content:
             application/json:
