@@ -6,7 +6,7 @@ info:
 servers:
   - url: "http://localhost:8080"
 paths:
-  /api/wad:
+  /wad:
     post:
       description: "Create a new Wad"
       requestBody:
@@ -24,7 +24,7 @@ paths:
                 $ref: '#/components/schemas/WadDto'
         400:
           description: "No Wad uploaded"
-  /api/wad/{id}:
+  /wad/{id}:
     get:
       description: "Get Wad by id"
       parameters:
@@ -40,7 +40,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WadDto'
-  /api/wadpack:
+  /wadpack:
     post:
       description: "Create a new WadPack"
       requestBody:
@@ -58,7 +58,7 @@ paths:
                 $ref: '#/components/schemas/WadPackDto'
         400:
           description: "No WadPack created"
-  /api/wadpack/{id}:
+  /wadpack/{id}:
     get:
       description: "Get WadPack by id"
       parameters:
