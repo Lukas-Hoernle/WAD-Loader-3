@@ -1,4 +1,4 @@
-package com.luma.wadloader3.ddd3domain.model;
+package com.luma.wadloader3.ddd3domain.wad.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +16,7 @@ public class WadPack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(name = "name")
     private String name;
