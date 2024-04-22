@@ -18,10 +18,17 @@ public class SpaWebFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if (user != null && !path.startsWith("/api") && !path.contains(".") && path.matches("/(.*)")) {
+        if (user != null
+                && !backendPath(path)
+                && !path.contains(".")
+                && path.matches("/(.*)")) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean backendPath(String path) {
+        return path.startsWith("/wad") || path.startsWith("/wadpack") || path.startsWith("/api");
     }
 }

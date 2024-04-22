@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "^/api": {
+      "^/(wad|wadpack|api)": {
         target: "http://localhost:8080",
         changeOrigin: true,
       },
