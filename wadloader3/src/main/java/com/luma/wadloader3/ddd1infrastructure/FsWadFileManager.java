@@ -4,7 +4,7 @@ import com.luma.wadloader3.ddd3domain.files.model.FilePath;
 import com.luma.wadloader3.ddd3domain.files.services.WadFileManager;
 import com.luma.wadloader3.ddd4abstraction.functional.Either;
 import com.luma.wadloader3.ddd4abstraction.functional.ErrorMessage;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,18 +15,10 @@ import java.nio.file.Paths;
 /**
  * File manager implementation using the local users filesystem
  */
-@Service
+@RequiredArgsConstructor
 public class FsWadFileManager implements WadFileManager {
 
     private final Path rootDir;
-
-    public FsWadFileManager() {
-        String baseDir = System.getenv("appdata");
-
-        if (baseDir == null) throw new RuntimeException("envar appdata is not set");
-
-        rootDir = Paths.get(baseDir, "WadLoader3-server");
-    }
 
     @Override
     public Either<ErrorMessage, FilePath> saveFile(String wadName, MultipartFile wadFile) {
