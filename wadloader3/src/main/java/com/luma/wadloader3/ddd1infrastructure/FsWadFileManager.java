@@ -24,13 +24,15 @@ public class FsWadFileManager implements WadFileManager {
     public Either<ErrorMessage, FilePath> saveFile(String wadName, MultipartFile wadFile) {
         File file = fileByName(wadName);
 
-        if(file.exists()) return new Either.Left<>(new ErrorMessage("File already exists"));
+        if (file.exists()) return new Either.Left<>(new ErrorMessage("File already exists"));
+        if (!rootDir.toFile().exists() && !rootDir.toFile().mkdirs())
+            return new Either.Left<>(new ErrorMessage("Root directory '%s' could not be created".formatted(rootDir)));
 
         try {
             wadFile.transferTo(file);
             return new Either.Right<>(new FilePath(file.getAbsolutePath()));
         } catch (IOException e) {
-            return new Either.Left<>(new ErrorMessage(e.getMessage()));
+            return new Either.Left<>(new ErrorMessage("Error while saving file: " + e.getMessage()));
         }
     }
 
@@ -48,6 +50,6 @@ public class FsWadFileManager implements WadFileManager {
     }
 
     private String fileName(String fileName) {
-        return "%s-%d".formatted(fileName, fileName.hashCode());
+        return "Wad%d-%s".formatted(fileName.hashCode(), fileName);
     }
 }
