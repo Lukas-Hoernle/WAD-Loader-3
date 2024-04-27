@@ -4,8 +4,7 @@ import com.luma.wadloader3.ddd3domain.files.model.FilePath;
 import com.luma.wadloader3.ddd3domain.files.services.WadFileManager;
 import com.luma.wadloader3.ddd3domain.wad.model.Wad;
 import com.luma.wadloader3.ddd3domain.wad.repos.WadRepo;
-import com.luma.wadloader3.ddd4abstraction.functional.Either;
-import com.luma.wadloader3.ddd4abstraction.functional.ErrorMessage;
+import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import com.luma.wadloader3api.api.WadApi;
 import com.luma.wadloader3api.model.WadDto;
 import jakarta.validation.Valid;
@@ -36,7 +35,7 @@ public class WadController implements WadApi {
         if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
 
         return switch (fileManager.saveFile(name, file)) {
-            case Either.Right(FilePath filePath) -> {
+            case Failable.Success(FilePath filePath) -> {
                 Wad wad = Wad.builder()
                         .description(description)
                         .name(name)
@@ -46,8 +45,8 @@ public class WadController implements WadApi {
                 wad = wadRepo.save(wad);
                 yield ResponseEntity.ok(fromWad(wad));
             }
-            case Either.Left(ErrorMessage error) -> {
-                System.out.println(error.error());
+            case Failable.Failure(String error) -> {
+                System.out.println(error);
                 yield ResponseEntity.badRequest().build();
             }
         };

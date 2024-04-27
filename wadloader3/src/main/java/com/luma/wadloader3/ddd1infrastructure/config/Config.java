@@ -11,11 +11,11 @@ import java.nio.file.Paths;
 public class Config {
 
     @Bean
-    public WadFileManager wadFileManager() {
+    public WadFileManager wadFileManager(AllowedFileExtension allowedFileExtension) {
         // hint use other dir for testing
         String appdataDir = System.getenv("appdata");
         if(appdataDir == null) throw new RuntimeException("Envar appdata is not set");
 
-        return new FsWadFileManager(Paths.get(appdataDir, "WadLoader3-server"));
+        return new FsWadFileManager(Paths.get(appdataDir, "WadLoader3-server"), allowedFileExtension);
     }
 }
