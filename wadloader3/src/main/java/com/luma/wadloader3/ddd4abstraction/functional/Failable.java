@@ -71,10 +71,28 @@ public sealed interface Failable<T> {
      * @param <R>   the returntype of f
      * @return returns the result of applying f to this and other or any {@link Failure} in this or other.
      */
-    default <T2, R> Failable<R> combine(BiFunction<T, T2, R> f, Failable<T2> other) {
+    default <T2, R> Failable<R> combine(Failable<T2> other, BiFunction<T, T2, R> f) {
         return switch (this) {
             case Success<T> success -> other.map(((T2 v) -> f.apply(success.value, v)));
             case Failure<T> failure -> failure.coerce();
         };
+    }
+
+    default Failable<T> join(Failable<Failable<T>> nested) {
+        return switch (nested) {
+            case Success<Failable<T>> success -> success.value;
+            case Failure<Failable<T>> failure -> failure.coerce();
+        };
+    }
+
+    default T orElse(T alternative) {
+        return switch (this) {
+            case Success<T> (T value) -> value;
+            case Failure<T> ignored -> alternative;
+        };
+    }
+
+    static <T> Failable<T> fromOptional(Optional<T> optional, String error) {
+        return optional.<Failable<T>>map(Success::new).orElse(new Failure<>(error));
     }
 }

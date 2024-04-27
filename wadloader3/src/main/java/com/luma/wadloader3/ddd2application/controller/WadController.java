@@ -1,5 +1,6 @@
 package com.luma.wadloader3.ddd2application.controller;
 
+import com.luma.wadloader3.ddd2application.controller.mappers.WadMapper;
 import com.luma.wadloader3.ddd3domain.files.model.FilePath;
 import com.luma.wadloader3.ddd3domain.files.services.WadFileManager;
 import com.luma.wadloader3.ddd3domain.wad.model.Wad;
@@ -21,11 +22,12 @@ public class WadController implements WadApi {
 
     private final WadRepo wadRepo;
     private final WadFileManager fileManager;
+    private final WadMapper wadMapper;
 
     @Override
     public ResponseEntity<WadDto> wadIdGet(Integer id) {
         Optional<Wad> wad = wadRepo.findById(id);
-        return wad.map(this::fromWad)
+        return wad.map(wadMapper::map)
                 .map(ResponseEntity::ok)
                 .orElseGet(ResponseEntity.badRequest()::build);
     }
@@ -43,20 +45,12 @@ public class WadController implements WadApi {
                         .build();
 
                 wad = wadRepo.save(wad);
-                yield ResponseEntity.ok(fromWad(wad));
+                yield ResponseEntity.ok(wadMapper.map(wad));
             }
             case Failable.Failure(String error) -> {
                 System.out.println(error);
                 yield ResponseEntity.badRequest().build();
             }
         };
-    }
-
-    private WadDto fromWad(Wad wad) {
-        return WadDto.builder()
-                .id(wad.getId())
-                .name(wad.getName())
-                .description(wad.getDescription())
-                .build();
     }
 }
