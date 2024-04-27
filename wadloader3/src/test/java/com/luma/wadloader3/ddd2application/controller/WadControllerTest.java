@@ -49,7 +49,7 @@ class WadControllerTest {
         File f = new File("src/test/resources/testwad.pk3");
         MultipartFile multipartFile = new MockMultipartFile("testwad.pk3", new FileInputStream(f));
 
-        String name = "mywad";
+        String name = "mywad.pk3";
         String description = "random description";
 
         WadDto wadDto = wadController.wadPost(name, description, multipartFile).getBody();
@@ -58,6 +58,7 @@ class WadControllerTest {
         assertEquals(name, wadDto.getName());
         assertEquals(description, wadDto.getDescription());
 
+        //cleanup
         try (Stream<Path> files = Files.walk(Path.of(TEST_WAD_SAVE_DIR))) {
             files.forEach(path -> path.toFile().delete());
         }

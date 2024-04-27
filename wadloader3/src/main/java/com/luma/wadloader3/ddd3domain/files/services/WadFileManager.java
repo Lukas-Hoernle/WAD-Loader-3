@@ -1,8 +1,8 @@
 package com.luma.wadloader3.ddd3domain.files.services;
 
 import com.luma.wadloader3.ddd3domain.files.model.FilePath;
-import com.luma.wadloader3.ddd4abstraction.functional.Either;
 import com.luma.wadloader3.ddd4abstraction.functional.ErrorMessage;
+import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -12,15 +12,15 @@ public interface WadFileManager {
     /**
      * @param wadName the name of the wad
      * @param wadFile the wad as a file
-     * @return {@link Either}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the saved file as
-     * {@link Either.Left} or the reason why the file could not be saved as {@link Either.Right}.
+     * @return {@link Failable}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the saved file as
+     * {@link Failable.Failure} or the reason why the file could not be saved as {@link Failable.Success}.
      */
-    Either<ErrorMessage, FilePath> saveFile(String wadName, MultipartFile wadFile);
+   Failable<FilePath> saveFile(String wadName, MultipartFile wadFile);
 
     /**
      * @param name the name of the wad/file to get the path for.
-     * @return {@link Either}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the file as
-     * {@link Either.Left} or the reason why the file could not be found as {@link Either.Right}.
+     * @return {@link Failable}<{@link ErrorMessage}, {@link FilePath}> containing either the path to the file as
+     * {@link Failable.Failure} or the reason why the file could not be found as {@link Failable.Success}.
      */
-    Either<ErrorMessage, FilePath> findFileByName(String name);
+    Failable<FilePath> findFileByName(String name);
 }
