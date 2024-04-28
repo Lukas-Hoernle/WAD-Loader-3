@@ -5,10 +5,8 @@ Monorepo for online Doom-Wad Management System.
 ## Todos
 
 Backend:
-* implement Api on the Server
-   * delegate logic in ApiController to WadPackService and WadService
-* create endpoint to download WadPack
-* create Command to start and unzip wadpack
+* create endpoint to download WadPack/Wads
+* create link to start handler
 
 Frontend:
 *  create "Upload-Wad" Page
@@ -20,6 +18,18 @@ Frontend:
     * based on the name
     * based on the description    
 
+Client-Handler:
+* write cmd/powershell script to register as handler on custom protocol
+* consume DownloadApi
+  * save wads in files with their id
+* add start parameters for
+  * path of the GZDoom
+  * path to local IWAD
+  * ids of all necessary wads (in load-order)
+* write function to start background process to start doom
+  * download all missing wads
+  * execute
+  
 Optional:
 * Possibility to add Tags to Wads and WadPacks
   * Wads/WadPacks should then be searchable by these packs
