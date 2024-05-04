@@ -58,7 +58,7 @@ public class WadPackController implements WadpackApi {
 
                 return ResponseEntity.ok(wadPackMapper.map(wadPack));
             }
-            case Failable.Failure(String error) -> {
+            case Failable.Failure(List<String> error) -> {
                 System.err.println(error);
                 return ResponseEntity.badRequest().build();
             }
@@ -81,7 +81,7 @@ public class WadPackController implements WadpackApi {
             case Failable.Success<WadPackDto>(WadPackDto wadPackDto) -> {
                 return ResponseEntity.ok(wadPackDto);
             }
-            case Failable.Failure(String error) -> {
+            case Failable.Failure(List<String> error) -> {
                 System.err.println(error);
                 return ResponseEntity.badRequest().build();
             }
@@ -94,7 +94,7 @@ public class WadPackController implements WadpackApi {
 
 
         if (wads.size() < wadIds.size()) {
-            return new Failable.Failure<>("Not all WadIds found. expected: %s but found %s".formatted(
+            return Failable.Failure.of("Not all WadIds found. expected: %s but found %s".formatted(
                     wadIds,
                     wads.stream().map(Wad::getId).toList()));
         }
