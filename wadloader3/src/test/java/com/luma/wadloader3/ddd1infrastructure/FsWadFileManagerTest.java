@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FsWadFileManagerTest {
     FsWadFileManager wadFileManager =
-            new FsWadFileManager(new WadDir("./src/test/resources/runtime-test/wads", "./src/test/resources/runtime-test/wads/zip"),
+            new FsWadFileManager(new WadDir("./src/test/resources/runtime-test/wads", "./src/test/resources/runtime-test/wads/zip", ""),
                     new AllowedFileExtension(List.of("pk3", "wad")));
     File f = new File("src/test/resources/testwad.pk3");
     MultipartFile multipartFile;
@@ -38,8 +38,8 @@ class FsWadFileManagerTest {
     }
 
     @Test
-    void saveFileWorks() {
-        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile);
+    void saveFileWorks() throws IOException {
+        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
 
         assertInstanceOf(Failable.Success.class, result, () -> result.getFailure().toString());
         File wadFile = Path.of(result.getSuccess().path()).toFile();
@@ -53,9 +53,9 @@ class FsWadFileManagerTest {
     }
 
     @Test
-    void saveFileFailsOnExistingFile() {
+    void saveFileFailsOnExistingFile() throws IOException {
         //first file works
-        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile);
+        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
 
         assertInstanceOf(Failable.Success.class, result, () -> result.getFailure().toString());
         wadFile = Path.of(result.getSuccess().path()).toFile();
@@ -65,7 +65,7 @@ class FsWadFileManagerTest {
         assertEquals(f.length(), wadFile.length());
 
         //second file fails
-        Failable<FilePath> result2 = wadFileManager.saveFile("WadName.pk3", multipartFile);
+        Failable<FilePath> result2 = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
         assertInstanceOf(Failable.Failure.class, result2, "No Error occurred when saving same file twice");
 
         assertEquals(List.of("File already exists"), result2.getFailure());

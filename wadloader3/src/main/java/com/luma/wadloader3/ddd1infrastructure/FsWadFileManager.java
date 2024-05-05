@@ -7,10 +7,12 @@ import com.luma.wadloader3.ddd3domain.files.services.WadFileManager;
 import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
@@ -24,17 +26,18 @@ public class FsWadFileManager implements WadFileManager {
     private final AllowedFileExtension allowedFileExtension;
     
     @Override
-    public Failable<FilePath> saveFile(String wadName, MultipartFile wadFile) {
+    public Failable<FilePath> saveFile(String wadName, InputStream wadFile) {
         return fileByName(wadName).apply(file -> {
-            if (file.exists()) return Failable.Failure.of("File already exists");
+            if (file.exists()) return Failable.failure("File already exists");
             if (!wadDir.rootPath().toFile().exists() && !wadDir.rootPath().toFile().mkdirs())
-                return Failable.Failure.of("Root directory '%s' could not be created".formatted(wadDir.rootPath()));
+                return Failable.failure("Root directory '%s' could not be created".formatted(wadDir.rootPath()));
 
             try {
-                wadFile.transferTo(file);
-                return new Failable.Success<>(new FilePath(file.getAbsolutePath()));
+                FileCopyUtils.copy(wadFile, Files.newOutputStream(file.toPath()));
+                wadFile.close();
+                return Failable.success(new FilePath(file.getAbsolutePath()));
             } catch (IOException e) {
-                return Failable.Failure.of("Error while saving file: " + e.getMessage());
+                return Failable.failure("Error while saving file: " + e.getMessage());
             }
         });
     }
@@ -42,8 +45,8 @@ public class FsWadFileManager implements WadFileManager {
     @Override
     public Failable<FilePath> findFileByName(String name) {
         return fileByName(name).apply(file -> file.exists()
-                ? new Failable.Success<>(new FilePath(file.getAbsolutePath()))
-                : Failable.Failure.of("File not found"));
+                ? Failable.success(new FilePath(file.getAbsolutePath()))
+                : Failable.failure("File not found"));
     }
 
     private Failable<File> fileByName(String fileName) {
@@ -59,6 +62,6 @@ public class FsWadFileManager implements WadFileManager {
                 .findAny()
                 .map(ex -> "Wad-%d.%s".formatted(fileName.hashCode(), ex))
                 .<Failable<String>>map(Failable.Success::new)
-                .orElse(Failable.Failure.of("File extension is not allowed"));
+                .orElse(Failable.failure("File extension is not allowed"));
     }
 }

@@ -24,7 +24,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/index.html", "/static/**",
-                                "/*.ico", "/*.json", "/*.png", "/api/user").permitAll()
+                                "/*.ico", "/*.json", "/*.png", "/api/user", "/download/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf((csrf) -> csrf

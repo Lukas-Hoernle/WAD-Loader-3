@@ -30,7 +30,7 @@ class FileZipperImplementationTest {
         files = Stream.of(
                         "./src/test/resources/runtime-test/wads/file1.txt",
                         "./src/test/resources/runtime-test/wads/file2.txt")
-                .map(Path::of).map(path -> new FileZipper.FileToZip(path, random.nextInt()))
+                .map(Path::of).map(path -> new FileZipper.FileToZip(path, random.nextInt() + ""))
                 .toList();
         files.stream().map(FileZipper.FileToZip::path).map(Path::toFile).forEach((f) -> {
             try {
@@ -39,7 +39,7 @@ class FileZipperImplementationTest {
                 throw new RuntimeException(e);
             }
         });
-        wadDir = new WadDir("src/test/resources/runtime-test/wads", "src/test/resources/runtime-test/wads/zip");
+        wadDir = new WadDir("src/test/resources/runtime-test/wads", "src/test/resources/runtime-test/wads/zip", "");
         fileZipper = new FileZipperImplementation(wadDir);
     }
 

@@ -16,6 +16,7 @@ import java.nio.file.Path;
 public class WadDir {
     private String root;
     private String zipdir;
+    private String scriptdir;
 
     public Path rootPath() {
         return Path.of(root);
@@ -25,7 +26,7 @@ public class WadDir {
         return Path.of(zipdir);
     }
 
-    public Path packsPath() {
-        return Path.of(root, "wadpacks");
+    public Path scriptDirPath() {
+        return Path.of(scriptdir);
     }
 }

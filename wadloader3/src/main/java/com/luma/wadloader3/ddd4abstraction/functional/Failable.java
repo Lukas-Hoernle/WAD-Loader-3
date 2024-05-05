@@ -15,10 +15,27 @@ import java.util.stream.Stream;
  */
 public sealed interface Failable<T> {
     static <T> Failable<T> fromOptional(Optional<T> optional, String error) {
-        return optional.<Failable<T>>map(Success::new).orElse(Failure.of(error));
+        return optional.<Failable<T>>map(Success::new).orElse(Failable.failure(error));
     }
 
-    record Success<T>(T value) implements Failable<T> {
+    static <T> Success<T> success(T value) {
+        return new Success<>(value);
+    }
+
+    static <T> Failure<T> failure(String error) {
+        return new Failure<>(List.of(error));
+    }
+
+    static <T, E extends Exception> Failable<T> run(ThrowingSupplier<T, E> f) {
+        try {
+            return new Success<>(f.get());
+        } catch (Exception e) {
+            return Failable.failure(e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    interface ThrowingSupplier<T, E extends Exception> {
+        T get() throws E;
     }
 
     default boolean isError() {
@@ -97,21 +114,12 @@ public sealed interface Failable<T> {
         };
     }
 
-    default T orElse(T alternative) {
-        return switch (this) {
-            case Success<T> (T value) -> value;
-            case Failure<T> ignored -> alternative;
-        };
+    record Success<T>(T value) implements Failable<T> {
     }
 
     record Failure<T>(List<String> error) implements Failable<T> {
-        public static <T> Failure<T> of(String error) {
-            return new Failure<>(List.of(error));
-        }
         <R> Failure<R> coerce() {
             return (Failure<R>) this;
         }
     }
-
-
 }

@@ -6,7 +6,10 @@ import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -38,21 +41,22 @@ public class FileZipperImplementation implements FileZipper {
             Failable<Void> zipResult = files.stream()
                     .map(f -> zipAdd(zip, f))
                     // combine all the results to receive all failures
-                    .reduce(new Failable.Success<>(null), (acc, z) -> acc.combine(z, (a, b) -> b));
+                    .reduce(Failable.success(null), (acc, z) -> acc.combine(z, (a, b) -> b));
 
             return zipResult.chain(() -> newArchivePath);
 
         } catch (FileNotFoundException e) {
-            return Failable.Failure.of("File not found: " + e.getMessage());
+            return Failable.failure("File not found: " + e.getMessage());
         } catch (IOException e) {
-            return Failable.Failure.of("IOException: " + e.getMessage());
+            return Failable.failure("IOException: " + e.getMessage());
         }
     }
 
     /**
      * @param zip  zip stream.
      * @param file the file to add to the zip stream.
-     * @return {@link Failable} indicating if the computation was successful.
+     * @return {@link Failable} indicating weather the computation was successful or not.
+     * Because zip is mutated, no useful return value is given.
      */
     private Failable<Void> zipAdd(ZipOutputStream zip, FileToZip file) {
         try (FileInputStream fis = new FileInputStream(file.path().toFile())) {
@@ -68,12 +72,12 @@ public class FileZipperImplementation implements FileZipper {
                 zip.write(bytes, 0, length);
             }
 
-            return new Failable.Success<>(null);
+            return Failable.success(null);
 
         } catch (FileNotFoundException e) {
-            return Failable.Failure.of("File not found: " + e.getMessage());
+            return Failable.failure("File not found: " + e.getMessage());
         } catch (IOException e) {
-            return Failable.Failure.of("IOException: " + e.getMessage());
+            return Failable.failure("IOException: " + e.getMessage());
         }
     }
 

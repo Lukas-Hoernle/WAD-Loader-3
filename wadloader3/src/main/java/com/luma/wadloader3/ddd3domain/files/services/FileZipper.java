@@ -8,6 +8,6 @@ import java.util.List;
 public interface FileZipper {
     Failable<Path> zipFiles(List< FileToZip> files);
 
-    record FileToZip(Path path, int name) {
+    record FileToZip(Path path, String name) {
     }
 }

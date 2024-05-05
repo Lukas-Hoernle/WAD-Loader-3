@@ -37,7 +37,7 @@ public class WadController implements WadApi {
     public ResponseEntity<WadDto> wadPost(@Valid String name, @Valid String description, MultipartFile file) {
         if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
 
-        return switch (fileManager.saveFile(name, file)) {
+        return switch (Failable.run(file::getInputStream).apply((inputStream) -> fileManager.saveFile(name, inputStream))) {
             case Failable.Success(FilePath filePath) -> {
                 Wad wad = Wad.builder()
                         .description(description)

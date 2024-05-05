@@ -94,7 +94,7 @@ public class WadPackController implements WadpackApi {
 
 
         if (wads.size() < wadIds.size()) {
-            return Failable.Failure.of("Not all WadIds found. expected: %s but found %s".formatted(
+            return Failable.failure("Not all WadIds found. expected: %s but found %s".formatted(
                     wadIds,
                     wads.stream().map(Wad::getId).toList()));
         }
