@@ -2,7 +2,7 @@ import { createBrowserRouter, createRoutesFromElements, Route } from "react-rout
 import { LoginLayout } from "./LoginLayout.tsx";
 import App from "../App.tsx";
 import HomePage from "./HomePage.tsx"; 
-
+//WHY DOES EVERYTHING GO TO /API 
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route
