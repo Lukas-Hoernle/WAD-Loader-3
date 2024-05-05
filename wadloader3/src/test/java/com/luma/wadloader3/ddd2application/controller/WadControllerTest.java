@@ -1,5 +1,8 @@
 package com.luma.wadloader3.ddd2application.controller;
 
+import com.luma.wadloader3.ddd1infrastructure.FsWadFileManager;
+import com.luma.wadloader3.ddd1infrastructure.config.AllowedFileExtension;
+import com.luma.wadloader3.ddd1infrastructure.config.WadDir;
 import com.luma.wadloader3.ddd2application.config.TestConfig;
 import com.luma.wadloader3.ddd2application.controller.mappers.WadMapper;
 import com.luma.wadloader3.ddd3domain.files.services.WadFileManager;
@@ -20,15 +23,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import static com.luma.wadloader3.ddd2application.config.TestConfig.TEST_WAD_SAVE_DIR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {
-        TestConfig.class,
-        WadMapper.class
+        WadMapper.class,
+        AllowedFileExtension.class,
+        FsWadFileManager.class,
+        WadDir.class,
+        TestConfig.class
 })
 class WadControllerTest {
 
@@ -36,6 +41,8 @@ class WadControllerTest {
     WadFileManager wadFileManager;
     @Autowired
     WadMapper wadMapper;
+    @Autowired
+    WadDir wadDir;
     WadController wadController;
     @Mock
     WadRepo wadRepo;
@@ -63,7 +70,7 @@ class WadControllerTest {
         assertEquals(description, wadDto.getDescription());
 
         //cleanup
-        try (Stream<Path> files = Files.walk(Path.of(TEST_WAD_SAVE_DIR))) {
+        try (Stream<Path> files = Files.walk(wadDir.rootPath())) {
             files.forEach(path -> path.toFile().delete());
         }
     }

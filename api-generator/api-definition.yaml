@@ -130,6 +130,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WadPackDto'
+  /download/wad/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/WadIds"
+      responses:
+        200:
+          description: "wad downloading"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: "wad does not exists"
+      description: "download the wad with id 'id'"
+  /download/wad:
+    post:
+      requestBody:
+        description: "list of all wad id to download the wads for"
+        required: true
+        content:
+          application/json:
+            schema:
+
+              type: array
+              items:
+                type: integer
+      responses:
+        200:
+          description: "download all listed wads"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /download/wadpack/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: "download all wads of the wadpack and the starting configuration of the wadpack"
+      responses:
+        200:
+          description: "wadpack downloading"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: "wadpack does not exists"
+    post:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: "download all wads of the wadpack with the ids given by the request and the starting configuration of the wadpack"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WadIds"
+      responses:
+        200:
+          description: "wadpack downloading"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
 components:
   schemas:
     WadDto:
@@ -192,3 +271,7 @@ components:
         file:
           type: string
           format: binary
+    WadIds:
+      type: array
+      items:
+        type: integer

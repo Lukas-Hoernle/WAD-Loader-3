@@ -1,6 +1,7 @@
 package com.luma.wadloader3.ddd1infrastructure;
 
 import com.luma.wadloader3.ddd1infrastructure.config.AllowedFileExtension;
+import com.luma.wadloader3.ddd1infrastructure.config.WadDir;
 import com.luma.wadloader3.ddd3domain.files.model.FilePath;
 import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import org.junit.jupiter.api.AfterEach;
@@ -15,12 +16,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.luma.wadloader3.ddd2application.config.TestConfig.TEST_WAD_SAVE_DIR;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FsWadFileManagerTest {
     FsWadFileManager wadFileManager =
-            new FsWadFileManager(Path.of(TEST_WAD_SAVE_DIR), new AllowedFileExtension(List.of("pk3", "wad")));
+            new FsWadFileManager(new WadDir("./src/test/resources/runtime-test/wads", "./src/test/resources/runtime-test/wads/zip", ""),
+                    new AllowedFileExtension(List.of("pk3", "wad")));
     File f = new File("src/test/resources/testwad.pk3");
     MultipartFile multipartFile;
     File wadFile;
@@ -37,11 +38,11 @@ class FsWadFileManagerTest {
     }
 
     @Test
-    void saveFileWorks() {
-        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile);
+    void saveFileWorks() throws IOException {
+        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
 
-        assertInstanceOf(Failable.Success.class, result, result.getFailure().orElse("Works"));
-        File wadFile = Path.of(result.getSuccess().get().path()).toFile();
+        assertInstanceOf(Failable.Success.class, result, () -> result.getFailure().toString());
+        File wadFile = Path.of(result.getSuccess().path()).toFile();
 
         assertTrue(wadFile.exists());
         assertTrue(wadFile.isFile());
@@ -52,21 +53,21 @@ class FsWadFileManagerTest {
     }
 
     @Test
-    void saveFileFailsOnExistingFile() {
+    void saveFileFailsOnExistingFile() throws IOException {
         //first file works
-        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile);
+        Failable<FilePath> result = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
 
-        assertInstanceOf(Failable.Success.class, result, result.getFailure().orElse("Works"));
-        wadFile = Path.of(result.getSuccess().get().path()).toFile();
+        assertInstanceOf(Failable.Success.class, result, () -> result.getFailure().toString());
+        wadFile = Path.of(result.getSuccess().path()).toFile();
 
         assertTrue(wadFile.exists());
         assertTrue(wadFile.isFile());
         assertEquals(f.length(), wadFile.length());
 
         //second file fails
-        Failable<FilePath> result2 = wadFileManager.saveFile("WadName.pk3", multipartFile);
+        Failable<FilePath> result2 = wadFileManager.saveFile("WadName.pk3", multipartFile.getInputStream());
         assertInstanceOf(Failable.Failure.class, result2, "No Error occurred when saving same file twice");
 
-        assertEquals("File already exists", result2.getFailure().get());
+        assertEquals(List.of("File already exists"), result2.getFailure());
     }
 }

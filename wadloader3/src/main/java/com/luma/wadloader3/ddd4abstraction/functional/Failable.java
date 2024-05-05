@@ -1,8 +1,11 @@
 package com.luma.wadloader3.ddd4abstraction.functional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Class representing a failable computation returning a result. This is an alternative to exception handling forcing
@@ -11,13 +14,28 @@ import java.util.function.Function;
  * @param <T> the type of the return value.
  */
 public sealed interface Failable<T> {
-    record Failure<T>(String error) implements Failable<T> {
-        <R> Failure<R> coerce() {
-            return (Failure<R>) this;
+    static <T> Failable<T> fromOptional(Optional<T> optional, String error) {
+        return optional.<Failable<T>>map(Success::new).orElse(Failable.failure(error));
+    }
+
+    static <T> Success<T> success(T value) {
+        return new Success<>(value);
+    }
+
+    static <T> Failure<T> failure(String error) {
+        return new Failure<>(List.of(error));
+    }
+
+    static <T, E extends Exception> Failable<T> run(ThrowingSupplier<T, E> f) {
+        try {
+            return new Success<>(f.get());
+        } catch (Exception e) {
+            return Failable.failure(e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
-    record Success<T>(T value) implements Failable<T> {
+    interface ThrowingSupplier<T, E extends Exception> {
+        T get() throws E;
     }
 
     default boolean isError() {
@@ -50,17 +68,17 @@ public sealed interface Failable<T> {
         return this.apply(f.andThen(Success::new));
     }
 
-    default Optional<T> getSuccess() {
+    default T getSuccess() {
         return switch (this) {
-            case Success<T> success -> Optional.of(success.value);
-            case Failure<T> ignored -> Optional.empty();
+            case Success<T> success -> success.value;
+            case Failure<T> ignored -> throw new RuntimeException("getSuccess() called on Failure");
         };
     }
 
-    default Optional<String> getFailure() {
+    default List<String> getFailure() {
         return switch (this) {
-            case Success<T> ignored -> Optional.empty();
-            case Failure<T> failure -> Optional.of(failure.error);
+            case Success<T> ignored -> List.of();
+            case Failure<T> failure -> failure.error;
         };
     }
 
@@ -74,7 +92,11 @@ public sealed interface Failable<T> {
     default <T2, R> Failable<R> combine(Failable<T2> other, BiFunction<T, T2, R> f) {
         return switch (this) {
             case Success<T> success -> other.map(((T2 v) -> f.apply(success.value, v)));
-            case Failure<T> failure -> failure.coerce();
+            case Failure<T> failure -> switch (other) {
+                case Success<T2> ignore -> failure.coerce();
+                case Failure<T2> failure2 ->
+                        new Failure<>(Stream.of(failure, failure2).map(Failure::error).flatMap(List::stream).toList());
+            };
         };
     }
 
@@ -85,14 +107,19 @@ public sealed interface Failable<T> {
         };
     }
 
-    default T orElse(T alternative) {
+    default <R> Failable<R> chain(Supplier<R> f) {
         return switch (this) {
-            case Success<T> (T value) -> value;
-            case Failure<T> ignored -> alternative;
+            case Success<T> ignored -> new Success<>(f.get());
+            case Failure<T> failure -> failure.coerce();
         };
     }
 
-    static <T> Failable<T> fromOptional(Optional<T> optional, String error) {
-        return optional.<Failable<T>>map(Success::new).orElse(new Failure<>(error));
+    record Success<T>(T value) implements Failable<T> {
+    }
+
+    record Failure<T>(List<String> error) implements Failable<T> {
+        <R> Failure<R> coerce() {
+            return (Failure<R>) this;
+        }
     }
 }

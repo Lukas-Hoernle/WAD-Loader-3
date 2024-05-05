@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -36,7 +37,7 @@ public class WadController implements WadApi {
     public ResponseEntity<WadDto> wadPost(@Valid String name, @Valid String description, MultipartFile file) {
         if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
 
-        return switch (fileManager.saveFile(name, file)) {
+        return switch (Failable.run(file::getInputStream).apply((inputStream) -> fileManager.saveFile(name, inputStream))) {
             case Failable.Success(FilePath filePath) -> {
                 Wad wad = Wad.builder()
                         .description(description)
@@ -45,9 +46,10 @@ public class WadController implements WadApi {
                         .build();
 
                 wad = wadRepo.save(wad);
+
                 yield ResponseEntity.ok(wadMapper.map(wad));
             }
-            case Failable.Failure(String error) -> {
+            case Failable.Failure(List<String> error) -> {
                 System.out.println(error);
                 yield ResponseEntity.badRequest().build();
             }
