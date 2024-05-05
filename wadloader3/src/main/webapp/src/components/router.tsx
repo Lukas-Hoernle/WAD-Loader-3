@@ -1,7 +1,6 @@
 import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import {LoginLayout} from "./LoginLayout.tsx";
 import App from "../App.tsx";
-import UploadWad from "./UploadWad.tsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -9,7 +8,6 @@ export const router = createBrowserRouter(
             path="/"
             element={
                 <LoginLayout>
-                    <Route path="/upload" element={<UploadWad />} />
                     <App />
                 </LoginLayout>
             }
