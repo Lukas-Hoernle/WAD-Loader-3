@@ -5,7 +5,6 @@ Monorepo for online Doom-Wad Management System.
 ## Todos
 
 Backend:
-* create endpoint to download WadPack/Wads
 * create link to start handler
 
 Frontend:
@@ -23,8 +22,8 @@ Client-Handler:
 * consume DownloadApi
   * save wads in files with their id
 * add start parameters for
-  * path of the GZDoom
-  * path to local IWAD
+  * path of the GZDoom (also used in the .cmd files as %GZDOOM_PATH%)
+  * path to local IWAD (also used in the .cmd files as %IWAD_PATH%)
   * ids of all necessary wads (in load-order)
 * write function to start background process to start doom
   * download all missing wads
