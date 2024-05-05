@@ -8,9 +8,6 @@ export const router = createBrowserRouter(
             path="/"
             element={
                 <LoginLayout>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/search-download" element={<SearchDownloadPage />} />
-                    <Route path="/create-wadpack" element={<CreateWadPackPage />} />
                     <App />
                 </LoginLayout>
             }
