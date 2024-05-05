@@ -1,6 +1,7 @@
-import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
-import {LoginLayout} from "./LoginLayout.tsx";
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+import { LoginLayout } from "./LoginLayout.tsx";
 import App from "../App.tsx";
+import HomePage from "./HomePage.tsx"; 
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -8,6 +9,7 @@ export const router = createBrowserRouter(
             path="/"
             element={
                 <LoginLayout>
+                    <Route path="/" element={<HomePage />} />
                     <App />
                 </LoginLayout>
             }
