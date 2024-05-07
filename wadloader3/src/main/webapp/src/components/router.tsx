@@ -1,5 +1,6 @@
 import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import {LoginLayout} from "./LoginLayout.tsx";
+import CreateWad from "./CreateWad";
 import App from "../App.tsx";
 
 export const router = createBrowserRouter(
@@ -9,7 +10,10 @@ export const router = createBrowserRouter(
             element={
                 <LoginLayout>
                     <App />
+                    <CreateWad />
                 </LoginLayout>
+
+
             }
         >
         </Route>
