@@ -14,6 +14,10 @@ tags:
       wad
     description:
       api managing wads
+  - name:
+      download
+    description:
+      api for file downloads
 paths:
   /wad:
     post:
@@ -132,6 +136,8 @@ paths:
                 $ref: '#/components/schemas/WadPackDto'
   /download/wad/{id}:
     get:
+      tags:
+        - download
       parameters:
         - name: id
           in: path
@@ -149,15 +155,42 @@ paths:
         404:
           description: "wad does not exists"
       description: "download the wad with id 'id'"
+  /download/handler:
+    get:
+      tags:
+        - download
+      description: "download handler to start wads on computer"
+      responses:
+        200:
+          description: "client-handler downloading"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /download/setup:
+    get:
+      tags:
+        - download
+      description: "download local setup script"
+      responses:
+        200:
+          description: "local setup script download"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
   /download/wad:
     post:
+      tags:
+        - download
       requestBody:
         description: "list of all wad id to download the wads for"
         required: true
         content:
           application/json:
             schema:
-
               type: array
               items:
                 type: integer
@@ -171,6 +204,8 @@ paths:
                 format: binary
   /download/wadpack/{id}:
     get:
+      tags:
+        - download
       parameters:
         - name: id
           in: path
@@ -189,6 +224,8 @@ paths:
         404:
           description: "wadpack does not exists"
     post:
+      tags:
+        - download
       parameters:
         - name: id
           in: path

@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,27 @@ public class DownloadController implements DownloadApi {
     private final WadPackRepo wadPackRepo;
     private final FileToZipFromWadService fileToZipService;
     private final CmdTemplateManipulator<TemplateArgs> cmdTemplateManipulator;
+
+    @Override
+    public ResponseEntity<Resource> downloadHandlerGet() {
+        //TODO replace handler.bat with haskell exe
+        FileSystemResource resource =
+                new FileSystemResource(Path.of("wadloader3/src/main/resources/handler.bat").toAbsolutePath());
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"handler.bat\"")
+                .body(resource);
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadSetupGet() {
+        FileSystemResource resource =
+                new FileSystemResource(Path.of("wadloader3/src/main/resources/wadloader.reg.bat").toAbsolutePath());
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"wadloader.reg.bat\"")
+                .body(resource);
+    }
 
     //you can use "/download/wad/2,3,4" to download the wads with id 2,3,4
     @Override
