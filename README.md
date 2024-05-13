@@ -18,16 +18,11 @@ Frontend:
     * based on the description    
 
 Client-Handler:
+* Add Server URL to "type Action"
+* unzip downloaded wadpacks
+* start wadpack if type "DownloadAndStart" was used
+* FIX Naming in setup script to use .exe file, maybe change name
 * write cmd/powershell script to register as handler on custom protocol
-* consume DownloadApi
-  * save wads in files with their id
-* add start parameters for
-  * path of the GZDoom (also used in the .cmd files as %GZDOOM_PATH%)
-  * path to local IWAD (also used in the .cmd files as %IWAD_PATH%)
-  * ids of all necessary wads (in load-order)
-* write function to start background process to start doom
-  * download all missing wads
-  * execute
   
 Optional:
 * Possibility to add Tags to Wads and WadPacks
@@ -67,3 +62,10 @@ These steps help you to create an executable jar file.
 Start the created jar file. No parameters needed.
 
 * java -jar "path/to/jar/from/previous/step.jar"
+
+## Use Application as a User
+
+1. download the setup script
+2. run the setup script as a user
+3. set %GZDOOM_PATH% to your gzdoom.exe
+4. set %IWAD_PATH% to the iwad you want to use to start your WadPacks

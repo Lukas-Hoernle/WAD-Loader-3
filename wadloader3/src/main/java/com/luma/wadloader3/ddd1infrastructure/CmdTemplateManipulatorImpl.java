@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CmdTemplateManipulatorImpl implements CmdTemplateManipulator<TemplateArgs> {
 
-    private final static Path templatePath = Path.of("startWadTemplate.cmd");
+    private final static Path templatePath = Path.of("wadloader3/src/main/resources/startWadTemplate.cmd");
     private final static String replaceVariable = "%FILES%";
     private final FileToZipFromWadService fileToZipService;
     private final WadDir wadDir;
@@ -35,12 +35,18 @@ public class CmdTemplateManipulatorImpl implements CmdTemplateManipulator<Templa
                 .map(String::valueOf)
                 .reduce("", (acc, val) -> acc + " " + val);
 
-        Failable<String> cmdScriptLines = Failable.run(() -> Files.readAllLines(wadDir.scriptDirPath().resolve(templatePath).toAbsolutePath())
-                .stream()
-                .map(s -> s.replaceAll(replaceVariable, replacementValue))
-                .collect(Collectors.joining("\n")));
-
         Path filePath = wadDir.scriptDirPath().resolve("start%s.cmd".formatted(templateValues.name()));
+
+        Failable<String> cmdScriptLines = Failable.run(() -> filePath
+                        .getParent()
+                        .toFile()
+                        .mkdirs())
+                .runChain(() -> Files.readAllLines(templatePath)
+                        .stream()
+                        .map(s -> s.replaceAll(replaceVariable, replacementValue))
+                        .collect(Collectors.joining("\n")));
+
+
 
         return cmdScriptLines.apply(script -> Failable.run(() -> Files.writeString(filePath, script)));
     }

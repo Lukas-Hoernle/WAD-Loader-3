@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 public sealed interface Failable<T> {
     static <T> Failable<T> fromOptional(Optional<T> optional, String error) {
-        return optional.<Failable<T>>map(Success::new).orElse(Failable.failure(error));
+        return optional.<Failable<T>>map(Success::new).orElseGet(() -> Failable.failure(error));
     }
 
     static <T> Success<T> success(T value) {
@@ -110,6 +110,13 @@ public sealed interface Failable<T> {
     default <R> Failable<R> chain(Supplier<R> f) {
         return switch (this) {
             case Success<T> ignored -> new Success<>(f.get());
+            case Failure<T> failure -> failure.coerce();
+        };
+    }
+
+    default <R, E extends Exception> Failable<R> runChain(ThrowingSupplier<R, E> f) {
+        return switch (this) {
+            case Success<T> ignored -> Failable.run(f);
             case Failure<T> failure -> failure.coerce();
         };
     }
