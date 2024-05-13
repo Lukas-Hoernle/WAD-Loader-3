@@ -1,40 +1,41 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Main where
-
+import System.Environment (getArgs)
+import Domain (getWadIds, WadId, getServer, getWadPackId)
+import WadFiles (existsWadFile)
+import Control.Monad (filterM)
+import WadloaderParser (parseUrlAction)
+import GHC.Base (failIO)
+import WadDownload (downloadFileGET, downloadWadPack)
 -- Exported from the package conduit-extra
 
-import Conduit (runConduit, runResourceT, (.|))
-import Data.Aeson
-import Data.Conduit.Binary (sinkFile)
-import Network.HTTP.Conduit
-
--- https://hackage.haskell.org/package/http-conduit-2.3.8.3/docs/Network-HTTP-Conduit.html
--- https://github.com/snoyberg/http-client/blob/master/TUTORIAL.md
-
-data Wad where
-  Wad :: String -> Int -> Wad
-
-instance ToJSON Wad where
-  toJSON (Wad name wadId) =
-    object
-      [ "name" .= name
-      , "wadId" .= wadId
-      ]
-
-wads :: [Wad]
-wads = [Wad "Wad1" 1, Wad "Wad2" 2]
+--TODO:
+--check how to use Envars
+--check how to download files from my api
+--implement wadloader protoc ol
+--chose values from paths to store wadpacks and wads (one for both otherwise the template wont work)
+--
+--templates are named {id}.bat wads are only named {id}
 
 main :: IO ()
 main = do
-  manager <- newManager tlsManagerSettings
-  initRequest <- parseRequest "POST http://httpbin.org/post"
-  let request =
-        initRequest
-          { requestBody = RequestBodyLBS $ encode wads
-          , requestHeaders = [("Content-Type", "application/json; charset=utf-8")]
-          }
+  args <- getArgs
+  action <- eitherToIO $ do
+    arg <- handleArgs args
+    parseUrlAction arg
+  downloadIds <- filterWads $ getWadIds action 
+  downloadWadPack (getServer action) (getWadPackId action) downloadIds 
+  print downloadIds
 
-  runResourceT $ do
-    response <- http request manager
-    runConduit $ responseBody response .| sinkFile "foo.txt"
+    --(show . parse urlAction $ x)
+    --
+handleArgs :: [String] -> Either String String
+handleArgs [] = Left "No Args given"
+handleArgs (x:_) = Right x
+
+eitherToIO :: Either String a -> IO a
+eitherToIO (Left msg) = failIO msg
+eitherToIO (Right wadIds) = return wadIds
+
+filterWads :: [WadId] -> IO [WadId]
+filterWads = filterM (fmap not . existsWadFile ) 
