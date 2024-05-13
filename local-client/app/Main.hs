@@ -6,7 +6,7 @@ import WadFiles (existsWadFile)
 import Control.Monad (filterM)
 import WadloaderParser (parseUrlAction)
 import GHC.Base (failIO)
-import WadDownload (downloadFileGET, downloadWadPack)
+import WadDownload (downloadWadPack)
 -- Exported from the package conduit-extra
 
 --TODO:

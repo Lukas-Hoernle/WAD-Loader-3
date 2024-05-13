@@ -9,8 +9,10 @@ wadSegment = pathSeparator :"local"
 wadPath :: String
 wadPath = wadloaderPath ++ wadSegment 
 
-wadPackApiPath :: String -> WadPackId -> String
-wadPackApiPath url packId = url ++ "/download/wadpack/" ++ show packId
+wadPackApiPath :: String -> WadPackId -> [WadId] -> String
+wadPackApiPath url packId wadIds = url ++ "/download/wadpack/" ++ show packId ++ "/" ++ wads
+  where
+    wads = foldr (\v acc -> show v ++ (',':acc)) "" wadIds 
 
 type WadId = Int
 type WadPackId = Int
