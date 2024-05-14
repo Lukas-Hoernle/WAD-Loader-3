@@ -5,7 +5,7 @@ Monorepo for online Doom-Wad Management System.
 ## Todos
 
 Backend:
-* create link to start handler
+* remove created zipfiles periodically (download is valid for x-minutes, maybe 5 or 15 minutes), configurable 
 
 Frontend:
 *  create "Upload-Wad" Page
@@ -18,16 +18,7 @@ Frontend:
     * based on the description    
 
 Client-Handler:
-* write cmd/powershell script to register as handler on custom protocol
-* consume DownloadApi
-  * save wads in files with their id
-* add start parameters for
-  * path of the GZDoom (also used in the .cmd files as %GZDOOM_PATH%)
-  * path to local IWAD (also used in the .cmd files as %IWAD_PATH%)
-  * ids of all necessary wads (in load-order)
-* write function to start background process to start doom
-  * download all missing wads
-  * execute
+* maybe cleanup of .zip files
   
 Optional:
 * Possibility to add Tags to Wads and WadPacks
@@ -37,7 +28,7 @@ Optional:
 ## Setup
 
 Necessary setup to run the program.
-Setting localhost:3000 is only necessary if you want to run the frontend on it's own.
+Setting localhost:3000 is only necessary if you want to serve the frontend from vite.
 
 1. Create Authorization Project at auth0
     * create free account at https://auth0.com
@@ -56,14 +47,50 @@ Setting localhost:3000 is only necessary if you want to run the frontend on it's
 
 ## Build Application
 
-These steps help you to create an executable jar file.
+you need: 
+* java: 21
+* haskell: GHC2021
+* node: 20 (lower should be possible as well)
+* npm (js/ts build tool)
+* yalc (manager for local npm packages ,can be installed via npm)
+* maven (java build tool)
+* cabal (haskell build tool, recommended installation via ghcup)
+
+These steps help you to create an executable jar-file.
+All steps assume the repository root as initial dir.
+
+### Build the api
+
+1. cd ./api-generator
+2. npm install
+3. npm run generate
+4. npm run update
+
+### Build haskell client (can be omitted if no changes to the haskell code were made)
+
+1. cd ./local-client
+2. cabal build
+3. cp ./dist-newstyle/build/x86_64-windows/ghc-9.4.8/local-client-0.1.0.0/x/local-client/build/local-client/local-client.exe ../wadloader3/src/main/resources/local-client.exe
+
+### Build the back- and frontend
 
 1. cd ./wadloader3
-2. npm run build
-3. mvn package
+2. yalc add wadloader3-api
+3. npm install
+4. npm run build
+5. mvn package
 
-## Start application
+## Start server
 
 Start the created jar file. No parameters needed.
 
 * java -jar "path/to/jar/from/previous/step.jar"
+
+## Setup Application as a User
+
+1. download the setup script (by clicking the download button or calling /download/setup)
+2. run the setup script with admin privileges 
+
+optional (if you don't set these you are asked about their values every time you start a wadpack):
+3. set %GZDOOM_PATH% as the path to your gzdoom.exe
+4. set %IWAD_PATH% to the path of iwad you want to use to start your WadPacks

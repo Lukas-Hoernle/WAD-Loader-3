@@ -9,10 +9,10 @@ import com.luma.wadloader3.ddd3domain.wad.repos.WadPackRepo;
 import com.luma.wadloader3.ddd3domain.wad.repos.WadRepo;
 import com.luma.wadloader3.ddd4abstraction.functional.Failable;
 import com.luma.wadloader3api.api.DownloadApi;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +30,27 @@ public class DownloadController implements DownloadApi {
     private final FileToZipFromWadService fileToZipService;
     private final CmdTemplateManipulator<TemplateArgs> cmdTemplateManipulator;
 
+    @Override
+    public ResponseEntity<Resource> downloadHandlerGet() {
+        //TODO replace handler.bat with haskell exe
+        FileSystemResource resource =
+                new FileSystemResource(Path.of("wadloader3/src/main/resources/local-client.exe").toAbsolutePath());
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"local-client.exe\"")
+                .body(resource);
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadSetupGet() {
+        FileSystemResource resource =
+                new FileSystemResource(Path.of("wadloader3/src/main/resources/wadloader.reg.bat").toAbsolutePath());
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"wadloader.reg.bat\"")
+                .body(resource);
+    }
+
     //you can use "/download/wad/2,3,4" to download the wads with id 2,3,4
     @Override
     public ResponseEntity<Resource> downloadWadIdGet(List<Integer> ids) {
@@ -37,8 +58,8 @@ public class DownloadController implements DownloadApi {
     }
 
     @Override
-    public ResponseEntity<Resource> downloadWadPost(@Valid List<Integer> ids) {
-        return downloadWads(ids);
+    public ResponseEntity<Resource> downloadWadPackNoWads(Integer id) {
+        return downloadWadpackIdIdsGet(id, List.of());
     }
 
     @Override
@@ -57,7 +78,7 @@ public class DownloadController implements DownloadApi {
     }
 
     @Override
-    public ResponseEntity<Resource> downloadWadpackIdPost(Integer wadPackId, @Valid List<Integer> wadIds) {
+    public ResponseEntity<Resource> downloadWadpackIdIdsGet(Integer wadPackId, List<Integer> wadIds) {
         Failable<WadPack> wadPackF = Failable.fromOptional(wadPackRepo.findById(wadPackId), "WadPack with id '%s' not found".formatted(wadPackId));
 
         //list of all wads to download
@@ -71,7 +92,6 @@ public class DownloadController implements DownloadApi {
 
         return downloadWadPack(wadPackId, wadPackF, wadsF);
     }
-
 
     private ResponseEntity<Resource> downloadWads(List<Integer> ids) {
         List<FileZipper.FileToZip> files = wadRepo.findAllById(ids).stream().map(fileToZipService::fromWad).toList();
