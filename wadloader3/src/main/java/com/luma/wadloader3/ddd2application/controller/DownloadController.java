@@ -34,10 +34,10 @@ public class DownloadController implements DownloadApi {
     public ResponseEntity<Resource> downloadHandlerGet() {
         //TODO replace handler.bat with haskell exe
         FileSystemResource resource =
-                new FileSystemResource(Path.of("wadloader3/src/main/resources/handler.bat").toAbsolutePath());
+                new FileSystemResource(Path.of("wadloader3/src/main/resources/local-client.exe").toAbsolutePath());
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"handler.bat\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"local-client.exe\"")
                 .body(resource);
     }
 
@@ -55,6 +55,11 @@ public class DownloadController implements DownloadApi {
     @Override
     public ResponseEntity<Resource> downloadWadIdGet(List<Integer> ids) {
         return downloadWads(ids);
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadWadPackNoWads(Integer id) {
+        return downloadWadpackIdIdsGet(id, List.of());
     }
 
     @Override

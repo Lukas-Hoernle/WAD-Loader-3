@@ -42,8 +42,7 @@ actionConstructor =
 
 --this assumes the remaining string is a server url (with protocol etc.)
 action :: Parser Char Action
-action = actionConstructor <*> numbers <*> server
-  where server = fmap init (string "$" >> remainder)
+action = actionConstructor <*> numbers <*> (string "$" >> remainder)
 
 urlAction :: Parser Char Action
 urlAction = string urlPrefix >> action

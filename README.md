@@ -5,7 +5,7 @@ Monorepo for online Doom-Wad Management System.
 ## Todos
 
 Backend:
-* create link to start handler
+* remove created zipfiles periodically (download is valid for x-minutes, maybe 5 or 15 minutes), configurable 
 
 Frontend:
 *  create "Upload-Wad" Page
@@ -18,11 +18,7 @@ Frontend:
     * based on the description    
 
 Client-Handler:
-* Add Server URL to "type Action"
-* unzip downloaded wadpacks
-* start wadpack if type "DownloadAndStart" was used
-* FIX Naming in setup script to use .exe file, maybe change name
-* write cmd/powershell script to register as handler on custom protocol
+* maybe cleanup of .zip files
   
 Optional:
 * Possibility to add Tags to Wads and WadPacks

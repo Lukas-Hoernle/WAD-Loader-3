@@ -33,7 +33,7 @@ public class CmdTemplateManipulatorImpl implements CmdTemplateManipulator<Templa
                 .map(fileToZipService::fromWad)
                 .map(FileZipper.FileToZip::name)
                 .map(String::valueOf)
-                .reduce("", (acc, val) -> acc + " " + val);
+                .reduce("", (acc, val) -> acc + " %~dp0" + val);
 
         Path filePath = wadDir.scriptDirPath().resolve("start%s.cmd".formatted(templateValues.name()));
 

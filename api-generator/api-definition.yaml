@@ -202,6 +202,29 @@ paths:
                 format: binary
         404:
           description: "wadpack does not exists"
+  /download/wadpack/{id}/:
+    get:
+      operationId: downloadWadPackNoWads
+
+      tags:
+        - download
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      description: "download no wads of the wadpack and the starting configuration of the wadpack"
+      responses:
+        200:
+          description: "wadpack downloading"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: "wadpack does not exists"
   /download/wadpack/{id}/{ids}:
     get:
       tags:
