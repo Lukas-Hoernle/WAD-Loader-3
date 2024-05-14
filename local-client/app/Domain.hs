@@ -4,15 +4,16 @@ import System.FilePath (pathSeparator)
 
 wadloaderPath :: String
 wadloaderPath = "wadloader3"
-wadSegment :: [Char]
-wadSegment = pathSeparator :"local"
+wadSegment :: String
+wadSegment = pathSeparator : "local"
 wadPath :: String
-wadPath = wadloaderPath ++ wadSegment 
+wadPath = wadloaderPath ++ wadSegment
 
 wadPackApiPath :: String -> WadPackId -> [WadId] -> String
 wadPackApiPath url packId wadIds = url ++ "/download/wadpack/" ++ show packId ++ "/" ++ wads
-  where
-    wads = foldr (\v acc -> show v ++ (',':acc)) "" wadIds 
+ where
+  wads = foldr (\v acc -> show v ++ (',' : acc)) "" wadIds
+  
 
 type WadId = Int
 type WadPackId = Int
@@ -21,6 +22,10 @@ type DownloadUrl = String
 data Action where
   DownloadWadPack :: WadPackId -> [WadId] -> DownloadUrl -> Action
   DownloadAndStartWadPack :: WadPackId -> [WadId] -> DownloadUrl -> Action
+
+startAction :: Action -> Bool
+startAction (DownloadWadPack {}) = False
+startAction (DownloadAndStartWadPack {}) = True
 
 getWadPackId :: Action -> WadPackId
 getWadPackId (DownloadWadPack packId _ _) = packId
@@ -38,4 +43,4 @@ instance Show Action where
   show :: Action -> String
   show action = case action of
     DownloadWadPack packid wads server -> "DownloadWadPack " ++ show packid ++ " " ++ show wads ++ " " ++ server
-    DownloadAndStartWadPack packid wads server ->  "DownloadAndStartWadPack " ++ show packid ++ " " ++ show wads ++ " " ++ server
+    DownloadAndStartWadPack packid wads server -> "DownloadAndStartWadPack " ++ show packid ++ " " ++ show wads ++ " " ++ server

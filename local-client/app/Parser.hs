@@ -1,9 +1,9 @@
 module Parser where
 
-import Control.Applicative ( Alternative(empty, (<|>)) )
-import Control.Monad ( MonadPlus(..), ap, liftM )
+import Control.Applicative (Alternative (empty, (<|>)))
+import Control.Monad (MonadPlus (..), ap, liftM)
 
-newtype Parser t a = Parser { parse :: [t] -> [(a, [t])] }
+newtype Parser t a = Parser {parse :: [t] -> [(a, [t])]}
 
 result :: a -> Parser t a
 result val = Parser $ \inp -> [(val, inp)]
@@ -21,9 +21,9 @@ instance Functor (Parser t) where
 
 instance Alternative (Parser t) where
   empty = zero
-  p <|> q =  Parser $ \inp -> case parse (p `plus` q) inp of
+  p <|> q = Parser $ \inp -> case parse (p `plus` q) inp of
     [] -> []
-    (x:_) -> [x] 
+    (x : _) -> [x]
 
 instance MonadPlus (Parser t) where
   mzero = zero
@@ -41,19 +41,22 @@ then' combine p q =
     q >>= \xs ->
       result $ combine x xs
 
-tokenMatching :: (t -> Bool) -> Parser t t 
-tokenMatching c = Parser parseCond 
-  where
-    parseCond [] = []
-    parseCond (x:xs) = if c x then [(x,xs)] else []
+tokenMatching :: (t -> Bool) -> Parser t t
+tokenMatching c = Parser parseCond
+ where
+  parseCond [] = []
+  parseCond (x : xs) = if c x then [(x, xs)] else []
 
 tokenMatchingInto :: (t -> Bool) -> a -> Parser t a
-tokenMatchingInto c = (tokenMatching c >>) . result 
+tokenMatchingInto c = (tokenMatching c >>) . result
 
 many' :: Parser t a -> Parser t [a]
-many' p = 
+many' p =
   do
-   x <- p
-   xs <- many' p
-   return (x : xs) 
-   <|> return []
+    x <- p
+    xs <- many' p
+    return (x : xs)
+    <|> return []
+
+remainder :: Parser t [t]
+remainder = many' . tokenMatching $ const True
