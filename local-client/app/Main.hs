@@ -9,7 +9,6 @@ import GHC.Base (failIO)
 import WadDownload (downloadWadPack)
 
 --TODO:
--- execute start{id}.cmd file
 -- maybe: cleanup z.zip files
 main :: IO ()
 main = do

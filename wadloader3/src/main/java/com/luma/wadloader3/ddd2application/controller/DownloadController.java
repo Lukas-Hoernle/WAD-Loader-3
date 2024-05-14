@@ -32,7 +32,6 @@ public class DownloadController implements DownloadApi {
 
     @Override
     public ResponseEntity<Resource> downloadHandlerGet() {
-        //TODO replace handler.bat with haskell exe
         FileSystemResource resource =
                 new FileSystemResource(Path.of("wadloader3/src/main/resources/local-client.exe").toAbsolutePath());
         return ResponseEntity
