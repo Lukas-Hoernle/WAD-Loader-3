@@ -31,13 +31,13 @@ public class WadPackController implements WadpackApi {
     private final WadPackMapper wadPackMapper;
 
     @Override
-    public ResponseEntity<Void> wadpackIdDelete(Integer id) {
+    public ResponseEntity<Void> deleteWadpack(Integer id) {
         wadPackRepo.deleteById(id);
         return ResponseEntity.status(200).build();
     }
 
     @Override
-    public ResponseEntity<WadPackDto> wadpackIdGet(Integer id) {
+    public ResponseEntity<WadPackDto> getWadpack(Integer id) {
         return wadPackRepo.findById(id)
                 .map(wadPackMapper::map)
                 .map(ResponseEntity::ok)
@@ -45,7 +45,7 @@ public class WadPackController implements WadpackApi {
     }
 
     @Override
-    public ResponseEntity<WadPackDto> wadpackPost(@Valid NewWadPackDto newWadPackDto) {
+    public ResponseEntity<WadPackDto> postWadpack(@Valid NewWadPackDto newWadPackDto) {
         switch (toLoadOrder(newWadPackDto.getWads())) {
             case Failable.Success<Map<Integer, Wad>>(Map<Integer, Wad> wadOrder) -> {
                 WadPack wadPack = WadPack.builder()
@@ -66,7 +66,7 @@ public class WadPackController implements WadpackApi {
     }
 
     @Override
-    public ResponseEntity<WadPackDto> wadpackIdPut(Integer id, @Valid NewWadPackDto newWadPackDto) {
+    public ResponseEntity<WadPackDto> updateWadpack(Integer id, @Valid NewWadPackDto newWadPackDto) {
 
         Failable<WadPackDto> updatedFailable = Failable.fromOptional(wadPackRepo.findById(id), "no WadPack with id %d".formatted(id))
                 .combine(toLoadOrder(newWadPackDto.getWads()), (oldWadPack, loadOrder) -> {
