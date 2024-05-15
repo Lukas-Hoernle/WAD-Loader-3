@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" modified="2024-05-15T06:53:35.409Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="u8LU5l-3ImVCwAzhbEe5" version="24.2.0" type="device">
+  <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
+    <mxGraphModel dx="1434" dy="874" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-5" value="frontend" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-6" value="local-client" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-7" value="backend" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-8" value="1 .GET wadpack/{id}" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="H8w_ixA9ijicdqJ4W0mB-5" target="H8w_ixA9ijicdqJ4W0mB-7">
+          <mxGeometry x="0.1468" y="-26" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="180" as="sourcePoint" />
+            <mxPoint x="390" y="130" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-9" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="H8w_ixA9ijicdqJ4W0mB-7" target="H8w_ixA9ijicdqJ4W0mB-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="390" as="sourcePoint" />
+            <mxPoint x="250" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-10" value="2. wadpack with required wads" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="H8w_ixA9ijicdqJ4W0mB-9">
+          <mxGeometry x="-0.3187" y="-3" relative="1" as="geometry">
+            <mxPoint x="60" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-11" value="4. wadloader://startwadpack{id}${serverurl}" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="H8w_ixA9ijicdqJ4W0mB-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="160" as="sourcePoint" />
+            <mxPoint x="510" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-14" value="3. Click: Start Wadpack {id} " style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-15" value="5. GET {serverurl}/download/wadpack/{id}" style="endArrow=classic;html=1;rounded=0;entryX=1.008;entryY=0.617;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="519.04" y="402.98" as="sourcePoint" />
+            <mxPoint x="240.00000000000003" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-16" value="6. wadpack{id}.zip" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" edge="1" parent="1" source="H8w_ixA9ijicdqJ4W0mB-7" target="H8w_ixA9ijicdqJ4W0mB-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="390" as="sourcePoint" />
+            <mxPoint x="520" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-17" value="&lt;div&gt;Start a wadpack on the users pc&lt;/div&gt;&lt;div&gt;(local-client installed)&lt;br&gt;&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-18" value="7. starts wadpack" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="510" y="460" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="H8w_ixA9ijicdqJ4W0mB-19" value="0. go to wadpack page" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="460" y="120" width="150" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
