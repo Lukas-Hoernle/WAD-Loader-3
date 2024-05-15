@@ -26,7 +26,7 @@ public class WadController implements WadApi {
     private final WadMapper wadMapper;
 
     @Override
-    public ResponseEntity<WadDto> wadIdGet(Integer id) {
+    public ResponseEntity<WadDto> getWad(Integer id) {
         Optional<Wad> wad = wadRepo.findById(id);
         return wad.map(wadMapper::map)
                 .map(ResponseEntity::ok)
@@ -34,7 +34,7 @@ public class WadController implements WadApi {
     }
 
     @Override
-    public ResponseEntity<WadDto> wadPost(@Valid String name, @Valid String description, MultipartFile file) {
+    public ResponseEntity<WadDto> postWad(@Valid String name, @Valid String description, MultipartFile file) {
         if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
 
         return switch (Failable.run(file::getInputStream).apply((inputStream) -> fileManager.saveFile(name, inputStream))) {

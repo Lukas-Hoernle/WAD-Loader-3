@@ -31,7 +31,7 @@ public class DownloadController implements DownloadApi {
     private final CmdTemplateManipulator<TemplateArgs> cmdTemplateManipulator;
 
     @Override
-    public ResponseEntity<Resource> downloadHandlerGet() {
+    public ResponseEntity<Resource> downloadLocalHandler() {
         FileSystemResource resource =
                 new FileSystemResource(Path.of("wadloader3/src/main/resources/local-client.exe").toAbsolutePath());
         return ResponseEntity
@@ -41,7 +41,7 @@ public class DownloadController implements DownloadApi {
     }
 
     @Override
-    public ResponseEntity<Resource> downloadSetupGet() {
+    public ResponseEntity<Resource> downloadSetupScript() {
         FileSystemResource resource =
                 new FileSystemResource(Path.of("wadloader3/src/main/resources/wadloader.reg.bat").toAbsolutePath());
         return ResponseEntity
@@ -52,17 +52,17 @@ public class DownloadController implements DownloadApi {
 
     //you can use "/download/wad/2,3,4" to download the wads with id 2,3,4
     @Override
-    public ResponseEntity<Resource> downloadWadIdGet(List<Integer> ids) {
+    public ResponseEntity<Resource> downloadWad(List<Integer> ids) {
         return downloadWads(ids);
     }
 
     @Override
-    public ResponseEntity<Resource> downloadWadPackNoWads(Integer id) {
-        return downloadWadpackIdIdsGet(id, List.of());
+    public ResponseEntity<Resource> downloadWadPackWithoutWads(Integer id) {
+        return downloadWadpackWithExplicitWads(id, List.of());
     }
 
     @Override
-    public ResponseEntity<Resource> downloadWadpackIdGet(Integer id) {
+    public ResponseEntity<Resource> downloadWadpack(Integer id) {
         Failable<WadPack> wadPackF = Failable.fromOptional(wadPackRepo.findById(id), "WadPack with id '%s' not found".formatted(id));
 
         //list of all wads to download
@@ -77,7 +77,7 @@ public class DownloadController implements DownloadApi {
     }
 
     @Override
-    public ResponseEntity<Resource> downloadWadpackIdIdsGet(Integer wadPackId, List<Integer> wadIds) {
+    public ResponseEntity<Resource> downloadWadpackWithExplicitWads(Integer wadPackId, List<Integer> wadIds) {
         Failable<WadPack> wadPackF = Failable.fromOptional(wadPackRepo.findById(wadPackId), "WadPack with id '%s' not found".formatted(wadPackId));
 
         //list of all wads to download
