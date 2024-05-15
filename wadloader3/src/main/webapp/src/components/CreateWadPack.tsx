@@ -28,7 +28,26 @@ function CreateWadPack() {
 };
 
     const handleCreateWadPack = async () => {
-
+        try {
+            const response = await fetch('/api/wadpack', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    wads: selectedWads
+                })
+            });
+            if (response.ok) {
+                alert('WAD Pack created successfully!');
+                setSelectedWads([]);
+            } else {
+                alert('Failed to create WAD Pack.');
+            }
+        } catch (error) {
+            console.error('Error creating WAD Pack:', error);
+            alert('Failed to create WAD Pack. Please try again.');
+        }
     };
 
     return (

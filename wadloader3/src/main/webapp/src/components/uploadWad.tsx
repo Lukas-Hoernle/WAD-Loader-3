@@ -2,15 +2,14 @@ import { useState } from 'react';
 import { Button, Box, Input } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-function UploadWad() {
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const handleFileChange = (event: { target: { files: any[]; }; }) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
+const UploadWad = () => {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setSelectedFile(file || null);
     };
 
-    const uploadFile = async (file: any) => {
+    const uploadFile = async (file: File) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -19,7 +18,6 @@ function UploadWad() {
                 method: 'POST',
                 body: formData
             });
-
             alert('Datei erfolgreich hochgeladen!');
         } catch (error) {
             console.error('Fehler beim Hochladen der Datei:', error);
@@ -34,7 +32,6 @@ function UploadWad() {
             alert('Bitte wählen Sie eine Datei aus.');
         }
     };
-
     return (
         <Box>
             <Input
@@ -56,6 +53,5 @@ function UploadWad() {
             )}
         </Box>
     );
-}
-
+};
 export default UploadWad;
