@@ -1,5 +1,12 @@
 @echo off
 
+REM check admin privileges
+REM if not admin, restart elevated
+set admin=0
+whoami /groups | find "12288" >NUL && set admin=1
+if %admin% EQU 0 powershell -Command "Start-Process -Verb RunAs %0
+if %admin% EQU 0 exit
+
 set "HANDLER_PATH=%APPDATA%\wadloader3\handler"
 mkdir %HANDLER_PATH%
 
