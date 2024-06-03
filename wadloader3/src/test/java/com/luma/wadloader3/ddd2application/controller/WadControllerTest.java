@@ -63,7 +63,7 @@ class WadControllerTest {
         String name = "mywad.pk3";
         String description = "random description";
 
-        WadDto wadDto = wadController.wadPost(name, description, multipartFile).getBody();
+        WadDto wadDto = wadController.postWad(name, description, multipartFile).getBody();
 
         assertNotNull(wadDto);
         assertEquals(name, wadDto.getName());
