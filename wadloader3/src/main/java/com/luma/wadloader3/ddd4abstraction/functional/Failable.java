@@ -1,10 +1,12 @@
 package com.luma.wadloader3.ddd4abstraction.functional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -30,7 +32,14 @@ public sealed interface Failable<T> {
         try {
             return new Success<>(f.get());
         } catch (Exception e) {
-            return Failable.failure(e.getClass().getName() + ": " + e.getMessage());
+            return Failable.failure(
+                    e.getClass().getName() +
+                            ": " +
+                            e.getMessage() +
+                            "\n" +
+                            Arrays.stream(e.getStackTrace())
+                                    .map(StackTraceElement::toString)
+                                    .collect(Collectors.joining("\n")));
         }
     }
 
