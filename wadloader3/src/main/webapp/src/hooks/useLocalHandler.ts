@@ -1,4 +1,4 @@
-type WadpackOption = "startwadpack" | "wadpack";
+type WadpackOption = "DownloadAndStartWadPack" | "DownloadWadPack";
 /**
  * only works on positive integers
  */

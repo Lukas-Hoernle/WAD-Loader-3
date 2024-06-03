@@ -46,7 +46,7 @@ class CmdTemplateManipulatorImplTest {
         assertTrue(newScript.isSuccess(), () -> newScript.getFailure().toString());
 
         //check file name
-        assertEquals(newScript.getSuccess().getFileName().toString(), "startwadPackName.cmd");
+        assertEquals("startwadPackName.cmd",newScript.getSuccess().getFileName().toString());
 
         //check file content
         List<String> lines;
@@ -61,7 +61,7 @@ class CmdTemplateManipulatorImplTest {
                 "if \"%GZDOOM_PATH%\"==\"\" set /p \"GZDOOM_PATH=Enter the path to gzdoom.exe: \"\n" +
                 "if \"%IWAD_PATH%\"==\"\" set /p \"IWAD_PATH=Enter the path to the iwad you want to use: \"\n" +
                 "\n" +
-                "start /b %GZDOOM_PATH% -iwad %IWAD% -file  1\n" +
+                "start /b %GZDOOM_PATH% -iwad %IWAD% -file  %~dp01\n" +
                 "\n" +
                 "echo \"%GZDOOM_DIR%\"", String.join("\n", lines));
     }
