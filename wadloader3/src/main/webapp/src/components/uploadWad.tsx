@@ -1,12 +1,10 @@
-import { useState } from 'react';
-import { Button, Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Box, Typography, Paper, Grid, LinearProgress } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useWadPackApi } from './useWadPackApi';
 
 const UploadWad = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
-    const wadPackApi = useWadPackApi();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -27,10 +25,14 @@ const UploadWad = () => {
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await wadPackApi.uploadWad(formData);
+            const response = await fetch('/api/upload-wad', {
+                method: 'POST',
+                body: formData
+            });
 
             if (response.ok) {
                 alert('Datei erfolgreich hochgeladen!');
+                setSelectedFile(null);
             } else {
                 alert('Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.');
             }
@@ -43,35 +45,51 @@ const UploadWad = () => {
     };
 
     return (
-        <Box>
-            <Typography variant="h6">Datei auswählen</Typography>
-            <input
-                type="file"
-                accept=".wad"
-                style={{ display: 'none' }}
-                id="file-upload"
-                onChange={handleFileChange}
-            />
-            <label htmlFor="file-upload">
-                <Button
-                    variant="contained"
-                    component="span"
-                    startIcon={<CloudUploadIcon />}
-                    disabled={uploading}
-                >
-                    {uploading ? 'Hochladen...' : 'Datei auswählen'}
-                </Button>
-            </label>
-            {selectedFile && (
-                <Button
-                    variant="contained"
-                    onClick={handleUpload}
-                    disabled={uploading}
-                >
-                    Hochladen
-                </Button>
-            )}
-        </Box>
+        <Paper elevation={3} sx={{ p: 3, mt: 3, mx: 'auto', maxWidth: 600 }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Datei hochladen
+            </Typography>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                    <input
+                        type="file"
+                        accept=".wad"
+                        style={{ display: 'none' }}
+                        id="file-upload"
+                        onChange={handleFileChange}
+                    />
+                    <label htmlFor="file-upload">
+                        <Button
+                            variant="contained"
+                            component="span"
+                            startIcon={<CloudUploadIcon />}
+                            fullWidth
+                            disabled={uploading}
+                        >
+                            {selectedFile ? selectedFile.name : 'Datei auswählen'}
+                        </Button>
+                    </label>
+                </Grid>
+                <Grid item xs={12}>
+                    {selectedFile && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUpload}
+                            fullWidth
+                            disabled={uploading}
+                        >
+                            Hochladen
+                        </Button>
+                    )}
+                </Grid>
+                {uploading && (
+                    <Grid item xs={12}>
+                        <LinearProgress />
+                    </Grid>
+                )}
+            </Grid>
+        </Paper>
     );
 };
 
