@@ -1,35 +1,43 @@
 import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
+import { useWadPackApi } from './useWadPackApi';
 
 function EditWadPack() {
     const [wads, setWads] = useState([]);
     const [selectedWads, setSelectedWads] = useState([]);
+    const wadPackApi = useWadPackApi();
 
     useEffect(() => {
-        fetchWads();//funktioniert glaub nich
-    }, []);
+        const fetchWads = async () => {
+            try {
+                const response = await wadPackApi.getWads();
+                setWads(response.data);
+            } catch (error) {
+                console.error('Fehler beim Abrufen der WADs:', error);
+            }
+        };
+        fetchWads();
+    }, [wadPackApi]);
 
-    const fetchWads = async () => {
+    const toggleWadSelection = (wadId) => {
+        setSelectedWads(prevSelectedWads =>
+            prevSelectedWads.includes(wadId)
+                ? prevSelectedWads.filter(id => id !== wadId)
+                : [...prevSelectedWads, wadId]
+        );
+    };
+
+    const handleSave = async () => {
         try {
-            const response = await fetch('/api/wads');
-            const data = await response.json();
-            setWads(data);
+            const updatedWadPack = {
+                wads: selectedWads.map(id => ({ id }))
+            };
+            await wadPackApi.updateWadPack(updatedWadPack);
+            alert('WAD Pack successfully updated!');
         } catch (error) {
-            console.error('Fehler beim Abrufen der WADs:', error);
+            console.error('Fehler beim Speichern des WAD Packs:', error);
+            alert('Failed to save WAD Pack. Please try again.');
         }
-    };
-
-    const toggleWadSelection = (wadId: never) => {
-        if (selectedWads.includes(wadId)) {
-            setSelectedWads(selectedWads.filter(id => id !== wadId));
-        } else {
-            // @ts-ignore
-            setSelectedWads([...selectedWads, wadId]);
-        }
-    };
-
-    const handleSave = () => {
-        console.log('Ausgewählte WADs:', selectedWads);
     };
 
     return (
