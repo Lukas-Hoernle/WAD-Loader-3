@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { TextField, Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import { useWadPackApi } from './useWadPackApi';
 
 const SearchDownloadPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const wadPackApi = useWadPackApi();
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`/api/search?q=${searchQuery}`);
-            const data = await response.json();
-            setSearchResults(data);
+            const response = await wadPackApi.searchWads(searchQuery);
+            setSearchResults(response.data);
         } catch (error) {
             console.error('Error searching:', error);
         }
@@ -19,13 +20,7 @@ const SearchDownloadPage = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch(`/api/download`, {
-                method: 'POST',
-                body: JSON.stringify(selectedItems),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await wadPackApi.downloadWads(selectedItems);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -39,12 +34,12 @@ const SearchDownloadPage = () => {
         }
     };
 
-    const toggleSelection = (id: any) => {
-        if (selectedItems.includes(id)) {
-            setSelectedItems(selectedItems.filter(item => item !== id));
-        } else {
-            setSelectedItems([...selectedItems, id]);
-        }
+    const toggleSelection = (id) => {
+        setSelectedItems(prevSelectedItems =>
+            prevSelectedItems.includes(id)
+                ? prevSelectedItems.filter(item => item !== id)
+                : [...prevSelectedItems, id]
+        );
     };
 
     return (
