@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Button, Box, Input } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from "axios";
+import { useWadPackApi } from "./useWadPackApi";
 
 function CreateWad() {
     const [selectedFile, setSelectedFile] = useState(null);
+    const wadPackApi = useWadPackApi();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -15,22 +16,13 @@ function CreateWad() {
         }
     };
 
-    const uploadFile = async (file: any) => {
+    const uploadFile = async (file) => {
         try {
             const formData = new FormData();
             formData.append("file", file);
 
-            await axios.post(
-                "/wadpack",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                }
-            );
+            await wadPackApi.uploadWadPack(formData);
 
-            // Die Antwort der API wird ignoriert
             alert("Datei erfolgreich hochgeladen!");
         } catch (error) {
             console.error("Fehler beim Hochladen der Datei:", error);
