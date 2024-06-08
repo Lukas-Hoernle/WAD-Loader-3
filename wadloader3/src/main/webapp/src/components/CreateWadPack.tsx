@@ -8,24 +8,23 @@ function CreateWadPack() {
     const wadPackApi = useWadPackApi();
 
     useEffect(() => {
+        const fetchWads = async () => {
+            try {
+                const response = await wadPackApi.getWads();
+                setWads(response.data);
+            } catch (error) {
+                console.error('Error fetching WADs:', error);
+            }
+        };
         fetchWads();
-    }, []);
-
-    const fetchWads = async () => {
-        try {
-            const response = await wadPackApi.getWads();
-            setWads(response.data);
-        } catch (error) {
-            console.error('Error fetching WADs:', error);
-        }
-    };
+    }, [wadPackApi]);
 
     const toggleWadSelection = (wadId) => {
-        if (!selectedWads.includes(wadId)) {
-            setSelectedWads([...selectedWads, wadId]);
-        } else {
-            setSelectedWads(selectedWads.filter(id => id !== wadId));
-        }
+        setSelectedWads(prevSelectedWads =>
+            prevSelectedWads.includes(wadId)
+                ? prevSelectedWads.filter(id => id !== wadId)
+                : [...prevSelectedWads, wadId]
+        );
     };
 
     const handleCreateWadPack = async () => {
