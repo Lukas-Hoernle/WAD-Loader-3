@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
+import { useWadPackApi } from './useWadPackApi';
 
 function CreateWadPack() {
     const [wads, setWads] = useState([]);
     const [selectedWads, setSelectedWads] = useState([]);
+    const wadPackApi = useWadPackApi();
 
     useEffect(() => {
         fetchWads();
@@ -11,39 +13,31 @@ function CreateWadPack() {
 
     const fetchWads = async () => {
         try {
-            const response = await fetch('/api/wads');
-            const data = await response.json();
-            setWads(data);
+            const response = await wadPackApi.getWads();
+            setWads(response.data);
         } catch (error) {
             console.error('Error fetching WADs:', error);
         }
     };
 
-    const toggleWadSelection = (wadId: any) => {
+    const toggleWadSelection = (wadId) => {
         if (!selectedWads.includes(wadId)) {
             setSelectedWads([...selectedWads, wadId]);
         } else {
             setSelectedWads(selectedWads.filter(id => id !== wadId));
         }
-};
+    };
 
     const handleCreateWadPack = async () => {
         try {
-            const response = await fetch('/api/wadpack', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    wads: selectedWads
-                })
-            });
-            if (response.ok) {
-                alert('WAD Pack created successfully!');
-                setSelectedWads([]);
-            } else {
-                alert('Failed to create WAD Pack.');
-            }
+            const newWadPack = {
+                name: "New WadPack",
+                description: "Description for the new WadPack",
+                wads: selectedWads.map(id => ({ id }))
+            };
+            await wadPackApi.createWadPack(newWadPack);
+            alert('WAD Pack created successfully!');
+            setSelectedWads([]);
         } catch (error) {
             console.error('Error creating WAD Pack:', error);
             alert('Failed to create WAD Pack. Please try again.');
