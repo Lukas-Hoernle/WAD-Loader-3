@@ -40,6 +40,20 @@ paths:
                 $ref: '#/components/schemas/WadDto'
         400:
           description: "No Wad uploaded"
+    get:
+      operationId: getWads
+      description: get all wads
+      tags:
+        - wad
+      responses:
+        200:
+          description: "get all wads"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WadDto'
   /wad/{id}:
     get:
       operationId: getWad
@@ -80,6 +94,20 @@ paths:
                 $ref: '#/components/schemas/WadPackDto'
         400:
           description: "No WadPack created"
+    get:
+      operationId: getWadPacks
+      description: get all wadpacks
+      tags:
+        - wadpack
+      responses:
+        200:
+          description: "get all wadpacks"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WadPackDto'
   /wadpack/{id}:
     get:
       operationId: getWadpack
