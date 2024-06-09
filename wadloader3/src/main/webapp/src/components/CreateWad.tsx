@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button, Box, Input } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useWadPackApi } from "./useWadPackApi";
+import { useWadPackApi } from "../api/hooks/useWadPackApi";
 
 function CreateWad() {
     const [selectedFile, setSelectedFile] = useState(null);
     const wadPackApi = useWadPackApi();
 
-    const handleFileChange = (event) => {
+    const handleFileChange = (event: { target: { files: any[]; }; }) => {
         const file = event.target.files[0];
         if (file && file.name.endsWith(".wad")) {
             setSelectedFile(file);
@@ -16,12 +16,12 @@ function CreateWad() {
         }
     };
 
-    const uploadFile = async (file) => {
+    const uploadFile = async (file: string | Blob) => {
         try {
             const formData = new FormData();
             formData.append("file", file);
 
-            await wadPackApi.uploadWadPack(formData);
+            await wadPackApi.postWadpack(formData);
 
             alert("Datei erfolgreich hochgeladen!");
         } catch (error) {

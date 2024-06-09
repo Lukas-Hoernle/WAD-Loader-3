@@ -42,3 +42,4 @@ replay_pid*
 /api-download-generator/spring-api-interface/
 /api-download-generator/package-lock.json
 /local-client/dist-newstyle/
+node_modules

@@ -8,6 +8,7 @@ const SearchDownloadPage = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const wadPackApi = useWadPackApi();
+    const WadApi = useWadApi()
 
     const handleSearch = async () => {
         try {
@@ -20,7 +21,7 @@ const SearchDownloadPage = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await wadPackApi.downloadWads(selectedItems);
+            const response = await wadApi.downloadWads(selectedItems);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
