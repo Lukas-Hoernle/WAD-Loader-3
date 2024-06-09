@@ -1,19 +1,21 @@
-import { useState } from 'react';
-import { TextField, Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { useWadPackApi } from './useWadPackApi';
+import { Box, Button, Checkbox, List, ListItem, ListItemSecondaryAction, ListItemText, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { WadDto } from 'wadloader3-api';
+import { useDownloadApi } from '../api/hooks/useDownloadApi';
+import { useWadApi } from '../api/hooks/useWadApi';
 
 const SearchDownloadPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]);
-    const wadPackApi = useWadPackApi();
-    const WadApi = useWadApi()
+    const [searchResults, setSearchResults] = useState<WadDto[]>([]);
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+    const wadApi = useWadApi()
+    const downloadApi= useDownloadApi();
 
     const handleSearch = async () => {
         try {
-            const response = await wadPackApi.searchWads(searchQuery);
-            setSearchResults(response.data);
+            const response = await wadApi.getWads();//gibs nich alle holen und hier searchen mit der searchQuery
+            setSearchResults(response);
         } catch (error) {
             console.error('Error searching:', error);
         }
@@ -21,9 +23,8 @@ const SearchDownloadPage = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await wadApi.downloadWads(selectedItems);
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            const response = await downloadApi.downloadWad({id: selectedItems});//filtern nach selectedItems und nur die downloaden
+            const url = window.URL.createObjectURL(response);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'download.zip';
@@ -35,7 +36,7 @@ const SearchDownloadPage = () => {
         }
     };
 
-    const toggleSelection = (id) => {
+    const toggleSelection = (id: number) => {
         setSelectedItems(prevSelectedItems =>
             prevSelectedItems.includes(id)
                 ? prevSelectedItems.filter(item => item !== id)

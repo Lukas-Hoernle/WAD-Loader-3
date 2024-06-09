@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
-import { useWadPackApi } from './useWadPackApi';
+import { useWadPackApi } from '../api/hooks/useWadPackApi';
+import { useWadApi } from '../api/hooks/useWadApi';
+import { WadDto } from 'wadloader3-api';
 
 function CreateWadPack() {
-    const [wads, setWads] = useState([]);
-    const [selectedWads, setSelectedWads] = useState([]);
+    const [wads, setWads] = useState<WadDto[]>([]);
+    const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const wadPackApi = useWadPackApi();
+    const wadApi = useWadApi();
 
     useEffect(() => {
         const fetchWads = async () => {
             try {
-                const response = await wadPackApi.getWads();
-                setWads(response.data);
+                const response = await wadApi.getWads();
+                setWads(response);
             } catch (error) {
                 console.error('Error fetching WADs:', error);
             }
@@ -19,7 +22,7 @@ function CreateWadPack() {
         fetchWads();
     }, [wadPackApi]);
 
-    const toggleWadSelection = (wadId) => {
+    const toggleWadSelection = (wadId: any) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wadId)
                 ? prevSelectedWads.filter(id => id !== wadId)
@@ -30,11 +33,11 @@ function CreateWadPack() {
     const handleCreateWadPack = async () => {
         try {
             const newWadPack = {
-                name: "New WadPack",
+                newWadPackDto:{name: "New WadPack",
                 description: "Description for the new WadPack",
-                wads: selectedWads.map(id => ({ id }))
+                wads: selectedWads,}
             };
-            await wadPackApi.createWadPack(newWadPack);
+            await wadPackApi.postWadpack(newWadPack);
             alert('WAD Pack created successfully!');
             setSelectedWads([]);
         } catch (error) {

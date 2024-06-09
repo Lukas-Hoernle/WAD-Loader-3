@@ -1,33 +1,35 @@
 import { useState } from "react";
 import { Button, Box, Input } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useWadPackApi } from "../api/hooks/useWadPackApi";
+import { useWadApi } from "../api/hooks/useWadApi";
 
 function CreateWad() {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const wadPackApi = useWadPackApi();
+    const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
+    // TODO Input Fields for name and description
+    const [name, setName] = useState<string>("TODO-setName");
+    const [description, setDescription] = useState<string>("TODO-setDescription");
+    const wadApi = useWadApi();
 
-    const handleFileChange = (event: { target: { files: any[]; }; }) => {
-        const file = event.target.files[0];
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fileList = event.currentTarget.files;
+        setName("todo-setname");
+        setdescription("todo set description");
+        if (!(fileList && fileList.length > 0)) {
+            alert("Bitte wählen Sie eine Datei mit der Endung '.wad' aus.");
+            return;
+        }
+        const file = fileList.item(0);
         if (file && file.name.endsWith(".wad")) {
             setSelectedFile(file);
-        } else {
-            alert("Bitte wählen Sie eine Datei mit der Endung '.wad' aus.");
         }
     };
 
-    const uploadFile = async (file: string | Blob) => {
-        try {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            await wadPackApi.postWadpack(formData);
-
-            alert("Datei erfolgreich hochgeladen!");
-        } catch (error) {
-            console.error("Fehler beim Hochladen der Datei:", error);
-            alert("Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.");
-        }
+    const uploadFile = async (file: Blob) => {
+            await wadApi.postWad({
+                name: name,
+                description: description,
+                file: file,
+            });
     };
 
     const handleUpload = () => {
@@ -43,7 +45,9 @@ function CreateWad() {
             <Input
                 type="file"
                 inputProps={{ accept: ".wad" }}
-                onChange={handleFileChange}
+                onChange={
+                    handleFileChange
+                }
                 style={{ display: "none" }}
                 id="file-upload"
             />

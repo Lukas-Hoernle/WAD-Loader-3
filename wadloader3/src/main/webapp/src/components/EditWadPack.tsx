@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
-import { useWadPackApi } from './useWadPackApi';
+import { useWadPackApi } from '../api/hooks/useWadPackApi';
+import { useWadApi } from '../api/hooks/useWadApi';
+import { WadDto } from 'wadloader3-api';
 
 function EditWadPack() {
-    const [wads, setWads] = useState([]);
-    const [selectedWads, setSelectedWads] = useState([]);
+    const [wads, setWads] = useState<WadDto[]>([]);
+    const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const wadPackApi = useWadPackApi();
-
+    const wadApi = useWadApi();
     useEffect(() => {
         const fetchWads = async () => {
             try {
-                const response = await wadPackApi.getWads();
-                setWads(response.data);
+                const response = await wadApi.getWads();
+                setWads(response);
             } catch (error) {
                 console.error('Fehler beim Abrufen der WADs:', error);
             }
@@ -30,9 +32,10 @@ function EditWadPack() {
     const handleSave = async () => {
         try {
             const updatedWadPack = {
-                wads: selectedWads.map(id => ({ id }))
+                newWadPackDto:{
+                wads: selectedWads.map(id => ({ id }))}
             };
-            await wadPackApi.updateWadPack(updatedWadPack);
+            await wadPackApi.updateWadpack(updatedWadPack);
             alert('WAD Pack successfully updated!');
         } catch (error) {
             console.error('Fehler beim Speichern des WAD Packs:', error);

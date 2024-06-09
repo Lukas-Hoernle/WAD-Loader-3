@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box, Typography, Paper, Grid, LinearProgress } from '@mui/material';
+import { Button, Typography, Paper, Grid, LinearProgress } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const UploadWad = () => {
