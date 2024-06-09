@@ -62,7 +62,7 @@ function EditWadPack() {
                 {wads.map(wad => (
                     <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad.id)}>
                         <ListItemText primary={wad.name} />
-                        {!selectedWads.includes(wad.id) && (
+                        {!selectedWads.includes(wad) && (
                             <ListItemSecondaryAction>
                                 <Checkbox />
                             </ListItemSecondaryAction>

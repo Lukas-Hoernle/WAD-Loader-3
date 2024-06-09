@@ -55,7 +55,7 @@ function CreateWadPack() {
                     <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad.id)}>
                         <ListItemText primary={wad.name} />
                         <ListItemSecondaryAction>
-                            <Checkbox checked={selectedWads.includes(wad.id)} />
+                            <Checkbox checked={selectedWads.includes(wad)} />
                         </ListItemSecondaryAction>
                     </ListItem>
                 ))}
