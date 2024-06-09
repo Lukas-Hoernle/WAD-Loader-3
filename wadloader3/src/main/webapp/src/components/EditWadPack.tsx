@@ -2,25 +2,26 @@ import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
-import { WadDto } from 'wadloader3-api';
+import { WadDto, WadPackDto } from 'wadloader3-api';
 
-function EditWadPack({ wadPackId }: { wadPackId: number }) {
+function EditWadPack() {
     const [wads, setWads] = useState<WadDto[]>([]);
     const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
+    const [wadPack, setWadPack] = useState<WadPackDto | null>(null);
     const wadPackApi = useWadPackApi();
     const wadApi = useWadApi();
 
     useEffect(() => {
-        const fetchWads = async () => {
-            try {
-                const response = await wadApi.getWads();
-                setWads(response);
-            } catch (error) {
-                console.error('Fehler beim Abrufen der WADs:', error);
-            }
+        const fetchData = async () => {
+            const wadResponse = await wadApi.getWads();
+            setWads(wadResponse);
+
+            const wadPackResponse = await wadPackApi.getWadpack();
+            setWadPack(wadPackResponse);
+            setSelectedWads(wadPackResponse.wads);
         };
-        fetchWads();
-    }, [wadPackApi]);
+        fetchData();
+    }, [wadPackApi, wadApi]);
 
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
@@ -31,19 +32,19 @@ function EditWadPack({ wadPackId }: { wadPackId: number }) {
     };
 
     const handleSave = async () => {
-        try {
-            const updatedWadPack = {
-                id: wadPackId,
-                newWadPackDto: {
-                    wads: selectedWads.map(wad => ({ id: wad.id }))
-                }
-            };
-            await wadPackApi.updateWadpack(updatedWadPack);
-            alert('WAD Pack successfully updated!');
-        } catch (error) {
-            console.error('Fehler beim Speichern des WAD Packs:', error);
-            alert('Failed to save WAD Pack. Please try again.');
+        if (wadPack === null) {
+            alert('WAD Pack ist nicht gesetzt.');
+            return;
         }
+
+        const updatedWadPack = {
+            id: wadPack.id,
+            newWadPackDto: {
+                wads: selectedWads.map(wad => ({ id: wad.id }))
+            }
+        };
+        await wadPackApi.updateWadpack(updatedWadPack);
+        alert('WAD Pack erfolgreich aktualisiert!');
     };
 
     return (
