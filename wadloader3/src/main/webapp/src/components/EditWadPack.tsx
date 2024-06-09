@@ -4,11 +4,12 @@ import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto } from 'wadloader3-api';
 
-function EditWadPack() {
+function EditWadPack({ wadPackId }: { wadPackId: number }) {
     const [wads, setWads] = useState<WadDto[]>([]);
     const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const wadPackApi = useWadPackApi();
     const wadApi = useWadApi();
+
     useEffect(() => {
         const fetchWads = async () => {
             try {
@@ -21,19 +22,21 @@ function EditWadPack() {
         fetchWads();
     }, [wadPackApi]);
 
-    const toggleWadSelection = (wadId) => {
+    const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
-            prevSelectedWads.includes(wadId)
-                ? prevSelectedWads.filter(id => id !== wadId)
-                : [...prevSelectedWads, wadId]
+            prevSelectedWads.includes(wad)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
+                : [...prevSelectedWads, wad]
         );
     };
 
     const handleSave = async () => {
         try {
             const updatedWadPack = {
-                newWadPackDto:{
-                wads: selectedWads.map(id => ({ id }))}
+                id: wadPackId,
+                newWadPackDto: {
+                    wads: selectedWads.map(wad => ({ id: wad.id }))
+                }
             };
             await wadPackApi.updateWadpack(updatedWadPack);
             alert('WAD Pack successfully updated!');
@@ -48,9 +51,9 @@ function EditWadPack() {
             <Typography variant="h4">Edit WadPack Page</Typography>
             <Typography variant="h5">WADs im Pack</Typography>
             <List>
-                {selectedWads.map(id => (
-                    <ListItem key={id} dense button onClick={() => toggleWadSelection(id)}>
-                        <ListItemText primary={wads.find(wad => wad.id === id)?.name} />
+                {selectedWads.map(wad => (
+                    <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
+                        <ListItemText primary={wads.find(w => w.id === wad.id)?.name} />
                         <ListItemSecondaryAction>
                             <Checkbox checked />
                         </ListItemSecondaryAction>
@@ -60,7 +63,7 @@ function EditWadPack() {
             <Typography variant="h5">Verfügbare WADs</Typography>
             <List>
                 {wads.map(wad => (
-                    <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad.id)}>
+                    <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
                         <ListItemText primary={wad.name} />
                         {!selectedWads.includes(wad) && (
                             <ListItemSecondaryAction>
