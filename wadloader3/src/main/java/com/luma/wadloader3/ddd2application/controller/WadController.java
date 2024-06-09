@@ -34,6 +34,12 @@ public class WadController implements WadApi {
     }
 
     @Override
+    public ResponseEntity<List<WadDto>> getWads() {
+        List<WadDto> wads = wadRepo.findAll().stream().map(wadMapper::map).toList();
+        return ResponseEntity.ok(wads);
+    }
+
+    @Override
     public ResponseEntity<WadDto> postWad(@Valid String name, @Valid String description, MultipartFile file) {
         if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
 

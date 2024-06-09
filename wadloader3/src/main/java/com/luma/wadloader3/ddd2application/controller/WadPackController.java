@@ -37,6 +37,12 @@ public class WadPackController implements WadpackApi {
     }
 
     @Override
+    public ResponseEntity<List<WadPackDto>> getWadPacks() {
+        List<WadPackDto> wadPackDtos = wadPackRepo.findAll().stream().map(wadPackMapper::map).toList();
+        return ResponseEntity.ok(wadPackDtos);
+    }
+
+    @Override
     public ResponseEntity<WadPackDto> getWadpack(Integer id) {
         return wadPackRepo.findById(id)
                 .map(wadPackMapper::map)
