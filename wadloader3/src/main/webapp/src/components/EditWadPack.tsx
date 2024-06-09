@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
-import { WadDto, WadPackDto } from 'wadloader3-api';
+import { WadDto, WadPackDto, UpdateWadpackRequest } from 'wadloader3-api';
 
 function EditWadPack() {
     const [wads, setWads] = useState<WadDto[]>([]);
@@ -37,12 +37,15 @@ function EditWadPack() {
             return;
         }
 
-        const updatedWadPack = {
+        const updatedWadPack: UpdateWadpackRequest = {
             id: wadPack.id,
             newWadPackDto: {
-                wads: selectedWads.map(wad => ({ id: wad.id }))
+                name: wadPack.name,
+                description: wadPack.description,
+                wads: selectedWads
             }
         };
+
         await wadPackApi.updateWadpack(updatedWadPack);
         alert('WAD Pack erfolgreich aktualisiert!');
     };
