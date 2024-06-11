@@ -5,7 +5,6 @@ import { useWadApi } from "../api/hooks/useWadApi";
 
 function CreateWad() {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
-    // TODO Input Fields for name and description
     const [name, setName] = useState<string>("TODO-setName");
     const [description, setDescription] = useState<string>("TODO-setDescription");
     const wadApi = useWadApi();
@@ -13,7 +12,7 @@ function CreateWad() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.currentTarget.files;
         setName("todo-setname");
-        setdescription("todo set description");
+        setDescription("todo set description");
         if (!(fileList && fileList.length > 0)) {
             alert("Bitte wählen Sie eine Datei mit der Endung '.wad' aus.");
             return;
@@ -25,11 +24,11 @@ function CreateWad() {
     };
 
     const uploadFile = async (file: Blob) => {
-            await wadApi.postWad({
-                name: name,
-                description: description,
-                file: file,
-            });
+        await wadApi.postWad({
+            name: name,
+            description: description,
+            file: file,
+        });
     };
 
     const handleUpload = () => {
@@ -45,9 +44,7 @@ function CreateWad() {
             <Input
                 type="file"
                 inputProps={{ accept: ".wad" }}
-                onChange={
-                    handleFileChange
-                }
+                onChange={handleFileChange}
                 style={{ display: "none" }}
                 id="file-upload"
             />

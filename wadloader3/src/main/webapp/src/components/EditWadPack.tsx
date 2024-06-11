@@ -16,7 +16,7 @@ function EditWadPack() {
             const wadResponse = await wadApi.getWads();
             setWads(wadResponse);
 
-            const wadPackResponse = await wadPackApi.getWadpack();
+            const wadPackResponse = await wadPackApi.getWadpack(wadPackId);
             setWadPack(wadPackResponse);
             setSelectedWads(wadPackResponse.wads);
         };
