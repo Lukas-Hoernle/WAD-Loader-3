@@ -19,7 +19,7 @@ function EditWadPack({ wadPackId }: { wadPackId: number }) {
             const request: GetWadpackRequest = { id: wadPackId };
             const wadPackResponse = await wadPackApi.getWadpack(request);
             setWadPack(wadPackResponse);
-            setSelectedWads(wadPackResponse.wads);
+            setSelectedWads(wadPackResponse.wads)
         };
         fetchData();
     }, [wadPackApi, wadApi, wadPackId]);
