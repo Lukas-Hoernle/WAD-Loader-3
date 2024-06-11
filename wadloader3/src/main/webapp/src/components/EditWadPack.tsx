@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
-import { WadDto, WadPackDto, UpdateWadpackRequest } from 'wadloader3-api';
+import { WadDto, WadPackDto, UpdateWadpackRequest, GetWadpackRequest } from 'wadloader3-api';
 
-function EditWadPack() {
+function EditWadPack({ wadPackId }: { wadPackId: number }) {
     const [wads, setWads] = useState<WadDto[]>([]);
     const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const [wadPack, setWadPack] = useState<WadPackDto | null>(null);
@@ -16,12 +16,13 @@ function EditWadPack() {
             const wadResponse = await wadApi.getWads();
             setWads(wadResponse);
 
-            const wadPackResponse = await wadPackApi.getWadpack(wadPackId);
+            const request: GetWadpackRequest = { id: wadPackId };
+            const wadPackResponse = await wadPackApi.getWadpack(request);
             setWadPack(wadPackResponse);
             setSelectedWads(wadPackResponse.wads);
         };
         fetchData();
-    }, [wadPackApi, wadApi]);
+    }, [wadPackApi, wadApi, wadPackId]);
 
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
