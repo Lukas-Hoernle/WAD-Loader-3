@@ -5,7 +5,7 @@ import App from "../App.tsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route
+        [<Route
             path="/"
             element={
                 <LoginLayout>
@@ -16,6 +16,15 @@ export const router = createBrowserRouter(
 
             }
         >
-        </Route>
+        </Route>,
+        <Route
+        path="/abc"
+        element={
+            <p>adsad</p>
+
+
+        }
+    >
+    </Route>]
     )
 );

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Typography, Paper, Grid, LinearProgress } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { WadApi } from 'wadloader3-api';
+import { useWadApi } from '../api/hooks/useWadApi';
 
 const UploadWad = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
-
+    const wadApi = useWadApi();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         setSelectedFile(file || null);
@@ -25,17 +27,10 @@ const UploadWad = () => {
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch('/api/upload-wad', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                alert('Datei erfolgreich hochgeladen!');
-                setSelectedFile(null);
-            } else {
-                alert('Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.');
-            }
+            wadApi.postWad({name: "habicht", description:"habichtdesc",file: file})
+            .then(_=>{setSelectedFile(null)})
+            .catch(()=>console.log("shit hits the fan"))
+            
         } catch (error) {
             console.error('Fehler beim Hochladen der Datei:', error);
             alert('Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.');
