@@ -106,7 +106,7 @@ function CreateWadPack() {
                 <Button variant="contained" onClick={addAllWads}>Add All Wads</Button>
                 <Button variant="contained" onClick={removeAllWads}>Remove All Wads</Button>
                 <Button variant="contained" onClick={handleSave}>Save</Button>
-                <Button variant="contained" onClick={() => setSelectedWads([])}>Remove Wad</Button>
+                <Button variant="contained" onClick={() => selectedWads.length > 0 && handleRemoveWad(selectedWads[selectedWads.length - 1])}>Remove Wad</Button>
             </Box>
         </Box>
     );
