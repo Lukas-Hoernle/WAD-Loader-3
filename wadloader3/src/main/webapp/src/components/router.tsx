@@ -1,30 +1,29 @@
-import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
-import {LoginLayout} from "./LoginLayout.tsx";
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+import { LoginLayout } from "./LoginLayout.tsx";
 import CreateWad from "./CreateWad";
+import WadList from "./WadList"; // Import the new WadList component
 import App from "../App.tsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
-        [<Route
-            path="/"
-            element={
-                <LoginLayout>
-                    <App />
-                    <CreateWad />
-                </LoginLayout>
-
-
-            }
-        >
-        </Route>,
-        <Route
-        path="/abc"
-        element={
-            <p>adsad</p>
-
-
-        }
-    >
-    </Route>]
+        <>
+            <Route
+                path="/"
+                element={
+                    <LoginLayout>
+                        <App />
+                        <CreateWad />
+                    </LoginLayout>
+                }
+            />
+            <Route
+                path="/abc"
+                element={<p>adsad</p>}
+            />
+            <Route
+                path="/wadliste"
+                element={<WadList />}
+            />
+        </>
     )
 );
