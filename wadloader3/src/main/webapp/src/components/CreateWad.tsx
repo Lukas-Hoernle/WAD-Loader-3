@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Box, Input } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useWadApi } from "../api/hooks/useWadApi";
 
 function CreateWad() {
@@ -10,18 +11,17 @@ function CreateWad() {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.currentTarget.files;
-        
-        setDescription("todo set description");
+
+        setDescription("Beispieldescription");
         if (!(fileList && fileList.length > 0)) {
             alert("Bitte wählen Sie eine Datei mit der Endung '.wad' aus.");
             return;
         }
         const file = fileList.item(0);
-        if (file && file.name.endsWith(".pk3")) {
+        if (file && file.name.endsWith(".wad")) {
             setName(file.name);
             setSelectedFile(file);
         }
-        console.log(wadApi.getWads().then(JSON.stringify).then(console.log))
     };
 
     const uploadFile = async (file: Blob) => {
@@ -44,13 +44,13 @@ function CreateWad() {
         <Box>
             <Input
                 type="file"
-                inputProps={{ accept: ".pk3" }}
+                inputProps={{ accept: ".wad" }}
                 onChange={handleFileChange}
                 style={{ display: "none" }}
                 id="file-upload"
             />
             <label htmlFor="file-upload">
-                <Button variant="contained" component="span">
+                <Button variant="contained" component="span" startIcon={<CloudUploadIcon />}>
                     Datei auswählen
                 </Button>
             </label>
