@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button, Box, Input } from "@mui/material";
 import { useWadApi } from "../api/hooks/useWadApi";
-import { useCookies } from "react-cookie";
 
 function CreateWad() {
     const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
@@ -25,16 +24,11 @@ function CreateWad() {
         console.log(wadApi.getWads().then(JSON.stringify).then(console.log))
     };
 
-    const [cookies] = useCookies(["XSRF-TOKEN"]);
     const uploadFile = async (file: Blob) => {
         await wadApi.postWad({
             name: name,
             description: description,
             file: file,
-        }, {
-            headers: {
-                "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
-            }
         });
     };
 
