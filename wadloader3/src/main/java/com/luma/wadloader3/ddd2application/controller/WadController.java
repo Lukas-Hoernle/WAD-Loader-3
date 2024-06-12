@@ -41,7 +41,10 @@ public class WadController implements WadApi {
 
     @Override
     public ResponseEntity<WadDto> postWad(@Valid String name, @Valid String description, MultipartFile file) {
-        if (wadRepo.existsByName(name)) return ResponseEntity.badRequest().build();
+        if (wadRepo.existsByName(name)) {
+            System.err.printf("Wad with name %s already exists%n", name);
+            return ResponseEntity.badRequest().build();
+        }
 
         return switch (Failable.run(file::getInputStream).apply((inputStream) -> fileManager.saveFile(name, inputStream))) {
             case Failable.Success(FilePath filePath) -> {

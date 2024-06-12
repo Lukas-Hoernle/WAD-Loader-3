@@ -1,4 +1,3 @@
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { Box, Button, Checkbox, List, ListItem, ListItemSecondaryAction, ListItemText, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { WadDto } from 'wadloader3-api';
@@ -72,7 +71,6 @@ const SearchDownloadPage = () => {
                 variant="contained"
                 onClick={handleDownload}
                 disabled={selectedItems.length === 0}
-                startIcon={<CloudDownloadIcon />}
             >
                 Download
             </Button>
