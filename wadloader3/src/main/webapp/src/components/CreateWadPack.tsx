@@ -16,7 +16,7 @@ function CreateWadPack() {
             try {
                 const wadResponse = await wadApi.getWads();
                 setWads(wadResponse);
-                const wadPackResponse = await wadPackApi.getWadpacks();
+                const wadPackResponse = await wadPackApi.getWadPacks();
                 setWadPacks(wadPackResponse);
             } catch (error) {
                 console.error('Error fetching data:', error);

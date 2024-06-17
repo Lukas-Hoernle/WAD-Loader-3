@@ -16,7 +16,7 @@ function CreateWadPack() {
             const wadResponse = await wadApi.getWads();
             setWads(wadResponse);
 
-            const wadPackResponse = await wadPackApi.getWadpacks();
+            const wadPackResponse = await wadPackApi.getWadPacks();
             setWadPacks(wadPackResponse);
         };
         fetchData();
