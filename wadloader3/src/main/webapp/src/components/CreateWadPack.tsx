@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider, IconButton } from '@mui/material';
+import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, WadPackDto } from 'wadloader3-api';
-import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 
 function CreateWadPack() {
     const [wads, setWads] = useState<WadDto[]>([]);
@@ -37,6 +36,22 @@ function CreateWadPack() {
 
     const removeAllWads = () => {
         setSelectedWads([]);
+    };
+
+    const moveWadUp = (index: number) => {
+        if (index > 0) {
+            const newSelectedWads = [...selectedWads];
+            [newSelectedWads[index - 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index - 1]];
+            setSelectedWads(newSelectedWads);
+        }
+    };
+
+    const moveWadDown = (index: number) => {
+        if (index < selectedWads.length - 1) {
+            const newSelectedWads = [...selectedWads];
+            [newSelectedWads[index + 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index + 1]];
+            setSelectedWads(newSelectedWads);
+        }
     };
 
     const handleSave = async () => {
@@ -77,30 +92,10 @@ function CreateWadPack() {
         setWadPacks(updatedWadPacks);
     };
 
-    const moveWadUp = (index: number) => {
-        if (index === 0) return;
-        setSelectedWads(prevSelectedWads => {
-            const newSelectedWads = [...prevSelectedWads];
-            [newSelectedWads[index - 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index - 1]];
-            return newSelectedWads;
-        });
-    };
-
-    const moveWadDown = (index: number) => {
-        if (index === selectedWads.length - 1) return;
-        setSelectedWads(prevSelectedWads => {
-            const newSelectedWads = [...prevSelectedWads];
-            [newSelectedWads[index + 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index + 1]];
-            return newSelectedWads;
-        });
-    };
-
     const handleUploadWad = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            await wadApi.uploadWad(formData);
+        if (event.target.files) {
+            const file = event.target.files[0];
+            await wadApi.uploadWad(file);
             const updatedWads = await wadApi.getWads();
             setWads(updatedWads);
         }
@@ -113,6 +108,18 @@ function CreateWadPack() {
                 <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
                     <Typography variant="h5" gutterBottom>Wads</Typography>
                     <Divider />
+                    <input
+                        accept=".wad"
+                        style={{ display: 'none' }}
+                        id="upload-wad"
+                        type="file"
+                        onChange={handleUploadWad}
+                    />
+                    <label htmlFor="upload-wad">
+                        <Button variant="contained" component="span" fullWidth>
+                            Upload WAD
+                        </Button>
+                    </label>
                     <List>
                         {wads.map(wad => (
                             <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
@@ -123,26 +130,19 @@ function CreateWadPack() {
                             </ListItem>
                         ))}
                     </List>
-                    <Button variant="contained" component="label">
-                        Upload Wad
-                        <input type="file" hidden onChange={handleUploadWad} />
-                    </Button>
                 </Paper>
                 <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
                     <Typography variant="h5" gutterBottom>Wads in Wad-Pack</Typography>
                     <Divider />
                     <List>
                         {selectedWads.map((wad, index) => (
-                            <ListItem key={wad.id} dense>
+                            <ListItem key={wad.id} dense button>
                                 <ListItemText primary={wad.name} />
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" onClick={() => moveWadUp(index)}>
-                                        <ArrowUpward />
-                                    </IconButton>
-                                    <IconButton edge="end" onClick={() => moveWadDown(index)}>
-                                        <ArrowDownward />
-                                    </IconButton>
                                     <Checkbox checked />
+                                    <Button onClick={() => moveWadUp(index)}>Up</Button>
+                                    <Button onClick={() => moveWadDown(index)}>Down</Button>
+                                    <Button onClick={() => handleRemoveWad(wad)}>Remove</Button>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
@@ -168,7 +168,6 @@ function CreateWadPack() {
                 <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
                 <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
                 <Button variant="contained" onClick={handleSave} style={{ flex: 1 }}>Save</Button>
-                <Button variant="contained" onClick={() => setSelectedWads([])} style={{ flex: 1 }}>Remove Wad</Button>
             </Box>
         </Box>
     );
