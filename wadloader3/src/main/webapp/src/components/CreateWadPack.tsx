@@ -136,7 +136,7 @@ function CreateWadPack() {
                     <Divider />
                     <List>
                         {selectedWads.map((wad, index) => (
-                            <ListItem key={wad.id} dense button>
+                            <ListItem key={wad.id} dense>
                                 <ListItemText primary={wad.name} />
                                 <ListItemSecondaryAction>
                                     <Checkbox checked />
