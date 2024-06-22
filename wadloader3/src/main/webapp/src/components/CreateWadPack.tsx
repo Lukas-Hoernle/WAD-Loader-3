@@ -27,7 +27,7 @@ function CreateWadPack() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -74,13 +74,15 @@ function CreateWadPack() {
         alert('WAD Pack saved successfully!');
         setSelectedWads([]);
         setEditingWadPack(null);
+        setPackName("New WadPack");
+        setPackDescription("Description for the new WadPack");
 
         const updatedWadPacks = await wadPackApi.getWadPacks();
         setWadPacks(updatedWadPacks);
     };
 
     const handleRemoveWad = (wad: WadDto) => {
-        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id));
+        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id));
     };
 
     const handleEditWadPack = (wadPack: WadPackDto) => {
@@ -167,6 +169,10 @@ function CreateWadPack() {
                         ))}
                     </List>
                 </Paper>
+            </Box>
+            <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
+                <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
+                <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <TextField
