@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider } from '@mui/material';
+import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider, TextField } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, WadPackDto } from 'wadloader3-api';
@@ -9,6 +9,8 @@ function CreateWadPack() {
     const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
     const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
+    const [packName, setPackName] = useState<string>("New WadPack");
+    const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
     const wadApi = useWadApi();
     const wadPackApi = useWadPackApi();
 
@@ -25,7 +27,7 @@ function CreateWadPack() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -57,8 +59,8 @@ function CreateWadPack() {
     const handleSave = async () => {
         const newWadPack = {
             newWadPackDto: {
-                name: editingWadPack ? editingWadPack.name : "New WadPack",
-                description: editingWadPack ? editingWadPack.description : "Description for the new WadPack",
+                name: packName,
+                description: packDescription,
                 wads: selectedWads,
             }
         };
@@ -78,12 +80,14 @@ function CreateWadPack() {
     };
 
     const handleRemoveWad = (wad: WadDto) => {
-        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id));
+        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id));
     };
 
     const handleEditWadPack = (wadPack: WadPackDto) => {
         setEditingWadPack(wadPack);
         setSelectedWads(wadPack.wads);
+        setPackName(wadPack.name);
+        setPackDescription(wadPack.description);
     };
 
     const handleDeleteWadPack = async (wadPack: WadPackDto) => {
@@ -165,8 +169,20 @@ function CreateWadPack() {
                 </Paper>
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
-                <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
-                <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
+                <TextField
+                    label="WadPack Title"
+                    variant="outlined"
+                    value={packName}
+                    onChange={(e) => setPackName(e.target.value)}
+                    style={{ flex: 1 }}
+                />
+                <TextField
+                    label="WadPack Description"
+                    variant="outlined"
+                    value={packDescription}
+                    onChange={(e) => setPackDescription(e.target.value)}
+                    style={{ flex: 1 }}
+                />
                 <Button variant="contained" onClick={handleSave} style={{ flex: 1 }}>Save</Button>
             </Box>
         </Box>
