@@ -1,7 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import { LoginLayout } from "./LoginLayout.tsx";
 import CreateWad from "./CreateWad";
-import WadList from "./WadList"; // Import the new WadList component
+import WadList from "./WadList";
 import App from "../App.tsx";
 
 export const router = createBrowserRouter(
