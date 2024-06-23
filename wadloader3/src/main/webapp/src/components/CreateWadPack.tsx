@@ -58,9 +58,11 @@ function CreateWadPack() {
 
     const handleSave = async () => {
         const newWadPack = {
-            name: packName,
-            description: packDescription,
-            wads: selectedWads,
+            newWadPackDto: {
+                name: packName,
+                description: packDescription,
+                wads: selectedWads,
+            }
         };
 
         if (editingWadPack) {
