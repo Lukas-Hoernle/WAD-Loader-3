@@ -1,5 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import { LoginLayout } from "./LoginLayout.tsx";
+import { MainLayout } from "./MainLayout.tsx";
 import CreateWad from "./CreateWad";
 import CreateWadPack from "./CreateWadPack";
 import WadList from "./WadList";
@@ -11,23 +11,26 @@ export const router = createBrowserRouter(
             <Route
                 path="/"
                 element={
-                    <LoginLayout>
-                        <App />
+                    <MainLayout>
+                        <WadList />
+                    </MainLayout>
+                }
+            />
+            <Route
+                path="/create-wad"
+                element={
+                    <MainLayout>
                         <CreateWad />
-                    </LoginLayout>
+                    </MainLayout>
                 }
             />
             <Route
                 path="/create-wad-pack"
-                element={<CreateWadPack />}
-            />
-            <Route
-                path="/abc"
-                element={<p>adsad</p>}
-            />
-            <Route
-                path="/wadliste"
-                element={<WadList />}
+                element={
+                    <MainLayout>
+                        <CreateWadPack />
+                    </MainLayout>
+                }
             />
         </>
     )
