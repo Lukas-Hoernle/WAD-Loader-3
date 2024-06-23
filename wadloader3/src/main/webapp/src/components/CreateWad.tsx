@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Grid, Paper } from '@mui/material';
 import { useWadApi } from '../api/hooks/useWadApi';
-import { WadDto } from 'wadloader3-api';
+import { WadDto, PostWadRequest } from 'wadloader3-api';
 
 function CreateWad() {
     const [wads, setWads] = useState<WadDto[]>([]);
@@ -26,12 +26,20 @@ function CreateWad() {
         );
     };
 
-    const handleUploadWad = async (event) => {
+    const handleUploadWad = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            await wadApi.uploadWad(file);
-            const updatedWads = await wadApi.getWads();
-            setWads(updatedWads);
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('description', 'Default description'); 
+
+            try {
+                await wadApi.postWad(formData as unknown as PostWadRequest); //mega ugly wtf das geht locker wirft das Fehler dafuck 
+                const updatedWads = await wadApi.getWads();
+                setWads(updatedWads);
+            } catch (error) {
+                console.error('Error uploading wad:', error);
+            }
         }
     };
 
