@@ -72,15 +72,18 @@ function CreateWadPack() {
             wads: selectedWads,
         };
         if (editingWadPack) {
-            await wadPackApi.updateWadpack({ ...newWadPack, id: editingWadPack.id });
+            await wadPackApi.updateWadpack({
+                ...newWadPack, id: editingWadPack.id,
+                newWadPackDto: undefined
+            });
         } else {
-            await wadPackApi.createWadPack(newWadPack);
+            await wadPackApi.getWadpack(newWadPack);
         }
         const updatedWadPacks = await wadPackApi.getWadPacks();
         setWadPacks(updatedWadPacks);
     };
 
-    const handleEditWadPack = (wadPack) => {
+    const handleEditWadPack = (wadPack: React.SetStateAction<null>) => {
         setEditingWadPack(wadPack);
         setPackName(wadPack.name);
         setPackDescription(wadPack.description);
