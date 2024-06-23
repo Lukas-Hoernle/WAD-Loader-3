@@ -32,10 +32,14 @@ function CreateWadPack() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const wadResponse = await wadApi.getWads();
-      setWads(wadResponse);
-      const wadPackResponse = await wadPackApi.getWadPacks();
-      setWadPacks(wadPackResponse);
+      try {
+        const wadResponse = await wadApi.getWads();
+        setWads(wadResponse);
+        const wadPackResponse = await wadPackApi.getWadPacks();
+        setWadPacks(wadPackResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
     fetchData();
   }, [wadApi, wadPackApi]);
@@ -56,43 +60,23 @@ function CreateWadPack() {
     setSelectedWads([]);
   };
 
-  const moveWadUp = async (index) => {
-    if (index > 0) {
-      const newSelectedWads = [...selectedWads];
-      [newSelectedWads[index - 1], newSelectedWads[index]] = [
-        newSelectedWads[index],
-        newSelectedWads[index - 1],
-      ];
-      setSelectedWads(newSelectedWads);
-      await wadPackApi.moveWadUp(newSelectedWads[index].id);
-    }
-  };
-
-  const moveWadDown = async (index) => {
-    if (index < selectedWads.length - 1) {
-      const newSelectedWads = [...selectedWads];
-      [newSelectedWads[index + 1], newSelectedWads[index]] = [
-        newSelectedWads[index],
-        newSelectedWads[index + 1],
-      ];
-      setSelectedWads(newSelectedWads);
-      await wadPackApi.moveWadDown(newSelectedWads[index].id);
-    }
-  };
-
   const handleSave = async () => {
     const newWadPack: NewWadPackDto = {
       name: packName,
       description: packDescription,
       wads: selectedWads,
     };
-    if (editingWadPack) {
-      await wadPackApi.updateWadpack({ newWadPackDto: newWadPack, id: editingWadPack.id });
-    } else {
-      await wadPackApi.postWadpack({ newWadPackDto: newWadPack });
+    try {
+      if (editingWadPack) {
+        await wadPackApi.updateWadpack({ newWadPackDto: newWadPack, id: editingWadPack.id });
+      } else {
+        await wadPackApi.postWadpack({ newWadPackDto: newWadPack });
+      }
+      const updatedWadPacks = await wadPackApi.getWadPacks();
+      setWadPacks(updatedWadPacks);
+    } catch (error) {
+      console.error("Error saving WadPack:", error);
     }
-    const updatedWadPacks = await wadPackApi.getWadPacks();
-    setWadPacks(updatedWadPacks);
   };
 
   const handleEditWadPack = (wadPack: WadPackDto) => {
@@ -103,9 +87,41 @@ function CreateWadPack() {
   };
 
   const handleDeleteWadPack = async (wadPack: WadPackDto) => {
-    await wadPackApi.deleteWadpack({id: wadPack.id});
-    const updatedWadPacks = await wadPackApi.getWadPacks();
-    setWadPacks(updatedWadPacks);
+    try {
+      await wadPackApi.deleteWadpack({id: wadPack.id});
+      const updatedWadPacks = await wadPackApi.getWadPacks();
+      setWadPacks(updatedWadPacks);
+    } catch (error) {
+      console.error("Error deleting WadPack:", error);
+    }
+  };
+
+  const handleRemoveWad = (wadToRemove: WadDto) => {
+    setSelectedWads((prevSelectedWads) =>
+      prevSelectedWads.filter((wad) => wad.id !== wadToRemove.id)
+    );
+  };
+
+  const moveWadUp = (index: number) => {
+    if (index > 0) {
+      const newSelectedWads = [...selectedWads];
+      [newSelectedWads[index - 1], newSelectedWads[index]] = [
+        newSelectedWads[index],
+        newSelectedWads[index - 1],
+      ];
+      setSelectedWads(newSelectedWads);
+    }
+  };
+
+  const moveWadDown = (index: number) => {
+    if (index < selectedWads.length - 1) {
+      const newSelectedWads = [...selectedWads];
+      [newSelectedWads[index + 1], newSelectedWads[index]] = [
+        newSelectedWads[index],
+        newSelectedWads[index + 1],
+      ];
+      setSelectedWads(newSelectedWads);
+    }
   };
 
   return (
@@ -156,13 +172,13 @@ function CreateWadPack() {
           <Box display="flex" justifyContent="space-between" mt={2}>
             <Button
               variant="contained"
-              onClick={() => moveWadUp(selectedWads.length - 1)}
+              onClick={() => moveWadUp(selectedWads.findIndex(w => w.id === selectedWads[selectedWads.length - 1].id))}
             >
               Up
             </Button>
             <Button
               variant="contained"
-              onClick={() => moveWadDown(selectedWads.length - 1)}
+              onClick={() => moveWadDown(selectedWads.findIndex(w => w.id === selectedWads[selectedWads.length - 1].id))}
             >
               Down
             </Button>
