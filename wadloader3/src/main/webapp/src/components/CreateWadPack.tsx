@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider, TextField } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
@@ -30,15 +30,9 @@ function CreateWadPack() {
         const fetchData = async () => {
             try {
                 const wadResponse = await wadApi.getWads();
-                console.log('Fetched WADs:', wadResponse);
-                if (wadResponse.length === 0) {
-                    setWads(initialWads);
-                } else {
-                    setWads(wadResponse);
-                }
+                setWads(wadResponse.length > 0 ? wadResponse : initialWads);
 
                 const wadPackResponse = await wadPackApi.getWadPacks();
-                console.log('Fetched Wad Packs:', wadPackResponse);
                 setWadPacks(wadPackResponse);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -49,8 +43,8 @@ function CreateWadPack() {
 
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
-            prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
+            prevSelectedWads.some(selectedWad => selectedWad.id === wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -86,24 +80,28 @@ function CreateWadPack() {
             wads: selectedWads,
         };
 
-        if (editingWadPack) {
-            await wadPackApi.updateWadpack({ id: editingWadPack.id, ...newWadPack });
-        } else {
-            await wadPackApi.postWadpack(newWadPack);
+        try {
+            if (editingWadPack) {
+                await wadPackApi.updateWadpack({ id: editingWadPack.id, ...newWadPack });
+            } else {
+                await wadPackApi.postWadpack(newWadPack);
+            }
+
+            alert('WAD Pack saved successfully!');
+            setSelectedWads([]);
+            setEditingWadPack(null);
+            setPackName("New WadPack");
+            setPackDescription("Description for the new WadPack");
+
+            const updatedWadPacks = await wadPackApi.getWadPacks();
+            setWadPacks(updatedWadPacks);
+        } catch (error) {
+            console.error('Error saving WAD Pack:', error);
         }
-
-        alert('WAD Pack saved successfully!');
-        setSelectedWads([]);
-        setEditingWadPack(null);
-        setPackName("New WadPack");
-        setPackDescription("Description for the new WadPack");
-
-        const updatedWadPacks = await wadPackApi.getWadPacks();
-        setWadPacks(updatedWadPacks);
     };
 
     const handleRemoveWad = (wad: WadDto) => {
-        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id));
+        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedSwd.id !== wad.id));
     };
 
     const handleEditWadPack = (wadPack: WadPackDto) => {
@@ -114,17 +112,25 @@ function CreateWadPack() {
     };
 
     const handleDeleteWadPack = async (wadPack: WadPackDto) => {
-        await wadPackApi.deleteWadpack({ id: wadPack.id });
-        const updatedWadPacks = await wadPackApi.getWadPacks();
-        setWadPacks(updatedWadPacks);
+        try {
+            await wadPackApi.deleteWadpack({ id: wadPack.id });
+            const updatedWadPacks = await wadPackApi.getWadPacks();
+            setWadPacks(updatedWadPacks);
+        } catch (error) {
+            console.error('Error deleting WAD Pack:', error);
+        }
     };
 
     const handleUploadWad = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            await wadApi.uploadWad(file);
-            const updatedWads = await wadApi.getWads();
-            setWads(updatedWads);
+            try {
+                await wadApi.uploadWad(file);
+                const updatedWads = await wadApi.getWads();
+                setWads(updatedWads);
+            } catch (error) {
+                console.error('Error uploading WAD:', error);
+            }
         }
     };
 
@@ -152,7 +158,7 @@ function CreateWadPack() {
                             <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
                                 <ListItemText primary={wad.name} />
                                 <ListItemSecondaryAction>
-                                    <Checkbox checked={selectedWads.some(selectedWad => selectedWad.id === wad.id)} />
+                                    <Checkbox checked={selectedWads.some(selectedWad => selectedSwd.id === wad.id)} />
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
