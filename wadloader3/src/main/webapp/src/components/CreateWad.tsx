@@ -31,10 +31,10 @@ function CreateWad() {
             const file = event.target.files[0];
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('description', 'Default description'); 
+            formData.append('description', 'Default description');
 
             try {
-                await wadApi.postWad(formData as unknown as PostWadRequest); //mega ugly wtf das geht locker wirft das Fehler dafuck 
+                await wadApi.postWad(formData as unknown as PostWadRequest); //mega ugly wtf das geht locker wirft das Fehler dafuck
                 const updatedWads = await wadApi.getWads();
                 setWads(updatedWads);
             } catch (error) {

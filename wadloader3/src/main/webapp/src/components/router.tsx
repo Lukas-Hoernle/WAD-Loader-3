@@ -1,22 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import NavigationPage from './NavigationPage';
-import CreateWad from './CreateWad';
-import CreateWadPack from './CreateWadPack';
-import WadList from './WadList';
+import { createBrowserRouter } from "react-router-dom";
+import CreateWad from "./CreateWad";
+import CreateWadPack from "./CreateWadPack";
+import WadList from "./WadList";
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/createwad" element={<CreateWad />} />
-        <Route path="/createwadpack" element={<CreateWadPack />} />
-        <Route path="/wadlist" element={<WadList />} />
-      </Routes>
-    </Router>
-  );
-}
+export const router = createBrowserRouter([
+  { path: "/", element: <HomePage /> },
+  { path: "/createwad", element: <CreateWad /> },
+  { path: "/createwadpack", element: <CreateWadPack /> },
+  { path: "/wadlist", element: <WadList /> },
+]);
 
 function HomePage() {
   return (
@@ -26,5 +18,3 @@ function HomePage() {
     </div>
   );
 }
-
-export default App;
