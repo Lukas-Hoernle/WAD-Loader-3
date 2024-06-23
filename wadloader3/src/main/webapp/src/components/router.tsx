@@ -8,8 +8,6 @@ import WadList from './WadList';
 function App() {
   return (
     <Router>
-      <NavigationPage />
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/createwad" element={<CreateWad />} />
