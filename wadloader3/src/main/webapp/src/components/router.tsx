@@ -1,19 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import MainLayout from './MainLayout';
-import CreateWad from './CreateWad';
-import CreateWadPack from './CreateWadPack';
+import { useNavigate } from 'react-router-dom';
+import { Button, Box } from '@mui/material';
 
-function App() {
+function MainLayout() {
+  const navigate = useNavigate();
+
+  const navigateToCreateWad = () => {
+    navigate('/createwad');
+  };
+
+  const navigateToCreateWadPack = () => {
+    navigate('/createwadpack');
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout />} />
-        <Route path="/createwad" element={<CreateWad />} />
-        <Route path="/createwadpack" element={<CreateWadPack />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
+      <Button variant="contained" onClick={navigateToCreateWad}>
+        Create Wad
+      </Button>
+      <Button variant="contained" onClick={navigateToCreateWadPack} mt={2}>
+        Create WadPack
+      </Button>
+    </Box>
   );
 }
 
-export default App;
+export default MainLayout;
