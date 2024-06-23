@@ -1,37 +1,18 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import { MainLayout } from "./MainLayout.tsx";
-import CreateWad from "./CreateWad";
-import CreateWadPack from "./CreateWadPack";
-import WadList from "./WadList";
-import App from "../App.tsx";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainLayout from './MainLayout';
+import CreateWad from './CreateWad';
+import CreateWadPack from './CreateWadPack';
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route
-                path="/"
-                element={
-                    <MainLayout>
-                        <WadList />
-                    </MainLayout>
-                }
-            />
-            <Route
-                path="/create-wad"
-                element={
-                    <MainLayout>
-                        <CreateWad />
-                    </MainLayout>
-                }
-            />
-            <Route
-                path="/create-wad-pack"
-                element={
-                    <MainLayout>
-                        <CreateWadPack />
-                    </MainLayout>
-                }
-            />
-        </>
-    )
-);
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/createwad" element={<CreateWad />} />
+        <Route path="/createwadpack" element={<CreateWadPack />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
