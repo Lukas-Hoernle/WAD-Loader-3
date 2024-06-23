@@ -5,14 +5,14 @@ import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, WadPackDto } from 'wadloader3-api';
 
 function CreateWadPack() {
-    const initialWads = [
+    const initialWads: WadDto[] = [
         { id: 1, name: 'Wad 1' },
         { id: 2, name: 'Wad 2' },
         { id: 3, name: 'Wad 3' },
         { id: 4, name: 'Wad 4' },
     ];
 
-    const initialSelectedWads = [
+    const initialSelectedWads: WadDto[] = [
         { id: 1, name: 'Wad 1' },
         { id: 3, name: 'Wad 3' },
     ];
@@ -28,10 +28,19 @@ function CreateWadPack() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const wadResponse = await wadApi.getWads();
-            setWads(wadResponse);
-            const wadPackResponse = await wadPackApi.getWadPacks();
-            setWadPacks(wadPackResponse);
+            try {
+                const wadResponse = await wadApi.getWads();
+                if (wadResponse.length === 0) {
+                    setWads(initialWads);
+                } else {
+                    setWads(wadResponse);
+                }
+
+                const wadPackResponse = await wadPackApi.getWadPacks();
+                setWadPacks(wadPackResponse);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
         fetchData();
     }, [wadApi, wadPackApi]);
@@ -141,7 +150,7 @@ function CreateWadPack() {
                             <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
                                 <ListItemText primary={wad.name} />
                                 <ListItemSecondaryAction>
-                                    <Checkbox checked={selectedWads.includes(wad)} />
+                                    <Checkbox checked={selectedWads.some(selectedWad => selectedWad.id === wad.id)} />
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
