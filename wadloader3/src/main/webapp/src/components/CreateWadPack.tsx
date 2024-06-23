@@ -5,9 +5,21 @@ import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, WadPackDto } from 'wadloader3-api';
 
 function CreateWadPack() {
-    const [wads, setWads] = useState<WadDto[]>([]);
+    const initialWads = [
+        { id: 1, name: 'Wad 1' },
+        { id: 2, name: 'Wad 2' },
+        { id: 3, name: 'Wad 3' },
+        { id: 4, name: 'Wad 4' },
+    ];
+
+    const initialSelectedWads = [
+        { id: 1, name: 'Wad 1' },
+        { id: 3, name: 'Wad 3' },
+    ];
+
+    const [wads, setWads] = useState<WadDto[]>(initialWads);
     const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
-    const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
+    const [selectedWads, setSelectedWads] = useState<WadDto[]>(initialSelectedWads);
     const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
     const [packName, setPackName] = useState<string>("New WadPack");
     const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
@@ -145,9 +157,9 @@ function CreateWadPack() {
                                 <ListItemSecondaryAction>
                                     <Checkbox checked />
                                     <Button onClick={() => handleRemoveWad(wad)}>Remove</Button>
+                                    <Button variant="contained" onClick={() => moveWadUp(index)}>Hoch</Button>
+                                    <Button variant="contained" onClick={() => moveWadDown(index)}>Runter</Button>
                                 </ListItemSecondaryAction>
-                                <Button variant="contained" onClick={() => moveWadUp(index)}>Hoch</Button>
-                                <Button variant="contained" onClick={() => moveWadDown(index)}>Runter</Button>
                             </ListItem>
                         ))}
                     </List>
