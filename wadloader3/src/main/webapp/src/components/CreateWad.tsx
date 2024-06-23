@@ -19,7 +19,7 @@ function CreateWad() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedS ad => selectedS ad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -30,6 +30,15 @@ function CreateWad() {
 
     const removeAllWads = () => {
         setSelectedWads([]);
+    };
+
+    const handleUploadWad = async (event) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0];
+            await wadApi.uploadWad(file);
+            const updatedWads = await wadApi.getWads();
+            setWads(updatedWads);
+        }
     };
 
     return (
@@ -53,7 +62,7 @@ function CreateWad() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Paper elevation={3} sx={{ p: 2 }}>
-                        <Typography variant="h5" gutterBottom>Created Wads</Typography>
+                        <Typography variant="h5" gutterBottom>Uploaded Wads</Typography>
                         <List>
                             {selectedWads.map(wad => (
                                 <ListItem key={wad.id} dense>
@@ -65,8 +74,18 @@ function CreateWad() {
                 </Grid>
             </Grid>
             <Box display="flex" justifyContent="space-around" mt={4}>
-                <Button variant="contained" onClick={addAllWads}>Add All Wads</Button>
-                <Button variant="contained" onClick={removeAllWads}>Remove All Wads</Button>
+                <input
+                    accept=".wad"
+                    style={{ display: 'none' }}
+                    id="upload-wad"
+                    type="file"
+                    onChange={handleUploadWad}
+                />
+                <label htmlFor="upload-wad">
+                    <Button variant="contained" component="span">
+                        Upload WAD
+                    </Button>
+                </label>
             </Box>
         </Box>
     );
