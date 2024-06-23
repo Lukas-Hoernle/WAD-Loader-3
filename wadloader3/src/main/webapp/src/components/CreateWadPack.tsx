@@ -30,6 +30,7 @@ function CreateWadPack() {
         const fetchData = async () => {
             try {
                 const wadResponse = await wadApi.getWads();
+                console.log('Fetched WADs:', wadResponse);
                 if (wadResponse.length === 0) {
                     setWads(initialWads);
                 } else {
@@ -37,6 +38,7 @@ function CreateWadPack() {
                 }
 
                 const wadPackResponse = await wadPackApi.getWadPacks();
+                console.log('Fetched Wad Packs:', wadPackResponse);
                 setWadPacks(wadPackResponse);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -48,7 +50,7 @@ function CreateWadPack() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -192,6 +194,7 @@ function CreateWadPack() {
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
                 <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
+                <Button variant="contained" onClick={handleSave} style={{ flex: 1 }}>Save</Button>
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <TextField
