@@ -32,14 +32,10 @@ function CreateWadPack() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const wadResponse = await wadApi.getWads();
-        setWads(wadResponse);
-        const wadPackResponse = await wadPackApi.getWadPacks();
-        setWadPacks(wadPackResponse);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const wadResponse = await wadApi.getWads();
+      setWads(wadResponse);
+      const wadPackResponse = await wadPackApi.getWadPacks();
+      setWadPacks(wadPackResponse);
     };
     fetchData();
   }, [wadApi, wadPackApi]);
@@ -66,17 +62,13 @@ function CreateWadPack() {
       description: packDescription,
       wads: selectedWads,
     };
-    try {
-      if (editingWadPack) {
-        await wadPackApi.updateWadpack({ newWadPackDto: newWadPack, id: editingWadPack.id });
-      } else {
-        await wadPackApi.postWadpack({ newWadPackDto: newWadPack });
-      }
-      const updatedWadPacks = await wadPackApi.getWadPacks();
-      setWadPacks(updatedWadPacks);
-    } catch (error) {
-      console.error("Error saving WadPack:", error);
+    if (editingWadPack) {
+      await wadPackApi.updateWadpack({ newWadPackDto: newWadPack, id: editingWadPack.id });
+    } else {
+      await wadPackApi.postWadpack({ newWadPackDto: newWadPack });
     }
+    const updatedWadPacks = await wadPackApi.getWadPacks();
+    setWadPacks(updatedWadPacks);
   };
 
   const handleEditWadPack = (wadPack: WadPackDto) => {
@@ -87,13 +79,9 @@ function CreateWadPack() {
   };
 
   const handleDeleteWadPack = async (wadPack: WadPackDto) => {
-    try {
-      await wadPackApi.deleteWadpack({id: wadPack.id});
-      const updatedWadPacks = await wadPackApi.getWadPacks();
-      setWadPacks(updatedWadPacks);
-    } catch (error) {
-      console.error("Error deleting WadPack:", error);
-    }
+    await wadPackApi.deleteWadpack({ id: wadPack.id });
+    const updatedWadPacks = await wadPackApi.getWadPacks();
+    setWadPacks(updatedWadPacks);
   };
 
   const handleRemoveWad = (wadToRemove: WadDto) => {
