@@ -1,38 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox,
-    Box, Paper, Divider, TextField
-} from '@mui/material';
+import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider, TextField } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, WadPackDto } from 'wadloader3-api';
 
 function CreateWadPack() {
-    const [wads, setWads] = useState<WadDto[]>([]);
-    const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
-    const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
-    const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
-    const [packName, setPackName] = useState<string>("New WadPack");
-    const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
+    const [wads, setWads] = useState([]);
+    const [wadPacks, setWadPacks] = useState([]);
+    const [selectedWads, setSelectedWads] = useState([]);
+    const [editingWadPack, setEditingWadPack] = useState(null);
+    const [packName, setPackName] = useState("New WadPack");
+    const [packDescription, setPackDescription] = useState("Description for the new WadPack");
+
     const wadApi = useWadApi();
     const wadPackApi = useWadPackApi();
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const wadResponse = await wadApi.getWads();
-                setWads(wadResponse);
+            const wadResponse = await wadApi.getWads();
+            setWads(wadResponse);
 
-                const wadPackResponse = await wadPackApi.getWadPacks();
-                setWadPacks(wadPackResponse);
-            } catch (error) {
-                console.error("Error loading WADs or Wad-Packs:", error);
-            }
+            const wadPackResponse = await wadPackApi.getWadPacks();
+            setWadPacks(wadPackResponse);
         };
+
         fetchData();
     }, [wadApi, wadPackApi]);
 
-    const toggleWadSelection = (wad: WadDto) => {
+    const toggleWadSelection = (wad) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
                 ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
@@ -48,31 +43,21 @@ function CreateWadPack() {
         setSelectedWads([]);
     };
 
-    const moveWadUp = async (index: number) => {
+    const moveWadUp = async (index) => {
         if (index > 0) {
-            try {
-                const newSelectedWads = [...selectedWads];
-                [newSelectedWads[index - 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index - 1]];
-                setSelectedWads(newSelectedWads);
-
-                await wadPackApi.moveWadUp(newSelectedWads[index].id);
-            } catch (error) {
-                console.error("Error moving wad up:", error);
-            }
+            const newSelectedWads = [...selectedWads];
+            [newSelectedWads[index - 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index - 1]];
+            setSelectedWads(newSelectedWads);
+            await wadPackApi.moveWadUp(newSelectedWads[index].id);
         }
     };
 
-    const moveWadDown = async (index: number) => {
+    const moveWadDown = async (index) => {
         if (index < selectedWads.length - 1) {
-            try {
-                const newSelectedWads = [...selectedWads];
-                [newSelectedWads[index + 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index + 1]];
-                setSelectedWads(newSelectedWads);
-
-                await wadPackApi.moveWadDown(newSelectedWads[index].id);
-            } catch (error) {
-                console.error("Error moving wad down:", error);
-            }
+            const newSelectedWads = [...selectedWads];
+            [newSelectedWads[index + 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index + 1]];
+            setSelectedWads(newSelectedWads);
+            await wadPackApi.moveWadDown(newSelectedWads[index].id);
         }
     };
 
@@ -83,57 +68,45 @@ function CreateWadPack() {
             wads: selectedWads,
         };
 
-        try {
-            if (editingWadPack) {
-                await wadPackApi.updateWadpack({ id: editingWadPack.id, ...newWadPack });
-            } else {
-                await wadPackApi.postWadpack(newWadPack);
-            }
-
-            alert('WAD Pack saved successfully!');
-            setSelectedWads([]);
-            setEditingWadPack(null);
-            setPackName("New WadPack");
-            setPackDescription("Description for the new WadPack");
-
-            const updatedWadPacks = await wadPackApi.getWadPacks();
-            setWadPacks(updatedWadPacks);
-        } catch (error) {
-            console.error("Error saving Wad-Pack:", error);
+        if (editingWadPack) {
+            await wadPackApi.updateWadpack({ id: editingWadPack.id, ...newWadPack });
+        } else {
+            await wadPackApi.postWadpack(newWadPack);
         }
+
+        alert('WAD Pack saved successfully!');
+        setSelectedWads([]);
+        setEditingWadPack(null);
+        setPackName("New WadPack");
+        setPackDescription("Description for the new WadPack");
+
+        const updatedWadPacks = await wadPackApi.getWadPacks();
+        setWadPacks(updatedWadPacks);
     };
 
-    const handleRemoveWad = (wad: WadDto) => {
-        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedSads.id !== wad.id));
+    const handleRemoveWad = (wad) => {
+        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedSads => selectedSads.id !== wad.id));
     };
 
-    const handleEditWadPack = (wadPack: WadPackDto) => {
+    const handleEditWadPack = (wadPack) => {
         setEditingWadPack(wadPack);
         setSelectedWads(wadPack.wads);
         setPackName(wadPack.name);
         setPackDescription(wadPack.description);
     };
 
-    const handleDeleteWadPack = async (wadPack: WadPackDto) => {
-        try {
-            await wadPackApi.deleteWadpack({ id: wadPack.id });
-            const updatedWadPacks = await wadPackApi.getWadPacks();
-            setWadPacks(updatedWadPacks);
-        } catch (error) {
-            console.error("Error deleting Wad-Pack:", error);
-        }
+    const handleDeleteWadPack = async (wadPack) => {
+        await wadPackApi.deleteWadpack({ id: wadPack.id });
+        const updatedWadPacks = await wadPackApi.getWadPacks();
+        setWadPacks(updatedWadPacks);
     };
 
-    const handleUploadWad = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadWad = async (event) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            try {
-                await wadApi.uploadWad(file);
-                const updatedWads = await wadApi.getWads();
-                setWads(updatedWads);
-            } catch (error) {
-                console.error("Error uploading WAD:", error);
-            }
+            await wadApi.uploadWad(file);
+            const updatedWads = await wadApi.getWads();
+            setWads(updatedWads);
         }
     };
 
