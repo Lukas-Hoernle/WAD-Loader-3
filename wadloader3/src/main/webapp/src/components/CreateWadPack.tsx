@@ -22,13 +22,11 @@ function CreateWadPack() {
             try {
                 const wadResponse = await wadApi.getWads();
                 setWads(wadResponse);
-                console.log("WADs geladen:", wadResponse);
 
                 const wadPackResponse = await wadPackApi.getWadPacks();
                 setWadPacks(wadPackResponse);
-                console.log("Wad-Packs geladen:", wadPackResponse);
             } catch (error) {
-                console.error("Fehler beim Laden von WADs oder Wad-Packs:", error);
+                console.error("Error loading WADs or Wad-Packs:", error);
             }
         };
         fetchData();
@@ -37,7 +35,7 @@ function CreateWadPack() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -57,11 +55,9 @@ function CreateWadPack() {
                 [newSelectedWads[index - 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index - 1]];
                 setSelectedWads(newSelectedWads);
 
-                console.log("Vor moveWadUp API-Aufruf");
-                await wadPackApi.moveWadUp(newSelectedWads[index].id); // Anpassen auf deine API-Methode
-                console.log("Nach moveWadUp API-Aufruf");
+                await wadPackApi.moveWadUp(newSelectedWads[index].id);
             } catch (error) {
-                console.error("Fehler beim Verschieben nach oben:", error);
+                console.error("Error moving wad up:", error);
             }
         }
     };
@@ -73,11 +69,9 @@ function CreateWadPack() {
                 [newSelectedWads[index + 1], newSelectedWads[index]] = [newSelectedWads[index], newSelectedWads[index + 1]];
                 setSelectedWads(newSelectedWads);
 
-                console.log("Vor moveWadDown API-Aufruf");
-                await wadPackApi.moveWadDown(newSelectedWads[index].id); // Anpassen auf deine API-Methode
-                console.log("Nach moveWadDown API-Aufruf");
+                await wadPackApi.moveWadDown(newSelectedWads[index].id);
             } catch (error) {
-                console.error("Fehler beim Verschieben nach unten:", error);
+                console.error("Error moving wad down:", error);
             }
         }
     };
@@ -105,12 +99,12 @@ function CreateWadPack() {
             const updatedWadPacks = await wadPackApi.getWadPacks();
             setWadPacks(updatedWadPacks);
         } catch (error) {
-            console.error("Fehler beim Speichern des Wad-Packs:", error);
+            console.error("Error saving Wad-Pack:", error);
         }
     };
 
     const handleRemoveWad = (wad: WadDto) => {
-        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id));
+        setSelectedWads(prevSelectedWads => prevSelectedWads.filter(selectedWad => selectedSads.id !== wad.id));
     };
 
     const handleEditWadPack = (wadPack: WadPackDto) => {
@@ -126,7 +120,7 @@ function CreateWadPack() {
             const updatedWadPacks = await wadPackApi.getWadPacks();
             setWadPacks(updatedWadPacks);
         } catch (error) {
-            console.error("Fehler beim Löschen des Wad-Packs:", error);
+            console.error("Error deleting Wad-Pack:", error);
         }
     };
 
@@ -138,7 +132,7 @@ function CreateWadPack() {
                 const updatedWads = await wadApi.getWads();
                 setWads(updatedWads);
             } catch (error) {
-                console.error("Fehler beim Hochladen des WADs:", error);
+                console.error("Error uploading WAD:", error);
             }
         }
     };
@@ -188,8 +182,8 @@ function CreateWadPack() {
                         ))}
                     </List>
                     <Box display="flex" justifyContent="space-between" mt={2}>
-                        <Button variant="contained" onClick={() => moveWadUp(selectedWads.length - 1)}>Hoch</Button>
-                        <Button variant="contained" onClick={() => moveWadDown(selectedWads.length - 1)}>Runter</Button>
+                        <Button variant="contained" onClick={() => moveWadUp(selectedWads.length - 1)}>Up</Button>
+                        <Button variant="contained" onClick={() => moveWadDown(selectedWads.length - 1)}>Down</Button>
                     </Box>
                 </Paper>
                 <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
