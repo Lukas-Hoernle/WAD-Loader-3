@@ -58,11 +58,9 @@ function CreateWadPack() {
 
     const handleSave = async () => {
         const newWadPack = {
-            newWadPackDto: {
-                name: packName,
-                description: packDescription,
-                wads: selectedWads,
-            }
+            name: packName,
+            description: packDescription,
+            wads: selectedWads,
         };
 
         if (editingWadPack) {
@@ -146,13 +144,15 @@ function CreateWadPack() {
                                 <ListItemText primary={wad.name} />
                                 <ListItemSecondaryAction>
                                     <Checkbox checked />
-                                    <Button onClick={() => moveWadUp(index)}>Up</Button>
-                                    <Button onClick={() => moveWadDown(index)}>Down</Button>
                                     <Button onClick={() => handleRemoveWad(wad)}>Remove</Button>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
                     </List>
+                    <Box display="flex" justifyContent="space-between" mt={2}>
+                        <Button variant="contained" onClick={() => moveWadUp(selectedWads.length - 1)}>Hoch</Button>
+                        <Button variant="contained" onClick={() => moveWadDown(selectedWads.length - 1)}>Runter</Button>
+                    </Box>
                 </Paper>
                 <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
                     <Typography variant="h5" gutterBottom>Wad-Packs</Typography>
