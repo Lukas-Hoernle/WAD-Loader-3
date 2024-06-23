@@ -1,15 +1,27 @@
-import { Outlet, Link } from "react-router-dom";
-import { Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Button, Box } from '@mui/material';
 
-export const MainLayout = () => {
-    return (
-        <Box sx={{ p: 4 }}>
-            <Box display="flex" justifyContent="center" mb={2}>
-                <Button component={Link} to="/" variant="contained" sx={{ mx: 1 }}>Home</Button>
-                <Button component={Link} to="/create-wad" variant="contained" sx={{ mx: 1 }}>Create WAD</Button>
-                <Button component={Link} to="/create-wad-pack" variant="contained" sx={{ mx: 1 }}>Create WAD Pack</Button>
-            </Box>
-            <Outlet />
-        </Box>
-    );
-};
+function MainLayout() {
+  const navigate = useNavigate();
+
+  const navigateToCreateWad = () => {
+    navigate('/createwad');
+  };
+
+  const navigateToCreateWadPack = () => {
+    navigate('/createwadpack');
+  };
+
+  return (
+    <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
+      <Button variant="contained" onClick={navigateToCreateWad}>
+        Create Wad
+      </Button>
+      <Button variant="contained" onClick={navigateToCreateWadPack} mt={2}>
+        Create WadPack
+      </Button>
+    </Box>
+  );
+}
+
+export default MainLayout;
