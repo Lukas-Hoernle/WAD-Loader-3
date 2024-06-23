@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Paper, Divider, TextField } from '@mui/material';
 import { useWadPackApi } from '../api/hooks/useWadPackApi';
 import { useWadApi } from '../api/hooks/useWadApi';
@@ -10,19 +11,17 @@ function CreateWadPack() {
     const [editingWadPack, setEditingWadPack] = useState(null);
     const [packName, setPackName] = useState('New WadPack');
     const [packDescription, setPackDescription] = useState('Description for the new WadPack');
-
     const wadApi = useWadApi();
     const wadPackApi = useWadPackApi();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             const wadResponse = await wadApi.getWads();
             setWads(wadResponse);
-
             const wadPackResponse = await wadPackApi.getWadPacks();
             setWadPacks(wadPackResponse);
         };
-
         fetchData();
     }, [wadApi, wadPackApi]);
 
@@ -72,70 +71,34 @@ function CreateWadPack() {
             description: packDescription,
             wads: selectedWads,
         };
-
         if (editingWadPack) {
-            await wadPackApi.updateWadpack({ id: editingWadPack.id, ...newWadPack });
+            await wadPackApi.updateWadpack({ ...newWadPack, id: editingWadPack.id });
         } else {
-            await wadPackApi.postWadpack(newWadPack);
+            await wadPackApi.createWadPack(newWadPack);
         }
-
-        alert('WAD Pack saved successfully!');
-        setSelectedWads([]);
-        setEditingWadPack(null);
-        setPackName('New WadPack');
-        setPackDescription('Description for the new WadPack');
-
         const updatedWadPacks = await wadPackApi.getWadPacks();
         setWadPacks(updatedWadPacks);
-    };
-
-    const handleRemoveWad = (wad) => {
-        setSelectedWads((prevSelectedWads) =>
-            prevSelectedWads.filter((selectedWad) => selectedWad.id !== wad.id)
-        );
     };
 
     const handleEditWadPack = (wadPack) => {
         setEditingWadPack(wadPack);
-        setSelectedWads([...wadPack.wads]);
         setPackName(wadPack.name);
         setPackDescription(wadPack.description);
+        setSelectedWads(wadPack.wads);
     };
 
     const handleDeleteWadPack = async (wadPack) => {
-        await wadPackApi.deleteWadpack({ id: wadPack.id });
+        await wadPackApi.deleteWadPack(wadPack.id);
         const updatedWadPacks = await wadPackApi.getWadPacks();
         setWadPacks(updatedWadPacks);
     };
 
-    const handleUploadWad = async (event) => {
-        if (event.target.files && event.target.files.length > 0) {
-            const file = event.target.files[0];
-            await wadApi.uploadWad(file);
-            const updatedWads = await wadApi.getWads();
-            setWads(updatedWads);
-        }
-    };
-
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" p={3}>
-            <Typography variant="h4" gutterBottom>Create WadPack Page</Typography>
-            <Box display="flex" justifyContent="space-between" width="100%" gap={2}>
-                <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
-                    <Typography variant="h5" gutterBottom>Wads</Typography>
-                    <Divider />
-                    <input
-                        accept=".wad"
-                        style={{ display: 'none' }}
-                        id="upload-wad"
-                        type="file"
-                        onChange={handleUploadWad}
-                    />
-                    <label htmlFor="upload-wad">
-                        <Button variant="contained" component="span" fullWidth>
-                            Upload WAD
-                        </Button>
-                    </label>
+        <Box sx={{ p: 4 }}>
+            <Typography variant="h4" align="center" gutterBottom>Create WadPack</Typography>
+            <Box display="flex" justifyContent="space-around" mt={4}>
+                <Paper elevation={3} sx={{ width: '30%', p: 2 }}>
+                    <Typography variant="h5" gutterBottom>Available Wads</Typography>
                     <List>
                         {wads.map((wad) => (
                             <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
@@ -147,8 +110,8 @@ function CreateWadPack() {
                         ))}
                     </List>
                 </Paper>
-                <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
-                    <Typography variant="h5" gutterBottom>Wads in Wad-Pack</Typography>
+                <Paper elevation={3} sx={{ width: '30%', p: 2 }}>
+                    <Typography variant="h5" gutterBottom>Selected Wads</Typography>
                     <Divider />
                     <List>
                         {selectedWads.map((wad, index) => (
@@ -165,7 +128,7 @@ function CreateWadPack() {
                         <Button variant="contained" onClick={() => moveWadDown(selectedWads.length - 1)}>Down</Button>
                     </Box>
                 </Paper>
-                <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
+                <Paper elevation={3} sx={{ width: '30%', p: 2 }}>
                     <Typography variant="h5" gutterBottom>Wad-Packs</Typography>
                     <Divider />
                     <List>
@@ -203,6 +166,11 @@ function CreateWadPack() {
                 <Button variant="contained" color="primary" onClick={handleSave}>Save WadPack</Button>
                 <Button variant="contained" color="default" onClick={addAllWads}>Add All Wads</Button>
                 <Button variant="contained" color="default" onClick={removeAllWads}>Remove All Wads</Button>
+            </Box>
+            <Box display="flex" justifyContent="center" mt={4}>
+                <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
+                    Back
+                </Button>
             </Box>
         </Box>
     );
