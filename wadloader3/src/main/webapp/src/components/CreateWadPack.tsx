@@ -146,13 +146,11 @@ function CreateWadPack() {
                                     <Checkbox checked />
                                     <Button onClick={() => handleRemoveWad(wad)}>Remove</Button>
                                 </ListItemSecondaryAction>
+                                <Button variant="contained" onClick={() => moveWadUp(index)}>Hoch</Button>
+                                <Button variant="contained" onClick={() => moveWadDown(index)}>Runter</Button>
                             </ListItem>
                         ))}
                     </List>
-                    <Box display="flex" justifyContent="space-between" mt={2}>
-                        <Button variant="contained" onClick={() => moveWadUp(selectedWads.length - 1)}>Hoch</Button>
-                        <Button variant="contained" onClick={() => moveWadDown(selectedWads.length - 1)}>Runter</Button>
-                    </Box>
                 </Paper>
                 <Paper elevation={3} style={{ width: '30%', padding: '1em' }}>
                     <Typography variant="h5" gutterBottom>Wad-Packs</Typography>
@@ -173,9 +171,6 @@ function CreateWadPack() {
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
                 <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
-                <Button variant="contained" onClick={hoch} style={{ flex: 1 }}>hoch</Button>
-                <Button variant="contained" onClick={runter} style={{ flex: 1 }}>runter</Button>
-
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <TextField
