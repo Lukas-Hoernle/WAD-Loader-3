@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, Box, Grid, Paper } from '@mui/material';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto } from 'wadloader3-api';
@@ -7,6 +8,7 @@ function CreateWad() {
     const [wads, setWads] = useState<WadDto[]>([]);
     const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
     const wadApi = useWadApi();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -86,6 +88,11 @@ function CreateWad() {
                         Upload WAD
                     </Button>
                 </label>
+            </Box>
+            <Box display="flex" justifyContent="center" mt={4}>
+                <Button variant="contained" color="primary" onClick={() => navigate('/create-wad-pack')}>
+                    Go to Create WadPack
+                </Button>
             </Box>
         </Box>
     );
