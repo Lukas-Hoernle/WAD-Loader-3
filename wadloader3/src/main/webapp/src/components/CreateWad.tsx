@@ -82,8 +82,8 @@ function CreateWad() {
                 </label>
             </Box>
             <Box display="flex" justifyContent="center" mt={4}>
-                <Button variant="contained" color="primary" onClick={() => navigate('/create-wad-pack')}>
-                    Go to Create WadPack
+                <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
+                    Back
                 </Button>
             </Box>
         </Box>
