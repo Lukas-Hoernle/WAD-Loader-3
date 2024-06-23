@@ -26,14 +26,6 @@ function CreateWad() {
         );
     };
 
-    const addAllWads = () => {
-        setSelectedWads(wads);
-    };
-
-    const removeAllWads = () => {
-        setSelectedWads([]);
-    };
-
     const handleUploadWad = async (event) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
@@ -47,7 +39,7 @@ function CreateWad() {
         <Box sx={{ p: 4 }}>
             <Typography variant="h4" align="center" gutterBottom>Create Wads Page</Typography>
             <Grid container spacing={4}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                     <Paper elevation={3} sx={{ p: 2 }}>
                         <Typography variant="h5" gutterBottom>Wads</Typography>
                         <List>
@@ -62,7 +54,7 @@ function CreateWad() {
                         </List>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                     <Paper elevation={3} sx={{ p: 2 }}>
                         <Typography variant="h5" gutterBottom>Uploaded Wads</Typography>
                         <List>
