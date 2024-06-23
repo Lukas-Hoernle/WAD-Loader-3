@@ -173,6 +173,9 @@ function CreateWadPack() {
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <Button variant="contained" onClick={addAllWads} style={{ flex: 1 }}>Add All Wads</Button>
                 <Button variant="contained" onClick={removeAllWads} style={{ flex: 1 }}>Remove All Wads</Button>
+                <Button variant="contained" onClick={hoch} style={{ flex: 1 }}>Add All Wads</Button>
+                <Button variant="contained" onClick={runter} style={{ flex: 1 }}>Remove All Wads</Button>
+
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%" mt={2} gap={2}>
                 <TextField
