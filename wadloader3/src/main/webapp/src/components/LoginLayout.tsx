@@ -1,15 +1,12 @@
 import { Button } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { Outlet } from "react-router-dom";
+import { login } from "../hooks/useLogin";
 import { useLogout } from "../hooks/useLogout";
 import { useUser } from "../hooks/useUser";
-import { login } from "../hooks/useLogin";
 
-
-
-export function LoginLayout({ children }: PropsWithChildren) {
-
+export function LoginLayout() {
   const logout = useLogout();
-  const {loading, authenticated } = useUser();
+  const { loading, authenticated } = useUser();
 
   if (loading) {
     return <p>Loading...</p>;
@@ -19,7 +16,7 @@ export function LoginLayout({ children }: PropsWithChildren) {
     return (
       <>
         <Button onClick={logout}>Logout</Button>
-        {children}
+        <Outlet></Outlet>
       </>
     );
   }
