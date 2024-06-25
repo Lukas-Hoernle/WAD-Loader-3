@@ -1,11 +1,22 @@
+Entschuldigung für das Missverständnis. Hier ist das gesamte Dokument mit einem Deckblatt:
+
+```markdown
+---
+title: Softwareprojekt Bericht - Entwicklung eines WadLoaders für Multiplayer Doom-Spiele
+author: Lukas Hörnle, Maximilian Lincks
+date: [Datum einfügen]
+---
+
 # Detaillierte Problemstellung
+
 * Multiplayer Doom Spielen mit Mods ist schwierig weil:
     * Jeder braucht alle Mods
     * Jeder muss die selben Mods in der gleichen Reihenfolge haben
-    * Keine standardtisierte Lösung
-    * clientseitige Software Optional => kein lokaler install notwendig
+    * Keine standardisierte Lösung
+    * Clientseitige Software optional => kein lokaler Install notwendig
 
 # Use Cases
+
 * .wad Dateien Archiv (upload/download wads)
 * Suche über .wad-Dateien (by Name, optional über Eigenschaften z.B. Pfade))
 * Login/ Logout
@@ -15,9 +26,12 @@
     * Optional Kopieren der Packs anderer
 * Download von einzelnen Dateien oder ganzen WadPacks
 * Erstellen von Shell-Kommando zum Starten von Wads
-* Optional start von Wads oder Wadspacks über lokalen handler
+* Optional start von Wads oder Wadspacks über lokalen Handler
+
 # Use Cases# Usecase Upload File
+
 ## Create User UC
+
 ```mermaid
 graph
 A(open WadLoader3) -->B(Enter Name and Password for new User)
@@ -25,6 +39,7 @@ A(open WadLoader3) -->B(Enter Name and Password for new User)
 ```
 
 ## Login UC
+
 ```mermaid
 graph
 A(Login) -->B(Upload Wad from\nlocal FileSystem)
@@ -32,6 +47,7 @@ A(Login) -->B(Upload Wad from\nlocal FileSystem)
 ```
 
 ## Upload WAD UC
+
 ```mermaid
 graph
 A(Login) -->B(upload .wad-File)
@@ -40,6 +56,7 @@ A(Login) -->B(upload .wad-File)
 ```
 
 ## create WAD Pack UC 
+
 ```mermaid
 graph
 A(Upload WAD UC) --> B(click ''create WAD-pack'')
@@ -55,6 +72,7 @@ A(Upload WAD UC) --> B(click ''create WAD-pack'')
 ```
 
 ## Download WAD Packs UC 
+
 ```mermaid
 graph
 A(get a link to a WAD-Pack) --> B(click ''download'')
@@ -62,6 +80,7 @@ A(get a link to a WAD-Pack) --> B(click ''download'')
 ```
 
 ## Browse Wads
+
 ```mermaid
 graph
 A(Open WadLoader) --> B(select ''wad search'')
@@ -69,6 +88,7 @@ A(Open WadLoader) --> B(select ''wad search'')
 ```
 
 ## Browse Wad-Packs
+
 ```mermaid
 graph
 A(Open WadLoader) --> B(select ''wad-pack search'')
@@ -76,10 +96,12 @@ A(Open WadLoader) --> B(select ''wad-pack search'')
 ```
 
 # Muss-/Kann-kriterien
+
 * Muss Disclaimer haben, dass nur Mods mit allen Rechten hochgleaden werden dürfen
 * Rest: siehe Use Cases
 
 # Technologieauswahl
+
 * Datenbank         - H2
 * Spring Boot       - Server
 * React/TS          - Client
@@ -143,18 +165,20 @@ Failables ermöglichen das Arbeiten mit potenziell fehlschalgenden Operationen, 
 
 ![package.png](https://hackmd.io/_uploads/Sk4wqsO8A.png)
 
-
-
-
 ## Client Handler 
-Die folgende Grafik gibt eine grobe Übersicht über die Abläufe im Client Handler.
+
+Die folgende Grafik gibt eine grobe Übersicht über die Abläufe im Client
+
+ Handler.
 
 Aus den Parametern des Programmes ergibt sich eine **Action**. Diese ist eine Anweisung, welche Wads und welches Start-Skript (für ein WadPack) herunterzuladen sind. Zudem Enthält die Action die URL des Server, welcher zum Herunterladen der Wads verwendet werden soll.
 
-Aus der List der benötigten Wads werden diejenigen ermittelt, welche dem Client noch nicht lokal zur Verfügung stehen.
+Aus der List der benötigten Wads werden diejenigen, welche dem Client noch nicht lokal zur Verfügung stehen, ermittelt. 
 
 Die List der noch herunterzuladenden Wads wird mit der Id des WadPacks an die URL des Servers weitergeleitet.
 
 Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle angeforderten Wads und eine .cmd Datei, welche das WadPack startet.
 
 ![Haskell_Handler.png](https://hackmd.io/_uploads/B11CZioER.png)
+
+```
