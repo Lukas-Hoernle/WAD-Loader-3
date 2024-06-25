@@ -178,28 +178,28 @@ function CreateWadPack() {
                   <ListItemText primary={wad.name} />
                   <ListItemSecondaryAction>
                     <Checkbox
-                      checked={true} // Placeholder for checkbox state
-                      onChange={() => {}} // Placeholder for checkbox handler
+                      checked={selectedWads.some(
+                        (selectedWad) => selectedWad.id === wad.id
+                      )}
+                      onChange={() => toggleWadSelection(wad)}
                     />
                   </ListItemSecondaryAction>
-                  {index === 0 && (
-                    <Button
-                      variant="contained"
-                      onClick={() => moveWadUp(index)}
-                      sx={{ ml: 1 }}
-                    >
-                      Up
-                    </Button>
-                  )}
-                  {index === selectedWads.length - 1 && (
-                    <Button
-                      variant="contained"
-                      onClick={() => moveWadDown(index)}
-                      sx={{ ml: 1 }}
-                    >
-                      Down
-                    </Button>
-                  )}
+                  <Button
+                    variant="contained"
+                    onClick={() => moveWadUp(index)}
+                    disabled={index === 0}
+                    sx={{ ml: 1 }}
+                  >
+                    Up
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => moveWadDown(index)}
+                    disabled={index === selectedWads.length - 1}
+                    sx={{ ml: 1 }}
+                  >
+                    Down
+                  </Button>
                 </ListItem>
               ))}
             </List>
