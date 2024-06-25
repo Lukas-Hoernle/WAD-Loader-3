@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, Typography, Box, Button, TextField } from '@mui/material';
 import { useWadApi } from '../api/hooks/useWadApi';
-import { WadDto, GetWadRequest } from 'wadloader3-api';
+import { WadDto, GetWadRequest, PostWadRequest } from 'wadloader3-api';
 
 function WadList() {
     const [wads, setWads] = useState<WadDto[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [descriptionInput, setDescriptionInput] = useState<string>('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const wadApi = useWadApi();
 
     useEffect(() => {
@@ -33,6 +35,38 @@ function WadList() {
         link.parentNode?.removeChild(link);
     };
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            setSelectedFile(files[0]);
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            console.error('No file selected.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('name', selectedFile.name);
+        formData.append('description', descriptionInput);
+
+        const postWadRequest: PostWadRequest = {
+            name: selectedFile.name,
+            description: descriptionInput,
+            file: selectedFile 
+        };
+
+        await wadApi.postWad(postWadRequest);
+
+        const updatedWads = await wadApi.getWads();
+        setWads(updatedWads);
+        setDescriptionInput('');
+        setSelectedFile(null);
+    };
+
     return (
         <Box>
             <Typography variant="h4">Wad List</Typography>
@@ -54,6 +88,39 @@ function WadList() {
                     </ListItem>
                 ))}
             </List>
+            <Box mt={2}>
+                <Typography variant="h5">Upload New Wad</Typography>
+                <TextField
+                    fullWidth
+                    label="Description"
+                    variant="outlined"
+                    value={descriptionInput}
+                    onChange={(e) => setDescriptionInput(e.target.value)}
+                    sx={{ mb: 2 }}
+                />
+                <input
+                    type="file"
+                    accept=".wad"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    id="file-upload"
+                />
+                <label htmlFor="file-upload">
+                    <Button variant="contained" component="span">
+                        Choose File
+                    </Button>
+                </label>
+                {selectedFile && <Typography>{selectedFile.name}</Typography>}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleUpload}
+                    disabled={!selectedFile || !descriptionInput.trim()}
+                    sx={{ mt: 2 }}
+                >
+                    Upload
+                </Button>
+            </Box>
         </Box>
     );
 }
