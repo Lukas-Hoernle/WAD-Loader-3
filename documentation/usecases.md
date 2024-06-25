@@ -1,4 +1,3 @@
-markdown
 ---
 title: Softwareprojekt Bericht - Entwicklung eines WadLoaders für Multiplayer Doom-Spiele
 author: Lukas Hörnle, Maximilian Lincks
