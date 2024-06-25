@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
 import { useWadPackApi } from "../api/hooks/useWadPackApi";
@@ -32,7 +31,6 @@ function CreateWadPack() {
   );
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
-  const navigate = useNavigate();
   const localHandler = useLocalHandler("http://localhost:8080");
 
   useEffect(() => {
@@ -140,6 +138,10 @@ function CreateWadPack() {
     }
   };
 
+  const handleCancel = () => {
+    setSelectedWads([]);
+  };
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -227,7 +229,7 @@ function CreateWadPack() {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => navigate("/wad-list")}
+              onClick={handleCancel}
             >
               Cancel
             </Button>
