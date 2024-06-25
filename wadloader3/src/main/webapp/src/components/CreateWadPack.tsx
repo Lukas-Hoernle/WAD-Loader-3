@@ -182,25 +182,23 @@ function CreateWadPack() {
                   >
                     Remove
                   </Button>
-                </ListItemSecondaryAction>
-                {index > 0 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadUp(index)}
                     sx={{ ml: 1 }}
+                    disabled={index === 0}
                   >
                     Up
                   </Button>
-                )}
-                {index < selectedWads.length - 1 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadDown(index)}
                     sx={{ ml: 1 }}
+                    disabled={index === selectedWads.length - 1}
                   >
                     Down
                   </Button>
-                )}
+                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
