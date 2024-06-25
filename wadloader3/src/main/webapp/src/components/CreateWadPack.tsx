@@ -18,12 +18,12 @@ import { useWadApi } from "../api/hooks/useWadApi";
 import { useWadPackApi } from "../api/hooks/useWadPackApi";
 
 function CreateWadPack() {
-  const [wads, setWads] = useState([] as WadDto[]);
-  const [wadPacks, setWadPacks] = useState([] as WadPackDto[]);
-  const [selectedWads, setSelectedWads] = useState([] as WadDto[]);
+  const [wads, setWads] = useState<WadDto[]>([]);
+  const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
+  const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
-  const [packName, setPackName] = useState("New WadPack");
-  const [packDescription, setPackDescription] = useState(
+  const [packName, setPackName] = useState<string>("New WadPack");
+  const [packDescription, setPackDescription] = useState<string>(
     "Description for the new WadPack"
   );
   const wadApi = useWadApi();
@@ -63,7 +63,10 @@ function CreateWadPack() {
       wads: selectedWads,
     };
     if (editingWadPack) {
-      await wadPackApi.updateWadpack({ newWadPackDto: newWadPack, id: editingWadPack.id });
+      await wadPackApi.updateWadpack({
+        newWadPackDto: newWadPack,
+        id: editingWadPack.id,
+      });
     } else {
       await wadPackApi.postWadpack({ newWadPackDto: newWadPack });
     }
@@ -109,6 +112,25 @@ function CreateWadPack() {
         newSelectedWads[index + 1],
       ];
       setSelectedWads(newSelectedWads);
+    }
+  };
+
+  const handleDownloadWadPack = async (wadPack: WadPackDto) => {
+    try {
+      const wadPackBinary = await wadPackApi.getWadpack({ id: wadPack.id });
+      const blob = new Blob([JSON.stringify(wadPackBinary)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = `${wadPack.name}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error downloading WadPack:", error);
     }
   };
 
@@ -167,13 +189,25 @@ function CreateWadPack() {
           <Box display="flex" justifyContent="space-between" mt={2}>
             <Button
               variant="contained"
-              onClick={() => moveWadUp(selectedWads.findIndex(w => w.id === selectedWads[selectedWads.length - 1].id))}
+              onClick={() =>
+                moveWadUp(
+                  selectedWads.findIndex(
+                    (w) => w.id === selectedWads[selectedWads.length - 1].id
+                  )
+                )
+              }
             >
               Up
             </Button>
             <Button
               variant="contained"
-              onClick={() => moveWadDown(selectedWads.findIndex(w => w.id === selectedWads[selectedWads.length - 1].id))}
+              onClick={() =>
+                moveWadDown(
+                  selectedWads.findIndex(
+                    (w) => w.id === selectedWads[selectedWads.length - 1].id
+                  )
+                )
+              }
             >
               Down
             </Button>
@@ -205,6 +239,13 @@ function CreateWadPack() {
                     onClick={() => handleDeleteWadPack(wadPack)}
                   >
                     Delete
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleDownloadWadPack(wadPack)}
+                  >
+                    Download
                   </Button>
                 </ListItemSecondaryAction>
               </ListItem>
