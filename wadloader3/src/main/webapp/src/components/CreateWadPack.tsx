@@ -167,69 +167,66 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
-        <Paper elevation={3} sx={{ width: "100%", p: 2, mb: 2 }}>
-          <Typography variant="h5" gutterBottom>
-            Selected Wads
-          </Typography>
-          <Divider />
-          <List>
-            {selectedWads.map((wad, index) => (
-              <ListItem key={wad.id} dense>
-                <ListItemText primary={wad.name} />
-                <ListItemSecondaryAction>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleRemoveWad(wad)}
-                  >
-                    Remove
-                  </Button>
-                </ListItemSecondaryAction>
-                {index === 0 && (
-                  <Button
-                    variant="contained"
-                    onClick={() => moveWadUp(index)}
-                    sx={{ ml: 1 }}
-                  >
-                    Up
-                  </Button>
-                )}
-                {index === selectedWads.length - 1 && (
-                  <Button
-                    variant="contained"
-                    onClick={() => moveWadDown(index)}
-                    sx={{ ml: 1 }}
-                  >
-                    Down
-                  </Button>
-                )}
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-        <Paper elevation={3} sx={{ width: "100%", p: 2, mb: 2 }}>
-          <Typography variant="h5" gutterBottom>
-            Wad-Packs
-          </Typography>
-          <Divider />
-          <List>
-            {wadPacks.map((wadPack) => (
-              <ListItem
-                key={wadPack.id}
-                dense
-                button
-                onClick={() => handleWadPackClick(wadPack)}
-                selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
-              >
-                <ListItemText
-                  primary={wadPack.name}
-                  secondary={wadPack.description}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
+        <Box sx={{ width: "100%", mt: 2 }}>
+          <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
+            <Typography variant="h5" gutterBottom>
+              Selected Wads
+            </Typography>
+            <List>
+              {selectedWads.map((wad, index) => (
+                <ListItem key={wad.id} dense>
+                  <ListItemText primary={wad.name} />
+                  <ListItemSecondaryAction>
+                    <Checkbox
+                      checked={true} // Placeholder for checkbox state
+                      onChange={() => {}} // Placeholder for checkbox handler
+                    />
+                  </ListItemSecondaryAction>
+                  {index === 0 && (
+                    <Button
+                      variant="contained"
+                      onClick={() => moveWadUp(index)}
+                      sx={{ ml: 1 }}
+                    >
+                      Up
+                    </Button>
+                  )}
+                  {index === selectedWads.length - 1 && (
+                    <Button
+                      variant="contained"
+                      onClick={() => moveWadDown(index)}
+                      sx={{ ml: 1 }}
+                    >
+                      Down
+                    </Button>
+                  )}
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+          <Box mt={2}>
+            <Typography variant="h5" gutterBottom>
+              Wad-Packs
+            </Typography>
+            <Divider />
+            <List>
+              {wadPacks.map((wadPack) => (
+                <ListItem
+                  key={wadPack.id}
+                  dense
+                  button
+                  onClick={() => handleWadPackClick(wadPack)}
+                  selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
+                >
+                  <ListItemText
+                    primary={wadPack.name}
+                    secondary={wadPack.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
       </Box>
       {selectedWadPack && (
         <Box mt={2}>
