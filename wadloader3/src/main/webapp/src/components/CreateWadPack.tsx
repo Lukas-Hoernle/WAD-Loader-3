@@ -148,11 +148,18 @@ function CreateWadPack() {
           </Typography>
           <Divider />
           <List>
-            {selectedWads.map((wad) => (
+            {selectedWads.map((wad, index) => (
               <ListItem key={wad.id} dense>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
-                  <Button onClick={() => handleRemoveWad(wad)}>Remove</Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleRemoveWad(wad)}
+                  >
+                    Remove
+                  </Button>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
