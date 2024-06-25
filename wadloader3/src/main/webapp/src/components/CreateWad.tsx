@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
-  Checkbox,
   Grid,
   List,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
   Paper,
   Typography,
@@ -18,7 +16,6 @@ import { useWadApi } from "../api/hooks/useWadApi";
 
 function CreateWad() {
   const [wads, setWads] = useState<WadDto[]>([]);
-  const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [descriptionInput, setDescriptionInput] = useState<string>("");
   const wadApi = useWadApi();
   const navigate = useNavigate();
@@ -31,21 +28,16 @@ function CreateWad() {
     fetchData();
   }, [wadApi]);
 
-  const toggleWadSelection = (wad: WadDto) => {
-    setSelectedWads((prevSelectedWads) =>
-      prevSelectedWads.includes(wad)
-        ? prevSelectedWads.filter((selectedWad) => selectedWad.id !== wad.id)
-        : [...prevSelectedWads, wad]
-    );
-  };
-
   const handleUploadWad = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
 
-      if (file.name.toLowerCase().endsWith(".wad") || file.name.toLowerCase().endsWith(".pk3")) {
+      if (
+        file.name.toLowerCase().endsWith(".wad") ||
+        file.name.toLowerCase().endsWith(".pk3")
+      ) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("name", file.name);
@@ -84,16 +76,8 @@ function CreateWad() {
             </Typography>
             <List>
               {wads.map((wad) => (
-                <ListItem
-                  key={wad.id}
-                  dense
-                  button
-                  onClick={() => toggleWadSelection(wad)}
-                >
+                <ListItem key={wad.id}>
                   <ListItemText primary={wad.name} />
-                  <ListItemSecondaryAction>
-                    <Checkbox checked={selectedWads.includes(wad)} />
-                  </ListItemSecondaryAction>
                 </ListItem>
               ))}
             </List>
