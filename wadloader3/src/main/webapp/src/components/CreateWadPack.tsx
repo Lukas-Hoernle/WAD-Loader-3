@@ -30,9 +30,9 @@ function CreateWadPack() {
   }, [wadApi, wadPackApi]);
 
   const toggleWadSelection = (wad: WadDto) => {
-    setSelectedWads((prevSelectedWads) =>
-      prevSelectedWads.some((selectedWad) => selectedWad.id === wad.id)
-        ? prevSelectedWads.filter((selectedWad) => selectedWad.id !== wad.id)
+    setSelectedWads(prevSelectedWads =>
+      prevSelectedWads.some(selectedWad => selectedWad.id === wad.id)
+        ? prevSelectedWads.filter(selectedWad => selectedSawd.id !== wad.id)
         : [...prevSelectedWads, wad]
     );
   };
@@ -69,8 +69,8 @@ function CreateWadPack() {
   };
 
   const handleRemoveWad = (wadToRemove: WadDto) => {
-    setSelectedWads((prevSelectedWads) =>
-      prevSelectedWads.filter((wad) => wad.id !== wadToRemove.id)
+    setSelectedWads(prevSelectedWads =>
+      prevSelectedWads.filter(wad => wad.id !== wadToRemove.id)
     );
   };
 
@@ -126,7 +126,7 @@ function CreateWadPack() {
 
   const handleStartWadPack = () => {
     if (selectedWadPack) {
-      const wadIds = selectedWadPack.wads.map((wad) => wad.id);
+      const wadIds = selectedWadPack.wads.map(wad => wad.id);
       localHandler("DownloadAndStartWadPack", selectedWadPack.id, wadIds as [number]);
     }
   };
@@ -142,19 +142,12 @@ function CreateWadPack() {
             Available Wads
           </Typography>
           <List>
-            {wads.map((wad) => (
-              <ListItem
-                key={wad.id}
-                dense
-                button
-                onClick={() => toggleWadSelection(wad)}
-              >
+            {wads.map(wad => (
+              <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
                   <Checkbox
-                    checked={selectedWads.some(
-                      (selectedWad) => selectedWad.id === wad.id
-                    )}
+                    checked={selectedWads.some(selectedWad => selectedSawd.id === wad.id)}
                     onChange={() => toggleWadSelection(wad)}
                   />
                 </ListItemSecondaryAction>
@@ -243,7 +236,7 @@ function CreateWadPack() {
           </Typography>
           <Divider />
           <List>
-            {wadPacks.map((wadPack) => (
+            {wadPacks.map(wadPack => (
               <ListItem
                 key={wadPack.id}
                 dense
