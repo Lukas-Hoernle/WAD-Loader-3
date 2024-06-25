@@ -100,25 +100,29 @@ function CreateWad() {
           </Paper>
         </Grid>
       </Grid>
-      <Box display="flex" justifyContent="space-around" mt={4}>
-        <input
-          accept=".wad,.pk3"
-          style={{ display: "none" }}
-          id="upload-wad"
-          type="file"
-          onChange={handleUploadWad}
-        />
-        <label htmlFor="upload-wad">
-          <Button variant="contained" component="span">
-            Upload WAD/PK3
-          </Button>
-        </label>
-        <TextField
-          label="Description"
-          variant="outlined"
-          value={descriptionInput}
-          onChange={(e) => setDescriptionInput(e.target.value)}
-        />
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+        <Box>
+          <input
+            accept=".wad,.pk3"
+            style={{ display: "none" }}
+            id="upload-wad"
+            type="file"
+            onChange={handleUploadWad}
+          />
+          <label htmlFor="upload-wad">
+            <Button variant="contained" component="span">
+              Upload WAD/PK3
+            </Button>
+          </label>
+        </Box>
+        <Box mt={2}>
+          <TextField
+            label="Description"
+            variant="outlined"
+            value={descriptionInput}
+            onChange={(e) => setDescriptionInput(e.target.value)}
+          />
+        </Box>
       </Box>
       <Box display="flex" justifyContent="center" mt={4}>
         <Button
