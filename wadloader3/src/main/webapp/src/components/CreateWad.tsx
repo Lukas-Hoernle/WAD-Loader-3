@@ -17,6 +17,7 @@ import { useWadApi } from "../api/hooks/useWadApi";
 function CreateWad() {
   const [wads, setWads] = useState<WadDto[]>([]);
   const [descriptionInput, setDescriptionInput] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const wadApi = useWadApi();
   const navigate = useNavigate();
 
@@ -28,38 +29,38 @@ function CreateWad() {
     fetchData();
   }, [wadApi]);
 
-  const handleUploadWad = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0]);
+    }
+  };
 
-      if (
-        file.name.toLowerCase().endsWith(".wad") ||
-        file.name.toLowerCase().endsWith(".pk3")
-      ) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("name", file.name);
-        formData.append("description", descriptionInput);
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      console.error("No file selected.");
+      return;
+    }
 
-        const postWadRequest: PostWadRequest = {
-          name: formData.get("name") as string,
-          description: formData.get("description") as string,
-          file: file,
-        };
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("name", selectedFile.name);
+    formData.append("description", descriptionInput);
 
-        try {
-          await wadApi.postWad(postWadRequest);
-          const updatedWads = await wadApi.getWads();
-          setWads(updatedWads);
-          setDescriptionInput(""); // Clear description input after successful upload
-        } catch (error) {
-          console.error("Error uploading wad:", error);
-        }
-      } else {
-        alert("Invalid file type. Only .wad and .pk3 files are allowed.");
-      }
+    const postWadRequest: PostWadRequest = {
+      name: formData.get("name") as string,
+      description: formData.get("description") as string,
+      file: selectedFile,
+    };
+
+    try {
+      await wadApi.postWad(postWadRequest);
+      const updatedWads = await wadApi.getWads();
+      setWads(updatedWads);
+      setDescriptionInput("");
+      setSelectedFile(null); 
+    } catch (error) {
+      console.error("Error uploading wad:", error);
     }
   };
 
@@ -85,37 +86,46 @@ function CreateWad() {
         </Grid>
       </Grid>
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-        <Box>
-          <input
-            accept=".wad,.pk3"
-            style={{ display: "none" }}
-            id="upload-wad"
-            type="file"
-            onChange={handleUploadWad}
-          />
-          <label htmlFor="upload-wad">
-            <Button variant="contained" component="span">
-              Upload WAD/PK3
-            </Button>
-          </label>
+        <TextField
+          label="Description"
+          variant="outlined"
+          value={descriptionInput}
+          onChange={(e) => setDescriptionInput(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+          <Box>
+            <input
+              accept=".wad,.pk3"
+              style={{ display: "none" }}
+              id="upload-wad"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="upload-wad">
+              <Button variant="contained" component="span">
+                Choose File
+              </Button>
+            </label>
+            {selectedFile && <Typography>{selectedFile.name}</Typography>}
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpload}
+            disabled={!selectedFile || !descriptionInput.trim()}
+          >
+            Upload
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            sx={{ ml: 2 }}
+          >
+            Back
+          </Button>
         </Box>
-        <Box mt={2}>
-          <TextField
-            label="Description"
-            variant="outlined"
-            value={descriptionInput}
-            onChange={(e) => setDescriptionInput(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </Button>
       </Box>
     </Box>
   );
