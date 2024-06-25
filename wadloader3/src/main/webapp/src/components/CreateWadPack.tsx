@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
 import { useWadPackApi } from "../api/hooks/useWadPackApi";
+import { useLocalHandler } from "../hooks/useLocalHandler";
 
 function CreateWadPack() {
   const [wads, setWads] = useState<WadDto[]>([]);
@@ -16,6 +17,7 @@ function CreateWadPack() {
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
   const navigate = useNavigate();
+  const localHandler = useLocalHandler("http://localhost:8080");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,7 +120,14 @@ function CreateWadPack() {
       setSelectedWadPack(null);
     } else {
       setSelectedWadPack(wadPack);
-      handleEditWadPack(wadPack); // Setzt die ausgewählten Wads für die Bearbeitung
+      handleEditWadPack(wadPack);
+    }
+  };
+
+  const handleStartWadPack = () => {
+    if (selectedWadPack) {
+      const wadIds = selectedWadPack.wads.map((wad) => wad.id);
+      localHandler("DownloadAndStartWadPack", selectedWadPack.id, wadIds as [number]);
     }
   };
 
@@ -241,6 +250,14 @@ function CreateWadPack() {
             sx={{ ml: 1 }}
           >
             Download
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleStartWadPack}
+            sx={{ ml: 1 }}
+          >
+            Start WadPack
           </Button>
         </Box>
       )}
