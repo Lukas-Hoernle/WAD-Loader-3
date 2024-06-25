@@ -150,7 +150,7 @@ function CreateWadPack() {
         Create WadPack
       </Typography>
       <Box display="flex" flexWrap="wrap" justifyContent="space-around" mt={4}>
-        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2 }}>
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2, bgcolor: "background.paper" }}>
           <Typography variant="h5" gutterBottom>
             Available Wads
           </Typography>
@@ -175,7 +175,7 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
-        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2 }}>
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2, bgcolor: "background.paper" }}>
           <Typography variant="h5" gutterBottom>
             Selected Wads
           </Typography>
@@ -216,7 +216,7 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
-        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2 }}>
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2, bgcolor: "background.paper" }}>
           <Typography variant="h5" gutterBottom>
             Wad-Packs
           </Typography>
