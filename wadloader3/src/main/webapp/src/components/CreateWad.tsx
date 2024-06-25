@@ -21,7 +21,7 @@ function CreateWad() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
@@ -29,16 +29,22 @@ function CreateWad() {
     const handleUploadWad = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('description', 'Default description');
 
-            try {
-                await wadApi.postWad(formData as unknown as PostWadRequest); //mega ugly wtf das geht locker wirft das Fehler dafuck
-                const updatedWads = await wadApi.getWads();
-                setWads(updatedWads);
-            } catch (error) {
-                console.error('Error uploading wad:', error);
+            // Check if the uploaded file type is .wad or .pk3
+            if (file.name.endsWith('.wad') || file.name.endsWith('.pk3')) {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('description', 'Default description');
+
+                try {
+                    await wadApi.postWad(formData as unknown as PostWadRequest);
+                    const updatedWads = await wadApi.getWads();
+                    setWads(updatedWads);
+                } catch (error) {
+                    console.error('Error uploading wad:', error);
+                }
+            } else {
+                alert('Invalid file type. Only .wad and .pk3 files are allowed.');
             }
         }
     };
@@ -77,7 +83,7 @@ function CreateWad() {
             </Grid>
             <Box display="flex" justifyContent="space-around" mt={4}>
                 <input
-                    accept=".wad"
+                    accept=".wad,.pk3" // Accept .wad and .pk3 file types
                     style={{ display: 'none' }}
                     id="upload-wad"
                     type="file"
@@ -85,7 +91,7 @@ function CreateWad() {
                 />
                 <label htmlFor="upload-wad">
                     <Button variant="contained" component="span">
-                        Upload WAD
+                        Upload WAD/PK3
                     </Button>
                 </label>
             </Box>
