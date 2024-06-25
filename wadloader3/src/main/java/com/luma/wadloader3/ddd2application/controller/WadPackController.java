@@ -52,6 +52,10 @@ public class WadPackController implements WadpackApi {
 
     @Override
     public ResponseEntity<WadPackDto> postWadpack(@Valid NewWadPackDto newWadPackDto) {
+        if (wadPackRepo.existsByName(newWadPackDto.getName())) {
+            System.err.printf("Wadpack '%s' already exists%n", newWadPackDto.getWads());
+            return ResponseEntity.badRequest().build();
+        }
         switch (toLoadOrder(newWadPackDto.getWads())) {
             case Failable.Success<Map<Integer, Wad>>(Map<Integer, Wad> wadOrder) -> {
                 WadPack wadPack = WadPack.builder()

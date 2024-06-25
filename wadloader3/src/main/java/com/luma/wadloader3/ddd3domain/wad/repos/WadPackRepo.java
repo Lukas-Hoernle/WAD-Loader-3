@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WadPackRepo extends JpaRepository<WadPack, Integer> {
+
+    boolean existsByName(String name);
 }
