@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -11,7 +12,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
@@ -20,6 +20,7 @@ import { useWadPackApi } from "../api/hooks/useWadPackApi";
 function CreateWadPack() {
   const [wads, setWads] = useState<WadDto[]>([]);
   const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
+  const [selectedWadPack, setSelectedWadPack] = useState<WadPackDto | null>(null);
   const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
   const [packName, setPackName] = useState<string>("New WadPack");
@@ -46,14 +47,6 @@ function CreateWadPack() {
         ? prevSelectedWads.filter((selectedWad) => selectedWad.id !== wad.id)
         : [...prevSelectedWads, wad]
     );
-  };
-
-  const addAllWads = () => {
-    setSelectedWads(wads);
-  };
-
-  const removeAllWads = () => {
-    setSelectedWads([]);
   };
 
   const handleSave = async () => {
@@ -134,6 +127,15 @@ function CreateWadPack() {
     }
   };
 
+  const handleWadPackClick = (wadPack: WadPackDto) => {
+    if (selectedWadPack && selectedWadPack.id === wadPack.id) {
+      setSelectedWadPack(null);
+    } else {
+      setSelectedWadPack(wadPack);
+      handleEditWadPack(wadPack); // Setzt die ausgewählten Wads für die Bearbeitung
+    }
+  };
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -164,22 +166,6 @@ function CreateWadPack() {
               </ListItem>
             ))}
           </List>
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={addAllWads}
-            >
-              Add All
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={removeAllWads}
-            >
-              Remove All
-            </Button>
-          </Box>
         </Paper>
         <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
@@ -235,44 +221,49 @@ function CreateWadPack() {
           <Divider />
           <List>
             {wadPacks.map((wadPack) => (
-              <ListItem key={wadPack.id} dense>
+              <ListItem
+                key={wadPack.id}
+                dense
+                button
+                onClick={() => handleWadPackClick(wadPack)}
+                selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
+              >
                 <ListItemText
                   primary={wadPack.name}
                   secondary={wadPack.description}
                 />
-                <ListItemSecondaryAction>
-                  <Box display="flex" flexDirection="column">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleEditWadPack(wadPack)}
-                      sx={{ mb: 1, minWidth: '75px' }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleDeleteWadPack(wadPack)}
-                      sx={{ mb: 1, minWidth: '75px' }}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleDownloadWadPack(wadPack)}
-                      sx={{ minWidth: '75px' }}
-                    >
-                      Download
-                    </Button>
-                  </Box>
-                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
         </Paper>
       </Box>
+      {selectedWadPack && (
+        <Box mt={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleEditWadPack(selectedWadPack)}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleDeleteWadPack(selectedWadPack)}
+            sx={{ ml: 1 }}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleDownloadWadPack(selectedWadPack)}
+            sx={{ ml: 1 }}
+          >
+            Download
+          </Button>
+        </Box>
+      )}
       <Box mt={4}>
         <TextField
           fullWidth
