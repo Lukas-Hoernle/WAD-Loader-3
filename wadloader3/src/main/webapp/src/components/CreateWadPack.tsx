@@ -32,7 +32,7 @@ function CreateWadPack() {
   const toggleWadSelection = (wad: WadDto) => {
     setSelectedWads(prevSelectedWads =>
       prevSelectedWads.some(selectedWad => selectedWad.id === wad.id)
-        ? prevSelectedWads.filter(selectedWad => selectedSawd.id !== wad.id)
+        ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
         : [...prevSelectedWads, wad]
     );
   };
@@ -147,7 +147,7 @@ function CreateWadPack() {
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
                   <Checkbox
-                    checked={selectedWads.some(selectedWad => selectedSawd.id === wad.id)}
+                    checked={selectedWads.some(selectedWad => selectedWad.id === wad.id)}
                     onChange={() => toggleWadSelection(wad)}
                   />
                 </ListItemSecondaryAction>
