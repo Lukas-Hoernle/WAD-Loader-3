@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
           { path: "/", element: <HomePage /> },
           { path: "/createwad", element: <CreateWad /> },
           { path: "/createwadpack", element: <CreateWadPack /> },
-          { path: "/wadlist", element: <WadList /> },
+          { path: "/listwad", element: <WadList /> },
         ],
       },
     ],

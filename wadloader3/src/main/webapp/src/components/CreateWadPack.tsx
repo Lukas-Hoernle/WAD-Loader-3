@@ -1,4 +1,16 @@
-import { Box, Button, Checkbox, Divider, List, ListItem, ListItemSecondaryAction, ListItemText, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
@@ -9,11 +21,15 @@ import { useLocalHandler } from "../hooks/useLocalHandler";
 function CreateWadPack() {
   const [wads, setWads] = useState<WadDto[]>([]);
   const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
-  const [selectedWadPack, setSelectedWadPack] = useState<WadPackDto | null>(null);
+  const [selectedWadPack, setSelectedWadPack] = useState<WadPackDto | null>(
+    null
+  );
   const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
   const [packName, setPackName] = useState<string>("New WadPack");
-  const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
+  const [packDescription, setPackDescription] = useState<string>(
+    "Description for the new WadPack"
+  );
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
   const navigate = useNavigate();
@@ -98,18 +114,11 @@ function CreateWadPack() {
 
   const handleDownloadWadPack = async (wadPack: WadPackDto) => {
     try {
-      const wadPackBinary = await wadPackApi.getWadpack({ id: wadPack.id });
-      const blob = new Blob([JSON.stringify(wadPackBinary)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = `${wadPack.name}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      localHandler(
+        "wadpack",
+        wadPack.id,
+        wadPack.wads.map((wad) => wad.id)
+      );
     } catch (error) {
       console.error("Error downloading WadPack:", error);
     }
@@ -126,8 +135,8 @@ function CreateWadPack() {
 
   const handleStartWadPack = () => {
     if (selectedWadPack) {
-      const wadIds = selectedWadPack.wads.map(wad => wad.id);
-      localHandler("DownloadAndStartWadPack", selectedWadPack.id, wadIds as [number]);
+      const wadIds = selectedWadPack.wads.map((wad) => wad.id);
+      localHandler("startwadpack", selectedWadPack.id, wadIds as [number]);
     }
   };
 
@@ -214,11 +223,7 @@ function CreateWadPack() {
             sx={{ mb: 2 }}
           />
           <Box display="flex" justifyContent="space-between">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSave}
-            >
+            <Button variant="contained" color="primary" onClick={handleSave}>
               Save WadPack
             </Button>
             <Button
@@ -242,7 +247,9 @@ function CreateWadPack() {
                 dense
                 button
                 onClick={() => handleWadPackClick(wadPack)}
-                selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
+                selected={
+                  selectedWadPack ? selectedWadPack.id === wadPack.id : false
+                }
               >
                 <ListItemText
                   primary={wadPack.name}
