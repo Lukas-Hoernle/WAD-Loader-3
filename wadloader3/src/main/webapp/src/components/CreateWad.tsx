@@ -57,8 +57,8 @@ function CreateWad() {
       await wadApi.postWad(postWadRequest);
       const updatedWads = await wadApi.getWads();
       setWads(updatedWads);
-      setDescriptionInput(""); // Clear description input after successful upload
-      setSelectedFile(null); // Clear selected file after successful upload
+      setDescriptionInput("");
+      setSelectedFile(null); 
     } catch (error) {
       console.error("Error uploading wad:", error);
     }
@@ -86,47 +86,46 @@ function CreateWad() {
         </Grid>
       </Grid>
       <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-        <Box>
-          <input
-            accept=".wad,.pk3"
-            style={{ display: "none" }}
-            id="upload-wad"
-            type="file"
-            onChange={handleFileChange}
-          />
-          <label htmlFor="upload-wad">
-            <Button variant="contained" component="span">
-              Choose File
-            </Button>
-          </label>
-          {selectedFile && <Typography>{selectedFile.name}</Typography>}
+        <TextField
+          label="Description"
+          variant="outlined"
+          value={descriptionInput}
+          onChange={(e) => setDescriptionInput(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+          <Box>
+            <input
+              accept=".wad,.pk3"
+              style={{ display: "none" }}
+              id="upload-wad"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="upload-wad">
+              <Button variant="contained" component="span">
+                Choose File
+              </Button>
+            </label>
+            {selectedFile && <Typography>{selectedFile.name}</Typography>}
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpload}
+            disabled={!selectedFile || !descriptionInput.trim()}
+          >
+            Upload
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            sx={{ ml: 2 }}
+          >
+            Back
+          </Button>
         </Box>
-        <Box mt={2}>
-          <TextField
-            label="Description"
-            variant="outlined"
-            value={descriptionInput}
-            onChange={(e) => setDescriptionInput(e.target.value)}
-          />
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleUpload}
-          disabled={!selectedFile || !descriptionInput.trim()}
-          sx={{ mt: 2 }}
-        >
-          Upload
-        </Button>
-      </Box>
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </Button>
       </Box>
     </Box>
   );
