@@ -139,8 +139,8 @@ function CreateWadPack() {
       <Typography variant="h4" align="center" gutterBottom>
         Create WadPack
       </Typography>
-      <Box display="flex" justifyContent="space-around" mt={4}>
-        <Paper elevation={3} sx={{ width: "30%", p: 2 }}>
+      <Box display="flex" justifyContent="space-around" mt={4} flexWrap="wrap">
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: { xs: 2, md: 0 } }}>
           <Typography variant="h5" gutterBottom>
             Available Wads
           </Typography>
@@ -165,13 +165,13 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
-        <Paper elevation={3} sx={{ width: "30%", p: 2 }}>
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: { xs: 2, md: 0 } }}>
           <Typography variant="h5" gutterBottom>
             Selected Wads
           </Typography>
           <Divider />
           <List>
-            {selectedWads.map((wad) => (
+            {selectedWads.map((wad, index) => (
               <ListItem key={wad.id} dense>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
@@ -180,39 +180,31 @@ function CreateWadPack() {
                     variant="contained"
                     color="secondary"
                     onClick={() => handleRemoveWad(wad)}
+                    sx={{ mr: 1 }}
                   >
                     Remove
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => moveWadUp(index)}
+                    sx={{ mr: 1 }}
+                  >
+                    Up
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => moveWadDown(index)}
+                  >
+                    Down
                   </Button>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              variant="contained"
-              onClick={() =>
-                moveWadUp(
-                  selectedWads.findIndex((w) => w.id === selectedWads[0].id)
-                )
-              }
-            >
-              Up
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() =>
-                moveWadDown(
-                  selectedWads.findIndex(
-                    (w) => w.id === selectedWads[selectedWads.length - 1].id
-                  )
-                )
-              }
-            >
-              Down
-            </Button>
-          </Box>
         </Paper>
-        <Paper elevation={3} sx={{ width: "30%", p: 2 }}>
+        <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2 }}>
           <Typography variant="h5" gutterBottom>
             Wad-Packs
           </Typography>
@@ -225,12 +217,12 @@ function CreateWadPack() {
                   secondary={wadPack.description}
                 />
                 <ListItemSecondaryAction>
-                  <Box display="flex">
+                  <Box display="flex" flexDirection={{ xs: "column", md: "row" }}>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => handleEditWadPack(wadPack)}
-                      sx={{ mr: 1 }}
+                      sx={{ mr: { md: 1 }, mb: { xs: 1, md: 0 } }}
                     >
                       Edit
                     </Button>
@@ -238,7 +230,7 @@ function CreateWadPack() {
                       variant="contained"
                       color="secondary"
                       onClick={() => handleDeleteWadPack(wadPack)}
-                      sx={{ mr: 1 }}
+                      sx={{ mr: { md: 1 }, mb: { xs: 1, md: 0 } }}
                     >
                       Delete
                     </Button>
@@ -256,7 +248,7 @@ function CreateWadPack() {
           </List>
         </Paper>
       </Box>
-      <Box width="90%" mt={3}>
+      <Box width="100%" mt={3}>
         <TextField
           label="WadPack Name"
           fullWidth
@@ -264,7 +256,7 @@ function CreateWadPack() {
           onChange={(e) => setPackName(e.target.value)}
         />
       </Box>
-      <Box width="90%" mt={3}>
+      <Box width="100%" mt={3}>
         <TextField
           label="WadPack Description"
           fullWidth
@@ -274,7 +266,7 @@ function CreateWadPack() {
           onChange={(e) => setPackDescription(e.target.value)}
         />
       </Box>
-      <Box width="90%" mt={3} display="flex" justifyContent="space-between">
+      <Box width="100%" mt={3} display="flex" justifyContent="space-between">
         <Button variant="contained" color="primary" onClick={handleSave}>
           Save WadPack
         </Button>
