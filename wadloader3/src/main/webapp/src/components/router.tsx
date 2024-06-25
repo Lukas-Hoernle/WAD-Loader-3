@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
 function HomePage() {
   return (
     <div>
-      <h1>Herzlich willkommmen b eim wadloader3,</h1>
+      <h1>Herzlich willkommmen beim wadloader3,</h1>
       <p>bitte navigieren Sie mit der oberen Leiste.</p>
     </div>
   );

@@ -171,7 +171,7 @@ function CreateWadPack() {
           </Typography>
           <Divider />
           <List>
-            {selectedWads.map((wad, index) => (
+            {selectedWads.map((wad) => (
               <ListItem key={wad.id} dense>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
