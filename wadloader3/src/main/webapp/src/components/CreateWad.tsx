@@ -30,7 +30,6 @@ function CreateWad() {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
 
-            // Check if the uploaded file type is .wad or .pk3
             if (file.name.endsWith('.wad') || file.name.endsWith('.pk3')) {
                 const formData = new FormData();
                 formData.append('file', file);
