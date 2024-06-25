@@ -1,17 +1,5 @@
+import { Box, Button, Checkbox, Divider, List, ListItem, ListItemSecondaryAction, ListItemText, Paper, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
@@ -24,9 +12,7 @@ function CreateWadPack() {
   const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
   const [packName, setPackName] = useState<string>("New WadPack");
-  const [packDescription, setPackDescription] = useState<string>(
-    "Description for the new WadPack"
-  );
+  const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
   const navigate = useNavigate();
@@ -167,66 +153,69 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
-        <Box sx={{ width: "100%", mt: 2 }}>
-          <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h5" gutterBottom>
-              Selected Wads
-            </Typography>
-            <List>
-              {selectedWads.map((wad, index) => (
-                <ListItem key={wad.id} dense>
-                  <ListItemText primary={wad.name} />
-                  <ListItemSecondaryAction>
-                    <Checkbox
-                      checked={selectedWads.some(
-                        (selectedWad) => selectedWad.id === wad.id
-                      )}
-                      onChange={() => toggleWadSelection(wad)}
-                    />
-                  </ListItemSecondaryAction>
+        <Paper elevation={3} sx={{ width: "100%", p: 2, mb: 2 }}>
+          <Typography variant="h5" gutterBottom>
+            Selected Wads
+          </Typography>
+          <Divider />
+          <List>
+            {selectedWads.map((wad, index) => (
+              <ListItem key={wad.id} dense>
+                <ListItemText primary={wad.name} />
+                <ListItemSecondaryAction>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleRemoveWad(wad)}
+                  >
+                    Remove
+                  </Button>
+                </ListItemSecondaryAction>
+                {index === 0 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadUp(index)}
-                    disabled={index === 0}
                     sx={{ ml: 1 }}
                   >
                     Up
                   </Button>
+                )}
+                {index === selectedWads.length - 1 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadDown(index)}
-                    disabled={index === selectedWads.length - 1}
                     sx={{ ml: 1 }}
                   >
                     Down
                   </Button>
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-          <Box mt={2}>
-            <Typography variant="h5" gutterBottom>
-              Wad-Packs
-            </Typography>
-            <Divider />
-            <List>
-              {wadPacks.map((wadPack) => (
-                <ListItem
-                  key={wadPack.id}
-                  dense
-                  button
-                  onClick={() => handleWadPackClick(wadPack)}
-                  selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
-                >
-                  <ListItemText
-                    primary={wadPack.name}
-                    secondary={wadPack.description}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Box>
+                )}
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+        <Paper elevation={3} sx={{ width: "100%", p: 2, mb: 2 }}>
+          <Typography variant="h5" gutterBottom>
+            Wad-Packs
+          </Typography>
+          <Divider />
+          <List>
+            {wadPacks.map((wadPack) => (
+              <ListItem
+                key={wadPack.id}
+                dense
+                button
+                onClick={() => handleWadPackClick(wadPack)}
+                selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
+              >
+                <ListItemText
+                  primary={wadPack.name}
+                  secondary={wadPack.description}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </Box>
       {selectedWadPack && (
         <Box mt={2}>
