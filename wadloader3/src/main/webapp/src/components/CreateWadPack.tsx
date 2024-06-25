@@ -49,14 +49,6 @@ function CreateWadPack() {
     );
   };
 
-  const addAllWads = () => {
-    setSelectedWads([...wads]);
-  };
-
-  const removeAllWads = () => {
-    setSelectedWads([]);
-  };
-
   const handleSave = async () => {
     const newWadPack: NewWadPackDto = {
       name: packName,
