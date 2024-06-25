@@ -77,6 +77,8 @@ function CreateWadPack() {
     await wadPackApi.deleteWadpack({ id: wadPack.id });
     const updatedWadPacks = await wadPackApi.getWadPacks();
     setWadPacks(updatedWadPacks);
+    setSelectedWads([]);
+    setEditingWadPack(null);
   };
 
   const handleRemoveWad = (wadToRemove: WadDto) => {
@@ -137,6 +139,7 @@ function CreateWadPack() {
 
   const handleCancel = () => {
     setSelectedWads([]);
+    setEditingWadPack(null);
   };
 
   // Filterung der Wad-Packs basierend auf dem Suchbegriff
