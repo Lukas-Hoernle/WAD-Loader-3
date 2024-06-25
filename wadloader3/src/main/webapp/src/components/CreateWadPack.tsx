@@ -170,7 +170,7 @@ function CreateWadPack() {
           </Typography>
           <Divider />
           <List>
-            {selectedWads.map((wad) => (
+            {selectedWads.map((wad, index) => (
               <ListItem key={wad.id} dense>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
@@ -191,9 +191,7 @@ function CreateWadPack() {
               variant="contained"
               onClick={() =>
                 moveWadUp(
-                  selectedWads.findIndex(
-                    (w) => w.id === selectedWads[selectedWads.length - 1].id
-                  )
+                  selectedWads.findIndex((w) => w.id === selectedWads[0].id)
                 )
               }
             >
@@ -226,27 +224,31 @@ function CreateWadPack() {
                   secondary={wadPack.description}
                 />
                 <ListItemSecondaryAction>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEditWadPack(wadPack)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleDeleteWadPack(wadPack)}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleDownloadWadPack(wadPack)}
-                  >
-                    Download
-                  </Button>
+                  <Box display="flex">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleEditWadPack(wadPack)}
+                      sx={{ mr: 1 }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDeleteWadPack(wadPack)}
+                      sx={{ mr: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleDownloadWadPack(wadPack)}
+                    >
+                      Download
+                    </Button>
+                  </Box>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
