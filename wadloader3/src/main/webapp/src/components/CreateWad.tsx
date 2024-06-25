@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,7 +11,6 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { WadDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
@@ -71,10 +71,10 @@ function CreateWad() {
         Create Wads Page
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h5" gutterBottom>
-              Wads
+              Uploaded Wads
             </Typography>
             <List>
               {wads.map((wad) => (
@@ -88,20 +88,6 @@ function CreateWad() {
                   <ListItemSecondaryAction>
                     <Checkbox checked={selectedWads.includes(wad)} />
                   </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="h5" gutterBottom>
-              Uploaded Wads
-            </Typography>
-            <List>
-              {selectedWads.map((wad) => (
-                <ListItem key={wad.id} dense>
-                  <ListItemText primary={wad.name} />
                 </ListItem>
               ))}
             </List>
