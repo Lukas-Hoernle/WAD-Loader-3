@@ -21,7 +21,7 @@ function CreateWad() {
     const toggleWadSelection = (wad: WadDto) => {
         setSelectedWads(prevSelectedWads =>
             prevSelectedWads.includes(wad)
-                ? prevSelectedWads.filter(selectedWad => selectedSad.id !== wad.id)
+                ? prevSelectedWads.filter(selectedWad => selectedWad.id !== wad.id)
                 : [...prevSelectedWads, wad]
         );
     };
