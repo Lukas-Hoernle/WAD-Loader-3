@@ -1,156 +1,115 @@
----
-title: Softwareprojekt Bericht - Entwicklung eines WadLoaders für Multiplayer Doom-Spiele
-author: Lukas Hörnle, Maximilian Lincks
-date: [Datum einfügen]
----
-
-# Inhaltsverzeichnis
-
-1. [Detaillierte Problemstellung](#detaillierte-problemstellung)
-2. [Use Cases](#use-cases)
-   - [Upload eines Files](#upload-eines-files)
-   - [Benutzer erstellen](#benutzer-erstellen)
-   - [Login](#login)
-   - [WAD hochladen](#wad-hochladen)
-   - [WAD Pack erstellen](#wad-pack-erstellen)
-   - [WAD Packs herunterladen](#wad-packs-herunterladen)
-   - [WADs durchsuchen](#wads-durchsuchen)
-   - [WAD-Packs durchsuchen](#wad-packs-durchsuchen)
-3. [Muss-/Kann-Kriterien](#muss--kann-kriterien)
-4. [Technologieauswahl](#technologieauswahl)
-   - [Begründung H2](#begründung-h2)
-   - [Begründung Spring Boot](#begründung-spring-boot)
-   - [Begründung React/TS](#begründung-reactts)
-   - [Begründung Haskell](#begründung-haskell)
-5. [Architektur Modelle](#architektur-modelle)
-   - [Spring-Boot-Backend](#spring-boot-backend)
-     - [Infrastruktur](#infrastruktur)
-     - [API](#api)
-     - [Domain/Core](#domaincore)
-     - [Abstraktion](#abstraktion)
-   - [Client Handler](#client-handler)
-
 # Detaillierte Problemstellung
 
-* Multiplayer Doom Spielen mit Mods ist schwierig, weil:
-    * Jeder Spieler benötigt alle Mods.
-    * Die Mods müssen in der gleichen Reihenfolge installiert sein.
-    * Es gibt keine standardisierte Lösung.
-    * Clientseitige Software ist optional, was lokale Installationen überflüssig macht.
+Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader, die es Benutzern ermöglicht, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. WAD-Dateien sind Container für Ressourcen, die von Computerspielen verwendet werden, insbesondere von Spielen, die auf der Doom-Engine basieren. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Paketen (WAD-Packs) zu organisieren.
 
 # Use Cases
 
-* Archiv für .wad-Dateien (Upload/Download von .wads)
-* Suche nach .wad-Dateien (nach Namen und optional nach Eigenschaften wie Pfaden)
-* Anmeldung/Abmeldung (Login/Logout)
-* Nutzerverwaltung
-* Gruppierung mehrerer .wad-Dateien in WadPacks
-    * Bearbeiten eigener Packs
-    * Optionales Kopieren von Packs anderer Nutzer
-* Download einzelner Dateien oder ganzer WadPacks
-* Erstellung von Shell-Befehlen zum Starten von .wads
-* Optionales Starten von .wads oder WadPacks über lokalen Handler
+## Upload File
 
-# Upload eines Files
-
-## Benutzer erstellen
+### Create User UC
 
 ```mermaid
 graph
-A(open WadLoader3) -->B(Enter Name and Password for new User)
-    B --> C(Create User)
+A(Open WadLoader3) --> B(Enter Name and Password for new User)
+B --> C(Create User)
 ```
 
-## Login
+### Login UC
 
 ```mermaid
 graph
-A(Login) -->B(Upload Wad from\nlocal FileSystem)
-    B --> C(Edit Name)
+A(Login) --> B(Upload Wad from\nlocal FileSystem)
+B --> C(Edit Name)
 ```
 
-## WAD hochladen
+### Upload WAD UC
 
 ```mermaid
 graph
-A(Login) -->B(upload .wad-File)
-    B --> C(Enter Wad-Name)
-    C --> D(Wad File appears in the UI)
+A(Login) --> B(Upload .wad-File)
+B --> C(Enter Wad-Name)
+C --> D(Wad File appears in the UI)
 ```
 
-## WAD Pack erstellen
+### Create WAD Pack UC 
 
 ```mermaid
 graph
-A(WAD hochladen) --> B(click ''create WAD-pack'')
-    B --> Z(search .wad-Files)
-    B --> C(Select .wad-Files to add)
-    C --> Z
-    Z --> C
-    C --> X(Change order of wads) 
-    C --> D(name .wad-pack) 
-    X --> D
-    D --> Y(select Iwad to use)
-    Y --> E(get link to wadpack)
+A(Upload WAD UC) --> B(Click 'Create WAD-pack')
+B --> Z(Search .wad-Files)
+B --> C(Select .wad-Files to add)
+C --> Z
+Z --> C
+C --> X(Change order of Wads) 
+C --> D(Name .wad-pack) 
+X --> D
+D --> Y(Select IWAD to use)
+Y --> E(Get link to WAD-pack)
 ```
 
-## WAD Packs herunterladen
+### Download WAD Packs UC 
 
 ```mermaid
 graph
-A(get a link to a WAD-Pack) --> B(click ''download'')
-    B --> C(get a zipfile)
+A(Get a link to a WAD-Pack) --> B(Click 'Download')
+B --> C(Get a zip file)
 ```
 
-## WADs durchsuchen
+### Browse Wads
 
 ```mermaid
 graph
-A(Open WadLoader) --> B(select ''wad search'')
-    B --> C(Enter Search String)
+A(Open WadLoader) --> B(Select 'Wad Search')
+B --> C(Enter Search String)
 ```
 
-## WAD-Packs durchsuchen
+### Browse Wad-Packs
 
 ```mermaid
 graph
-A(Open WadLoader) --> B(select ''wad-pack search'')
-    B --> C(Enter Search String)
+A(Open WadLoader) --> B(Select 'Wad-pack Search')
+B --> C(Enter Search String)
 ```
 
 # Muss-/Kann-Kriterien
 
-* Muss: Es muss ein Disclaimer geben, der darauf hinweist, dass nur Mods mit allen erforderlichen Rechten hochgeladen werden dürfen.
-* Kann: Siehe Use Cases.
+Die Anwendung muss folgende Kriterien erfüllen:
+
+- Benutzerregistrierung und -authentifizierung
+- Hochladen und Verwalten von WAD-Dateien
+- Erstellen, Bearbeiten und Herunterladen von WAD-Paketen
+- Durchsuchen und Filtern von WAD-Dateien und -Paketen
+- Integration einer geeigneten Datenbank für Persistenz
+
+Kann-Kriterien umfassen:
+
+- Unterstützung für mehrere Benutzerrollen (Administrator, Standardbenutzer)
+- Erweiterte Such- und Filteroptionen für WAD-Dateien
+- Integration von OAuth für externe Anmeldungsoptionen
 
 # Technologieauswahl
 
-* Datenbank - H2
-* Server - Spring Boot
-* Client - React/TS
-* Client Handler - Haskell
-
 ## Begründung H2
 
-Die Entscheidung für eine H2-Datenbank wurde aufgrund ihrer nahtlosen Integration in Spring Boot und der geringen Komplexität des Datenmodells getroffen. H2 bietet eine leichte Einrichtung und erfordert keine zusätzliche Serverinstallation, was die Entwicklung und Tests erleichtert. Für unser Projekt, das primär einfache Datenoperationen und eine überschaubare Datenmenge umfasst (zwei Hauptentitäten: Wads und WadPacks), ist H2 vorerst ausreichend. Sollte in Zukunft eine skalierbarere oder spezifischere Datenbanklösung erforderlich sein, kann H2 problemlos durch eine andere relational oder sogar NoSQL-Datenbank ersetzt werden, ohne dass dies größere Änderungen in der Anwendungslogik erfordert.
+Eine H2-Datenbank lässt sich dank der Integration in Spring Boot mit minimalem Aufwand einsetzen. Da das zu persistierende Datenmodell klein ist (zwei Entitäten), ist H2 vorerst ausreichend. Bei Bedarf kann die Datenbank einfach durch eine andere ersetzt werden.
 
 ## Begründung Spring Boot
 
-Spring Boot wurde als Servertechnologie gewählt, da es eine robuste und weit verbreitete Plattform für die Entwicklung von Java-Webanwendungen ist. Durch seine Konventionen über Konfiguration Ansätze (Convention over Configuration) minimiert Spring Boot den Konfigurationsaufwand erheblich und erleichtert das Deployment auf verschiedenen Betriebssystemen. Die Unterstützung für eingebettete Server wie Tomcat oder Jetty ermöglicht eine einfache Bereitstellung der Anwendung, ohne dass zusätzliche Serverkonfigurationen erforderlich sind. Dies ist besonders vorteilhaft für unsere Anwendung, die plattformunabhängig sein soll und unter verschiedenen Betriebssystemen (z.B. Windows, Linux) laufen muss. Die Integration mit Spring Data JPA bietet zudem eine effiziente Möglichkeit, mit der Datenbank zu interagieren und unterstützt die Umsetzung des Repository-Patterns für die Datenzugriffsschicht.
+Spring Boot ist für Java-Webanwendungen eine beliebte Wahl, da es plattformunabhängig ist und das Bereitstellen unter verschiedenen Betriebssystemen erleichtert.
 
 ## Begründung React/TS
 
-React in Kombination mit TypeScript wurde als Frontend-Technologie gewählt, um eine moderne und benutzerfreundliche Webanwendung zu entwickeln. React ermöglicht die modulare Entwicklung von UI-Komponenten, was die Wiederverwendbarkeit und Wartbarkeit des Codes erhöht. Die Verwendung von TypeScript bietet statische Typisierung und verbessert die Code-Qualität und Fehlererkennung während der Entwicklung. Material UI als Komponenten-Bibliothek sorgt für ein konsistentes und ansprechendes Benutzererlebnis. Diese Kombination erlaubt es uns, schnell responsive und intuitiv bedienbare Oberflächen zu gestalten, die den modernen Standards entsprechen.
+React mit TypeScript ermöglicht die Entwicklung moderner Webanwendungen mit Material UI für ein konsistentes Benutzererlebnis.
 
 ## Begründung Haskell
 
-Haskell wurde als Sprache für den Client-Handler gewählt, da sie eine hohe Portabilität bietet und nativ ausführbare Programme ohne zusätzliche Interpreter erzeugen kann. Dies ist entscheidend, da der Client-Handler plattformunabhängig sein soll und keine Abhängigkeit von spezifischen Laufzeitumgebungen haben darf. Haskell ist bekannt für seine starke Typisierung und funktionale Programmierparadigmen, die zu einer robusten und wartbaren Codebasis beitragen. Obwohl die Lernkurve etwas steiler ist, bietet Haskell durch seine strikten Typen und seine reine funktionale Natur eine solide Grundlage für die Implementierung des Client-Handlers.
+Haskell bietet sich für den Client Handler an, da es plattformunabhängig ist und ohne zusätzliche Interpreter nativ ausführbar ist.
 
 # Architektur Modelle
 
 ## Spring-Boot-Backend
 
-Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren. 
+Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
 ### Infrastruktur
 
@@ -170,17 +129,37 @@ Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von ver
 
 ![Onion Architecture Diagramm](https://imgopt.infoq.com/fit-in/3000x4000/filters:quality(85)/filters:no_upscale()/news/2014/10/ddd-onion-architecture/en/resources/onion-architecture.png)
 
-
-![Paket](https://hackmd.io/_uploads/Sk4wqsO8A.png)
-
 ## Client Handler
 
-Die Grafik zeigt die grundlegenden Abläufe im Haskell-basierten Client Handler.
+Die folgende Grafik gibt eine grobe Übersicht über die Abläufe im Client Handler.
 
-Eine **Aktion** definiert die herunterzuladenden Wads und das Startskript für ein WadPack. Die URL des Servers wird angegeben.
+Aus den Parametern des Programmes ergibt sich eine **Action**. Diese ist eine Anweisung, welche Wads und welches Start-Skript (für ein WadPack) herunterzuladen sind. Zudem Enthält die Action die URL des Server, welcher zum Herunterladen der Wads verwendet werden soll.
 
-Die noch nicht lokal verfügbaren Wads werden ermittelt und zur Server-URL gesendet.
+Aus der List der benötigten Wads werden diejenigen ermittelt, welche dem Client noch nicht lokal zur Verfügung stehen.
 
-Der Server antwortet mit einer .zip Datei, die alle angeforderten Wads und ein .cmd Startskript enthält.
+Die List der noch herunterzuladenden Wads wird mit der Id des WadPacks an die URL des Servers weitergeleitet.
 
-![Haskell Handler](https://hackmd.io/_uploads/B11CZioER.png)
+Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle angeforderten Wads und eine .cmd Datei, welche das WadPack startet.
+
+![Haskell Handler Diagramm](https://hackmd.io/_uploads/B11CZioER.png)
+
+# Screenshots und Zustände
+
+## Create WAD
+
+Hier ist ein Screenshot der "Create WAD"-Seite im WadLoader-Projekt. Diese Seite ermöglicht es dem Benutzer, ein neues WAD-File hochzuladen und einen Namen und eine Beschreibung dafür einzugeben.
+
+![image](https://hackmd.io/_uploads/BJCP_ad8R.png)
+
+## Create WAD Pack
+
+Dies ist ein Beispiel für die "Create WAD Pack"-Seite. Der Benutzer kann ausgewählte WAD-Files zu einem Paket zusammenstellen, die Reihenfolge ändern und dem Paket einen Namen und eine Beschreibung geben.
+
+![image](https://hackmd.io/_uploads/ByzruadU0.png)
+
+## WAD List
+
+Hier ist die Ansicht der "WAD List", die dem Benutzer ermöglicht, nach WAD-Dateien zu suchen und sie herunterzuladen.
+
+![image](https://hackmd.io/_uploads/SkAfupuI0.png)
+```
