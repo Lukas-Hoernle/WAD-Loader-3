@@ -4,15 +4,6 @@ author: Lukas Hörnle, Maximilian Lincks
 date: [Datum einfügen]
 ---
 
-# Deckblatt
-
-| **Titel:**            | Softwareprojekt Bericht - Entwicklung eines WadLoaders für Multiplayer Doom-Spiele |
-|-----------------------|------------------------------------------------------------------------------------|
-| **Autoren:**          | Lukas Hörnle, Maximilian Lincks                                                     |
-| **Datum:**            | [Datum einfügen]                                                                    |
-| **Kurs/Veranstaltung:**| Software Architekturen Labor                                                         |
-| **Professor/Dozent:** | [Name einfügen]                                                                     |
-
 # Inhaltsverzeichnis
 
 1. [Detaillierte Problemstellung](#detaillierte-problemstellung)
