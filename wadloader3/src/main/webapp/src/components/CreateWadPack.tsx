@@ -49,6 +49,14 @@ function CreateWadPack() {
     );
   };
 
+  const addAllWads = () => {
+    setSelectedWads([...wads]);
+  };
+
+  const removeAllWads = () => {
+    setSelectedWads([]);
+  };
+
   const handleSave = async () => {
     const newWadPack: NewWadPackDto = {
       name: packName,
@@ -173,7 +181,7 @@ function CreateWadPack() {
           </Typography>
           <Divider />
           <List>
-            {selectedWads.map((wad) => (
+            {selectedWads.map((wad, index) => (
               <ListItem key={wad.id} dense>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
@@ -186,33 +194,27 @@ function CreateWadPack() {
                     Remove
                   </Button>
                 </ListItemSecondaryAction>
+                {index === 0 && (
+                  <Button
+                    variant="contained"
+                    onClick={() => moveWadUp(index)}
+                    sx={{ ml: 1 }}
+                  >
+                    Up
+                  </Button>
+                )}
+                {index === selectedWads.length - 1 && (
+                  <Button
+                    variant="contained"
+                    onClick={() => moveWadDown(index)}
+                    sx={{ ml: 1 }}
+                  >
+                    Down
+                  </Button>
+                )}
               </ListItem>
             ))}
           </List>
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              variant="contained"
-              onClick={() =>
-                moveWadUp(
-                  selectedWads.findIndex((w) => w.id === selectedWads[0].id)
-                )
-              }
-            >
-              Up
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() =>
-                moveWadDown(
-                  selectedWads.findIndex(
-                    (w) => w.id === selectedWads[selectedWads.length - 1].id
-                  )
-                )
-              }
-            >
-              Down
-            </Button>
-          </Box>
         </Paper>
         <Paper elevation={3} sx={{ width: { xs: "100%", md: "30%" }, p: 2, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
@@ -243,6 +245,7 @@ function CreateWadPack() {
             variant="contained"
             color="primary"
             onClick={() => handleEditWadPack(selectedWadPack)}
+            sx={{ ml: 1 }}
           >
             Edit
           </Button>
@@ -256,7 +259,6 @@ function CreateWadPack() {
           </Button>
           <Button
             variant="contained"
-            color="primary"
             onClick={() => handleDownloadWadPack(selectedWadPack)}
             sx={{ ml: 1 }}
           >
