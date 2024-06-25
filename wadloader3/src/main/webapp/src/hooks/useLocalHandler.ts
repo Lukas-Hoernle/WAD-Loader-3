@@ -1,4 +1,4 @@
-type WadpackOption = "DownloadAndStartWadPack" | "DownloadWadPack";
+type WadpackOption = "startwadpack" | "wadpack";
 /**
  * only works on positive integers
  */
@@ -9,6 +9,6 @@ type WadpackId = number;
 type WadId = number;
 
 export function useLocalHandler(serverUrl: string) {
-  return (option: WadpackOption, packId: WadpackId, wads: [WadId]) =>
+  return (option: WadpackOption, packId: WadpackId, wads: WadId[]) =>
     window.open(`wadloader://${option}${packId}-${wads.join('-')}$${serverUrl}`);
 }

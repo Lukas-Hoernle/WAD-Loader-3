@@ -62,6 +62,6 @@ public class FsWadFileManager implements WadFileManager {
                 .findAny()
                 .map(ex -> "Wad-%d.%s".formatted(fileName.hashCode(), ex))
                 .<Failable<String>>map(Failable.Success::new)
-                .orElse(Failable.failure("File extension is not allowed"));
+                .orElse(Failable.failure("File extension in '%s' is not among allowed extension %s".formatted(fileName, allowedFileExtension.getExtensions())));
     }
 }

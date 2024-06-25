@@ -24,9 +24,9 @@ public class WadPack {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "wads")
-    @OneToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(joinColumns = {@JoinColumn(name = "wad_pack_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "wad_id", referencedColumnName = "id")})
     @MapKeyColumn(name = "wad_order")
-    @Builder.Default
     private Map<Integer, Wad> wads = Map.of();
 }

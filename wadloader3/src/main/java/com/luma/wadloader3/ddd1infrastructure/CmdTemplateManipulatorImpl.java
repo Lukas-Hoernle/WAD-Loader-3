@@ -21,6 +21,7 @@ public class CmdTemplateManipulatorImpl implements CmdTemplateManipulator<Templa
     private final static String replaceVariable = "%FILES%";
     private final FileToZipFromWadService fileToZipService;
     private final WadDir wadDir;
+    private final static Path templatePath = Path.of("wadloader3/src/main/resources/startWadTemplate.cmd");
 
     @Override
     public Failable<Path> fillTemplate(TemplateArgs templateValues) {
@@ -40,7 +41,7 @@ public class CmdTemplateManipulatorImpl implements CmdTemplateManipulator<Templa
                         .getParent()
                         .toFile()
                         .mkdirs())
-                .runChain(() -> Files.readAllLines(wadDir.scriptDirPath().resolve(Path.of("startWadTemplate.cmd")))
+                .runChain(() -> Files.readAllLines(templatePath)
                         .stream()
                         .map(s -> s.replaceAll(replaceVariable, replacementValue))
                         .collect(Collectors.joining("\n")));
