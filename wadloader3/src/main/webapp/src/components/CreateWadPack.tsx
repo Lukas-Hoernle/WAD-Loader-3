@@ -181,7 +181,7 @@ function CreateWadPack() {
                     Remove
                   </Button>
                 </ListItemSecondaryAction>
-                {index === 0 && (
+                {index > 0 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadUp(index)}
@@ -190,7 +190,7 @@ function CreateWadPack() {
                     Up
                   </Button>
                 )}
-                {index === selectedWads.length - 1 && (
+                {index < selectedWads.length - 1 && (
                   <Button
                     variant="contained"
                     onClick={() => moveWadDown(index)}
@@ -203,6 +203,40 @@ function CreateWadPack() {
             ))}
           </List>
         </Paper>
+        <Box mt={4} sx={{ width: "100%" }}>
+          <TextField
+            fullWidth
+            label="WadPack Name"
+            variant="outlined"
+            value={packName}
+            onChange={(e) => setPackName(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="WadPack Description"
+            variant="outlined"
+            value={packDescription}
+            onChange={(e) => setPackDescription(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <Box display="flex" justifyContent="space-between">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSave}
+            >
+              Save WadPack
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate("/wad-list")}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
         <Paper elevation={3} sx={{ width: "100%", p: 2, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
             Wad-Packs
@@ -261,40 +295,6 @@ function CreateWadPack() {
           </Button>
         </Box>
       )}
-      <Box mt={4}>
-        <TextField
-          fullWidth
-          label="WadPack Name"
-          variant="outlined"
-          value={packName}
-          onChange={(e) => setPackName(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          fullWidth
-          label="WadPack Description"
-          variant="outlined"
-          value={packDescription}
-          onChange={(e) => setPackDescription(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-        <Box display="flex" justifyContent="space-between">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-          >
-            Save WadPack
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate("/wad-list")}
-          >
-            Cancel
-          </Button>
-        </Box>
-      </Box>
     </Box>
   );
 }
