@@ -4,9 +4,44 @@ author: Lukas Hörnle, Maximilian Lincks
 date: [Datum einfügen]
 ---
 
+# Deckblatt
+
+| **Titel:**            | Softwareprojekt Bericht - Entwicklung eines WadLoaders für Multiplayer Doom-Spiele |
+|-----------------------|------------------------------------------------------------------------------------|
+| **Autoren:**          | Lukas Hörnle, Maximilian Lincks                                                     |
+| **Datum:**            | [Datum einfügen]                                                                    |
+| **Kurs/Veranstaltung:**| Software Architekturen Labor                                                         |
+| **Professor/Dozent:** | [Name einfügen]                                                                     |
+
+# Inhaltsverzeichnis
+
+1. [Detaillierte Problemstellung](#detaillierte-problemstellung)
+2. [Use Cases](#use-cases)
+   - [Upload eines Files](#upload-eines-files)
+   - [Benutzer erstellen](#benutzer-erstellen)
+   - [Login](#login)
+   - [WAD hochladen](#wad-hochladen)
+   - [WAD Pack erstellen](#wad-pack-erstellen)
+   - [WAD Packs herunterladen](#wad-packs-herunterladen)
+   - [WADs durchsuchen](#wads-durchsuchen)
+   - [WAD-Packs durchsuchen](#wad-packs-durchsuchen)
+3. [Muss-/Kann-Kriterien](#muss--kann-kriterien)
+4. [Technologieauswahl](#technologieauswahl)
+   - [Begründung H2](#begründung-h2)
+   - [Begründung Spring Boot](#begründung-spring-boot)
+   - [Begründung React/TS](#begründung-reactts)
+   - [Begründung Haskell](#begründung-haskell)
+5. [Architektur Modelle](#architektur-modelle)
+   - [Spring-Boot-Backend](#spring-boot-backend)
+     - [Infrastruktur](#infrastruktur)
+     - [API](#api)
+     - [Domain/Core](#domaincore)
+     - [Abstraktion](#abstraktion)
+   - [Client Handler](#client-handler)
+
 # Detaillierte Problemstellung
 
-* Multiplayer Doom Spielen mit Mods ist schwierig weil:
+* Multiplayer Doom Spielen mit Mods ist schwierig, weil:
     * Jeder Spieler benötigt alle Mods.
     * Die Mods müssen in der gleichen Reihenfolge installiert sein.
     * Es gibt keine standardisierte Lösung.
@@ -25,9 +60,9 @@ date: [Datum einfügen]
 * Erstellung von Shell-Befehlen zum Starten von .wads
 * Optionales Starten von .wads oder WadPacks über lokalen Handler
 
-# Use Cases# Usecase Upload File
+# Upload eines Files
 
-## Create User UC
+## Benutzer erstellen
 
 ```mermaid
 graph
@@ -35,7 +70,7 @@ A(open WadLoader3) -->B(Enter Name and Password for new User)
     B --> C(Create User)
 ```
 
-## Login UC
+## Login
 
 ```mermaid
 graph
@@ -43,7 +78,7 @@ A(Login) -->B(Upload Wad from\nlocal FileSystem)
     B --> C(Edit Name)
 ```
 
-## Upload WAD UC
+## WAD hochladen
 
 ```mermaid
 graph
@@ -52,11 +87,11 @@ A(Login) -->B(upload .wad-File)
     C --> D(Wad File appears in the UI)
 ```
 
-## create WAD Pack UC 
+## WAD Pack erstellen
 
 ```mermaid
 graph
-A(Upload WAD UC) --> B(click ''create WAD-pack'')
+A(WAD hochladen) --> B(click ''create WAD-pack'')
     B --> Z(search .wad-Files)
     B --> C(Select .wad-Files to add)
     C --> Z
@@ -68,7 +103,7 @@ A(Upload WAD UC) --> B(click ''create WAD-pack'')
     Y --> E(get link to wadpack)
 ```
 
-## Download WAD Packs UC 
+## WAD Packs herunterladen
 
 ```mermaid
 graph
@@ -76,7 +111,7 @@ A(get a link to a WAD-Pack) --> B(click ''download'')
     B --> C(get a zipfile)
 ```
 
-## Browse Wads
+## WADs durchsuchen
 
 ```mermaid
 graph
@@ -84,7 +119,7 @@ A(Open WadLoader) --> B(select ''wad search'')
     B --> C(Enter Search String)
 ```
 
-## Browse Wad-Packs
+## WAD-Packs durchsuchen
 
 ```mermaid
 graph
@@ -92,7 +127,7 @@ A(Open WadLoader) --> B(select ''wad-pack search'')
     B --> C(Enter Search String)
 ```
 
-# Muss-/Kann-kriterien
+# Muss-/Kann-Kriterien
 
 * Muss: Es muss ein Disclaimer geben, der darauf hinweist, dass nur Mods mit allen erforderlichen Rechten hochgeladen werden dürfen.
 * Kann: Siehe Use Cases.
