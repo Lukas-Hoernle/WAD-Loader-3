@@ -158,6 +158,7 @@ function CreateWadPack() {
                     checked={selectedWads.some(
                       (selectedWad) => selectedWad.id === wad.id
                     )}
+                    onChange={() => toggleWadSelection(wad)}
                   />
                 </ListItemSecondaryAction>
               </ListItem>
