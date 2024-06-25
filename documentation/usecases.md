@@ -1,3 +1,4 @@
+
 # Detaillierte Problemstellung
 
 Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader, die es Benutzern ermöglicht, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. WAD-Dateien sind Container für Ressourcen, die von Computerspielen verwendet werden, insbesondere von Spielen, die auf der Doom-Engine basieren. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Paketen (WAD-Packs) zu organisieren.
@@ -133,11 +134,11 @@ Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von ver
 
 Die folgende Grafik gibt eine grobe Übersicht über die Abläufe im Client Handler.
 
-Aus den Parametern des Programmes ergibt sich eine **Action**. Diese ist eine Anweisung, welche Wads und welches Start-Skript (für ein WadPack) herunterzuladen sind. Zudem Enthält die Action die URL des Server, welcher zum Herunterladen der Wads verwendet werden soll.
+Aus den Parametern des Programmes ergibt sich eine **Action**. Diese ist eine Anweisung, welche Wads und welches Start-Skript (für ein WadPack) herunterzuladen sind. Zudem enthält die Action die URL des Servers, welcher zum Herunterladen der Wads verwendet werden soll.
 
-Aus der List der benötigten Wads werden diejenigen ermittelt, welche dem Client noch nicht lokal zur Verfügung stehen.
+Aus der Liste der benötigten Wads werden diejenigen ermittelt, welche dem Client noch nicht lokal zur Verfügung stehen.
 
-Die List der noch herunterzuladenden Wads wird mit der Id des WadPacks an die URL des Servers weitergeleitet.
+Die Liste der noch herunterzuladenden Wads wird mit der ID des WadPacks an die URL des Servers weitergeleitet.
 
 Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle angeforderten Wads und eine .cmd Datei, welche das WadPack startet.
 
@@ -162,4 +163,3 @@ Dies ist ein Beispiel für die "Create WAD Pack"-Seite. Der Benutzer kann ausgew
 Hier ist die Ansicht der "WAD List", die dem Benutzer ermöglicht, nach WAD-Dateien zu suchen und sie herunterzuladen.
 
 ![image](https://hackmd.io/_uploads/SkAfupuI0.png)
-```
