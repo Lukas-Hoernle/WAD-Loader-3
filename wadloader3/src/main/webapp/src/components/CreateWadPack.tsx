@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { NewWadPackDto, WadDto, WadPackDto } from "wadloader3-api";
 import { useWadApi } from "../api/hooks/useWadApi";
 import { useWadPackApi } from "../api/hooks/useWadPackApi";
@@ -21,18 +20,14 @@ import { useLocalHandler } from "../hooks/useLocalHandler";
 function CreateWadPack() {
   const [wads, setWads] = useState<WadDto[]>([]);
   const [wadPacks, setWadPacks] = useState<WadPackDto[]>([]);
-  const [selectedWadPack, setSelectedWadPack] = useState<WadPackDto | null>(
-    null
-  );
+  const [selectedWadPack, setSelectedWadPack] = useState<WadPackDto | null>(null);
   const [selectedWads, setSelectedWads] = useState<WadDto[]>([]);
   const [editingWadPack, setEditingWadPack] = useState<WadPackDto | null>(null);
   const [packName, setPackName] = useState<string>("New WadPack");
-  const [packDescription, setPackDescription] = useState<string>(
-    "Description for the new WadPack"
-  );
+  const [packDescription, setPackDescription] = useState<string>("Description for the new WadPack");
+  const [searchTerm, setSearchTerm] = useState<string>(''); // State für die Suche
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
-  const navigate = useNavigate();
   const localHandler = useLocalHandler("http://localhost:8080");
 
   useEffect(() => {
@@ -140,6 +135,15 @@ function CreateWadPack() {
     }
   };
 
+  const handleCancel = () => {
+    setSelectedWads([]);
+  };
+
+  // Filterung der Wad-Packs basierend auf dem Suchbegriff
+  const filteredWadPacks = wadPacks.filter(wadPack =>
+    wadPack.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -155,7 +159,7 @@ function CreateWadPack() {
               <ListItem key={wad.id} dense button onClick={() => toggleWadSelection(wad)}>
                 <ListItemText primary={wad.name} />
                 <ListItemSecondaryAction>
-                  <Checkbox
+                <Checkbox
                     checked={selectedWads.some(selectedWad => selectedWad.id === wad.id)}
                     onChange={() => toggleWadSelection(wad)}
                   />
@@ -227,7 +231,7 @@ function CreateWadPack() {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => navigate("/wad-list")}
+              onClick={handleCancel}
             >
               Cancel
             </Button>
@@ -238,16 +242,22 @@ function CreateWadPack() {
             Wad-Packs
           </Typography>
           <Divider />
+          <TextField
+            fullWidth
+            label="Search Wad-Packs"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ mb: 2 }}
+          />
           <List>
-            {wadPacks.map(wadPack => (
+            {filteredWadPacks.map(wadPack => (
               <ListItem
                 key={wadPack.id}
                 dense
                 button
                 onClick={() => handleWadPackClick(wadPack)}
-                selected={
-                  selectedWadPack ? selectedWadPack.id === wadPack.id : false
-                }
+                selected={selectedWadPack ? selectedWadPack.id === wadPack.id : false}
               >
                 <ListItemText
                   primary={wadPack.name}
