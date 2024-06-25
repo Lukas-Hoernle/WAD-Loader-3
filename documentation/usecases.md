@@ -132,43 +132,44 @@ A(Open WadLoader) --> B(select ''wad-pack search'')
 
 ## Begründung H2
 
-Eine H2-Datenbank lässt sich dank der Integration in Spring Boot mit minimalem Aufwand einsetzen. Da das zu persistierende Datenmodell klein ist (zwei Entitäten), ist H2 vorerst ausreichend. Bei Bedarf kann die Datenbank einfach durch eine andere ersetzt werden.
+Die Entscheidung für eine H2-Datenbank wurde aufgrund ihrer nahtlosen Integration in Spring Boot und der geringen Komplexität des Datenmodells getroffen. H2 bietet eine leichte Einrichtung und erfordert keine zusätzliche Serverinstallation, was die Entwicklung und Tests erleichtert. Für unser Projekt, das primär einfache Datenoperationen und eine überschaubare Datenmenge umfasst (zwei Hauptentitäten: Wads und WadPacks), ist H2 vorerst ausreichend. Sollte in Zukunft eine skalierbarere oder spezifischere Datenbanklösung erforderlich sein, kann H2 problemlos durch eine andere relational oder sogar NoSQL-Datenbank ersetzt werden, ohne dass dies größere Änderungen in der Anwendungslogik erfordert.
 
 ## Begründung Spring Boot
 
-Spring Boot ist für Java-Webanwendungen eine beliebte Wahl, da es plattformunabhängig ist und das Bereitstellen unter verschiedenen Betriebssystemen erleichtert.
+Spring Boot wurde als Servertechnologie gewählt, da es eine robuste und weit verbreitete Plattform für die Entwicklung von Java-Webanwendungen ist. Durch seine Konventionen über Konfiguration Ansätze (Convention over Configuration) minimiert Spring Boot den Konfigurationsaufwand erheblich und erleichtert das Deployment auf verschiedenen Betriebssystemen. Die Unterstützung für eingebettete Server wie Tomcat oder Jetty ermöglicht eine einfache Bereitstellung der Anwendung, ohne dass zusätzliche Serverkonfigurationen erforderlich sind. Dies ist besonders vorteilhaft für unsere Anwendung, die plattformunabhängig sein soll und unter verschiedenen Betriebssystemen (z.B. Windows, Linux) laufen muss. Die Integration mit Spring Data JPA bietet zudem eine effiziente Möglichkeit, mit der Datenbank zu interagieren und unterstützt die Umsetzung des Repository-Patterns für die Datenzugriffsschicht.
 
 ## Begründung React/TS
 
-React mit TypeScript ermöglicht die Entwicklung moderner Webanwendungen mit Material UI für ein konsistentes Benutzererlebnis.
+React in Kombination mit TypeScript wurde als Frontend-Technologie gewählt, um eine moderne und benutzerfreundliche Webanwendung zu entwickeln. React ermöglicht die modulare Entwicklung von UI-Komponenten, was die Wiederverwendbarkeit und Wartbarkeit des Codes erhöht. Die Verwendung von TypeScript bietet statische Typisierung und verbessert die Code-Qualität und Fehlererkennung während der Entwicklung. Material UI als Komponenten-Bibliothek sorgt für ein konsistentes und ansprechendes Benutzererlebnis. Diese Kombination erlaubt es uns, schnell responsive und intuitiv bedienbare Oberflächen zu gestalten, die den modernen Standards entsprechen.
 
 ## Begründung Haskell
 
-Haskell bietet sich für den Client Handler an, da es plattformunabhängig ist und ohne zusätzliche Interpreter nativ ausführbar ist.
+Haskell wurde als Sprache für den Client-Handler gewählt, da sie eine hohe Portabilität bietet und nativ ausführbare Programme ohne zusätzliche Interpreter erzeugen kann. Dies ist entscheidend, da der Client-Handler plattformunabhängig sein soll und keine Abhängigkeit von spezifischen Laufzeitumgebungen haben darf. Haskell ist bekannt für seine starke Typisierung und funktionale Programmierparadigmen, die zu einer robusten und wartbaren Codebasis beitragen. Obwohl die Lernkurve etwas steiler ist, bietet Haskell durch seine strikten Typen und seine reine funktionale Natur eine solide Grundlage für die Implementierung des Client-Handlers.
 
 # Architektur Modelle
 
 ## Spring-Boot-Backend
 
-Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten.
-
-![Onion Architecture](https://imgopt.infoq.com/fit-in/3000x4000/filters:quality(85)/filters:no_upscale()/news/2014/10/ddd-onion-architecture/en/resources/onion-architecture.png)
+Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren. 
 
 ### Infrastruktur
 
-Die äußerste Schicht enthält Implementierungen für die Infrastruktur, z.B. zum Zippen von Dateien oder zum Verwalten des Dateisystems.
+Die Infrastrukturschicht bildet die äußerste Schicht und enthält Implementierungen für datenbankbezogene Operationen, Dateimanagement und externe Schnittstellen. Beispielsweise umfasst sie die Implementierungen für das Zippen von Dateien oder das Verwalten des Dateisystems auf dem Server.
 
 ### API
 
-Hier befinden sich die Controller für die REST-Kommunikation mit Frontend und Client Handler sowie Mapper für die DTOs.
+In der API-Schicht werden die Controller definiert, die die REST-Schnittstellen zur Kommunikation mit dem Frontend und dem Client-Handler bereitstellen. Diese Schicht verwaltet auch die Umwandlung von Domain-Objekten in DTOs (Data Transfer Objects), die über das Netzwerk übertragen werden.
 
 ### Domain/Core
 
-Die Kernschicht enthält die Geschäftslogik, Modelle wie Wads und WadPacks sowie Schnittstellen für die Anwendungslogik.
+Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschäftslogik sowie die zentralen Entitäten wie Wads und WadPacks. Hier werden die Kernoperationen definiert, die die Anwendungslogik implementieren und auf die Infrastrukturschicht zugreifen.
 
 ### Abstraktion
 
-Generische Klassen, z.B. für fehlerresistente Operationen, werden hier implementiert.
+Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt an eine spezifische Domänenlogik gebunden sind.
+
+![Onion Architecture Diagramm](https://imgopt.infoq.com/fit-in/3000x4000/filters:quality(85)/filters:no_upscale()/news/2014/10/ddd-onion-architecture/en/resources/onion-architecture.png)
+
 
 ![Paket](https://hackmd.io/_uploads/Sk4wqsO8A.png)
 
