@@ -33,7 +33,7 @@ function CreateWadPack() {
   const wadApi = useWadApi();
   const wadPackApi = useWadPackApi();
   const navigate = useNavigate();
-  const localHandler = useLocalHandler("http://localhost:8080/");
+  const localHandler = useLocalHandler("http://localhost:8080");
 
   useEffect(() => {
     const fetchData = async () => {
