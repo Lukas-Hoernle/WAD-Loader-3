@@ -1,6 +1,6 @@
 # Detaillierte Problemstellung
 
-Computerspiele, hauptsächlich solche, die auf den alten Doom-Spielen basieren, nutzen sogenannte WAD-Dateien, um die Spiele mit neuen Inhalten anzureichern. Oft werden mehrere WADs zusammen mit einem Spiel genutzt, um verschiedene Szenarien oder Mods zu erstellen. Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader. Diese ermöglicht es, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. WAD-Dateien sind Container für Ressourcen, die von Computerspielen verwendet werden, insbesondere von Spielen, die auf der Doom-Engine basieren. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Paketen (WAD-Packs) zu organisieren.
+WAD-Dateien (Where's All the Data) sind Container für Ressourcen, die in der Doom-Engine genutzt werden. Diese Dateien sind essenziell für die Anpassung und Erweiterung des Spiels Doom. Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader. Diese ermöglicht es, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. Häufig werden mehrere WADs zusammen verwendet, um verschiedene Senarien oder Mods zu erstellen. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Modpacks (auch WAD-Packs) zu organisieren.
 
 # Anwendungsfälle (Use Cases)
 
