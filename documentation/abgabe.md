@@ -1,15 +1,10 @@
-
 # Detaillierte Problemstellung
 
-Computierspiele, haupstächliche solche die auf den alten Doom Spielen basierten, nutzen sogenannte WAD-Dateien um die Spiele mit neuen Inhalten anzureichern. Oft werden mehrere WADs zusammen mit einem Spiel gestartet. Dies geschieht über die Kommandozeile. Damit Multiplayer möglich ist, benötigen alle Teilnehmer die selben WADs.
+Computerspiele, hauptsächlich solche, die auf den alten Doom-Spielen basieren, nutzen sogenannte WAD-Dateien, um die Spiele mit neuen Inhalten anzureichern. Oft werden mehrere WADs zusammen mit einem Spiel genutzt, um verschiedene Szenarien oder Mods zu erstellen. Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader. Diese ermöglicht es, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. WAD-Dateien sind Container für Ressourcen, die von Computerspielen verwendet werden, insbesondere von Spielen, die auf der Doom-Engine basieren. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Paketen (WAD-Packs) zu organisieren.
 
-Diese Probleme sollen durch eine Webanwendung - den WadLoader3 - gelöst werden. Der WadLoader3 ermöglicht das Verwalten und Teilen von WADs online. WADs können hochgeladen und verteilt werden. Mehrere WADs können zu einem sogenannten WAD-Pack gruppiert werden. Ein WAD-Pack besteht aus mehreren WADs, und einer Reihenfloge, in der die einzelnen WADs in das entsprechende Spiel geladen werden sollen. WAD-Packs können online, basierend auf allen bereits hochgeladenen WADs, erstellt und bearbeitet werden.
+# Anwendungsfälle (Use Cases)
 
-Die vorliegende Problemstellung dreht sich um die Entwicklung einer Webanwendung namens WadLoader. Diese ermöglicht es den, WAD-Dateien hochzuladen, zu organisieren und herunterzuladen. WAD-Dateien sind Container für Ressourcen, die von Computerspielen verwendet werden, insbesondere von Spielen, die auf der Doom-Engine basieren. Das Hauptziel der Anwendung ist es, eine benutzerfreundliche Oberfläche bereitzustellen, um diese Dateien zu verwalten und sie in Form von Paketen (WAD-Packs) zu organisieren.
-
-# Use Cases
-
-### Create User UC
+### Benutzer erstellen (Create User UC)
 
 ```mermaid
 graph
@@ -17,7 +12,7 @@ A(Open WadLoader3) --> B(Enter Name and Password for new User)
 B --> C(Create User)
 ```
 
-### Login UC
+### Anmeldung (Login UC)
 
 ```mermaid
 graph
@@ -25,7 +20,7 @@ A(Login) --> B(Upload Wad from\nlocal FileSystem)
 B --> C(Edit Name)
 ```
 
-### Upload WAD UC
+### WAD hochladen (Upload WAD UC)
 
 ```mermaid
 graph
@@ -34,7 +29,7 @@ B --> C(Enter Wad-Name)
 C --> D(Wad File appears in the UI)
 ```
 
-### Create WAD Pack UC 
+### WAD-Paket erstellen (Create WAD Pack UC)
 
 ```mermaid
 graph
@@ -50,7 +45,7 @@ D --> Y(Select IWAD to use)
 Y --> E(Get link to WAD-pack)
 ```
 
-### Download WAD Packs UC 
+### WAD-Pakete herunterladen (Download WAD Packs UC)
 
 ```mermaid
 graph
@@ -58,7 +53,7 @@ A(Get a link to a WAD-Pack) --> B(Click 'Download')
 B --> C(Get a zip file)
 ```
 
-### Browse Wads
+### WADs durchsuchen (Browse Wads)
 
 ```mermaid
 graph
@@ -66,7 +61,7 @@ A(Open WadLoader) --> B(Select 'Wad Search')
 B --> C(Enter Search String)
 ```
 
-### Browse Wad-Packs
+### WAD-Pakete durchsuchen (Browse Wad-Packs)
 
 ```mermaid
 graph
@@ -110,16 +105,15 @@ Haskell bietet sich für den Client Handler an, da es plattformunabhängig ist u
 
 ## Begründung Auth0
 
-Authentifizierung und Authorisierung ist ein sehr komplexes und sensibles Gebiet. Das Implementieren eines OAuth2 flows ist nicht trivial. Deswegen wird Auth0, ein Anbieter für Authentification und Authorization als Service, genutzt.
+Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet. Das Implementieren eines OAuth2 Flows ist nicht trivial. Deswegen wird Auth0, ein Anbieter für Authentication und Authorization als Service, genutzt.
 
 Dadurch müssen vom WadLoader keine Userdaten verwaltet werden. Das Anmelden über bereits bestehende Konten (z.B. GitHub) ist möglich.
 
-# Architektur Modelle
+# Architekturmodelle
 
 ## Spring-Boot-Backend
 
 ![image](https://hackmd.io/_uploads/rkhSzEYI0.png)
-
 
 Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
@@ -143,11 +137,9 @@ Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von ver
 
 ### Funktionsweise
 
-Wads werden als immutable Daten angesehen. Das hat den Vorteil, dass es nicht zu inkostistenzen kommen kann, wenn einzelne Wads gelöscht oder geupdatet werden.
-Das Löschen von Wads würde die Konsistenz von WadPacks zerstören, die den Wad genutzt haben. Beim Updaen von Wads kann es, wie beim Updaten von Software, zu Fehlern und Inkonsistenzen kommen.
+Wads werden als immutable Daten angesehen. Das hat den Vorteil, dass es nicht zu Inkonsistenzen kommen kann, wenn einzelne Wads gelöscht oder geupdatet werden. Das Löschen von Wads würde die Konsistenz von WadPacks zerstören, die den Wad genutzt haben. Beim Updaten von Wads kann es, wie beim Updaten von Software, zu Fehlern und Inkonsistenzen kommen.
 
-WadPacks können bliebig bearbeitet werden. Deswegen werden beim Herunterladen und Starten eines WadPacks, das Vorhandenshein aller benötigten Wads geprüft und ein neues Startscript heruntergeladen.
-
+WadPacks können beliebig bearbeitet werden. Deswegen werden beim Herunterladen und Starten eines WadPacks, das Vorhandensein aller benötigten Wads geprüft und ein neues Startscript heruntergeladen.
 
 ## Client Handler
 
@@ -159,11 +151,9 @@ Aus der Liste der benötigten Wads werden diejenigen ermittelt, welche dem Clien
 
 Die Liste der noch herunterzuladenden Wads wird mit der ID des WadPacks an die URL des Servers weitergeleitet.
 
-Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle angeforderten Wads und eine .cmd Datei, welche das WadPack startet.
-Diese .cmd Datei wird zum Ausführen eines einzelnen WadPacks genutzt.
+Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle angeforderten Wads und eine .cmd Datei, welche das WadPack startet. Diese .cmd Datei wird zum Ausführen eines einzelnen WadPacks genutzt.
 
 ![Haskell Handler Diagramm](https://hackmd.io/_uploads/B11CZioER.png)
-
 
 # Screenshots und Zustände
 
@@ -185,56 +175,56 @@ Hier ist die Ansicht der "WAD List", die dem Benutzer ermöglicht, nach WAD-Date
 
 ![image](https://hackmd.io/_uploads/SkAfupuI0.png)
 
-# Run the Application
+# Anwendung ausführen
 
 ## Setup
 
-Necessary setup to run the program.
-Setting localhost:3000 is only necessary if you want to serve the frontend from vite.
+Notwendige Einrichtung, um das Programm auszuführen. Das Festlegen von localhost:3000 ist nur erforderlich, wenn das Frontend von Vite bereitgestellt werden soll.
 
-1. Create Authorization Project at auth0
-    * create free account at https://auth0.com
-    * Create a new "Regular Web Application"
-    * add "allowed callback urls": http://localhost:8080/login/oauth2/code/okta
-    * add "allowed logout urls": http://localhost:3000,http://localhost:8080
-    * add "allowed web origins": http://localhost:3000,http://localhost:8080
-    * check "allow corss-origin authentication" and add origins: "http://localhost:3000, http://localhost:8080"
-2. create file src/main/resources/application-local.properties
-3. add entries for (okta.XXX values are from the auth0 project created previously):
+1. Erstellen eines Authentifizierungsprojekts bei auth0
+    * Erstellen eines kostenlosen Kontos unter https://auth0.com
+    * Erstellen einer neuen "Regular Web Application"
+    * Hinzufügen von "Allowed Callback URLs": http://localhost:8080/login/oauth2/code/okta
+    * Hinzufügen von "Allowed Logout URLs": http://localhost:3000, http://localhost:8080
+    * Hinzufügen von "Allowed Web Origins": http://localhost:3000, http://localhost:8080
+    * Aktivieren von "Allow Cross-Origin Authentication" und
+
+ Hinzufügen von Ursprüngen: "http://localhost:3000, http://localhost:8080"
+2. Erstellen der Datei src/main/resources/application-local.properties
+3. Hinzufügen von Einträgen für (okta.XXX-Werte stammen aus dem zuvor erstellten auth0-Projekt):
     * spring.datasource.username
     * spring.datasource.password
     * okta.oauth2.issuer
     * okta.oauth2.client-secret
     * okta.oauth2.client-id
 
-## Build Application
+## Anwendung bauen
 
-you need: 
-* java: 21
-* haskell: GHC2021
-* node: 20 (lower should be possible as well)
-* npm (js/ts build tool)
-* yalc (manager for local npm packages ,can be installed via npm)
-* maven (java build tool)
-* cabal (haskell build tool, recommended installation via ghcup)
+Erforderliche Werkzeuge:
+* Java: 21
+* Haskell: GHC2021
+* Node: 20 (niedrigere Versionen sollten auch funktionieren)
+* npm (js/ts-Build-Tool)
+* yalc (Manager für lokale npm-Pakete, kann über npm installiert werden)
+* Maven (Java-Build-Tool)
+* Cabal (Haskell-Build-Tool, empfohlene Installation über ghcup)
 
-These steps help you to create an executable jar-file.
-All steps assume the repository root as initial dir.
+Diese Schritte helfen Ihnen, eine ausführbare Jar-Datei zu erstellen. Alle Schritte setzen das Stammverzeichnis des Repositories als Startverzeichnis voraus.
 
-### Build the api
+### API bauen
 
 1. cd ./api-generator
 2. npm install
 3. npm run generate
 4. npm run update
 
-### Build haskell client (can be omitted if no changes to the haskell code were made)
+### Haskell-Client bauen (kann ausgelassen werden, wenn keine Änderungen am Haskell-Code vorgenommen wurden)
 
 1. cd ./local-client
 2. cabal build
 3. cp ./dist-newstyle/build/x86_64-windows/ghc-9.4.8/local-client-0.1.0.0/x/local-client/build/local-client/local-client.exe ../wadloader3/src/main/resources/local-client.exe
 
-### Build the back- and frontend
+### Backend und Frontend bauen
 
 1. cd ./wadloader3
 2. yalc add wadloader3-api
@@ -242,16 +232,53 @@ All steps assume the repository root as initial dir.
 4. npm run build
 5. mvn package
 
-## Start server
+## Server starten
 
-Start the application without additional parameters.
+Starten Sie die Anwendung ohne zusätzliche Parameter.
 
-## Setup Application as a User
+## Anwendung als Benutzer einrichten
 
-1. Login
-2. download the setup script (by clicking the download button or calling /download/setup)
-3. run the setup script with admin privileges (it can also elevate itself)
+1. Anmeldung
+2. Herunterladen des Setup-Skripts (durch Klicken auf die Schaltfläche zum Herunterladen oder Aufrufen von /download/setup)
+3. Ausführen des Setup-Skripts mit Administratorrechten (es kann sich auch selbst erhöhen)
 
-optional (if you don't set these you are asked about their values every time you start a wadpack):
-4. set %GZDOOM_PATH% as the path to your gzdoom.exe
-5. set %IWAD_PATH% to the path of iwad you want to use to start your WadPacks
+Optional (wenn Sie diese nicht setzen, werden Sie jedes Mal nach ihren Werten gefragt, wenn Sie ein WadPack starten):
+4. Setzen Sie %GZDOOM_PATH% auf den Pfad zu Ihrer gzdoom.exe
+5. Setzen Sie %IWAD_PATH% auf den Pfad des IWAD, den Sie zum Starten Ihrer WadPacks verwenden möchten
+
+# Zukünftige Erweiterungen
+
+1. Unterstützung für zusätzliche Spiel-Engines neben der Doom-Engine.
+2. Erweiterte Benutzerrollen und Berechtigungssysteme.
+3. Unterstützung für Cloud-Speicher zur Verwaltung von WAD-Dateien.
+4. Verbesserte Such- und Filterfunktionen.
+5. Integration von Social Features wie Bewertungen und Kommentare zu WADs.
+6. Mobile App zur Verwaltung von WAD-Dateien unterwegs.
+
+# Sicherheit
+
+1. Implementierung von Sicherheitsmaßnahmen wie SSL/TLS für die Datenübertragung.
+2. Regelmäßige Sicherheitsupdates und Patches.
+3. Überprüfung und Validierung von hochgeladenen WAD-Dateien.
+4. Schutz vor Brute-Force-Angriffen und anderen bösartigen Aktivitäten.
+
+# Leistungsoptimierungen
+
+1. Caching von häufig verwendeten Daten.
+2. Optimierung der Datenbankabfragen.
+3. Lastverteilung für den Serverbetrieb.
+4. Überwachung und Profiling der Anwendung zur Identifizierung von Engpässen.
+
+# Deployment
+
+1. Einsatz von CI/CD-Pipelines für automatisierte Builds und Tests.
+2. Verwendung von Docker für eine konsistente und portable Deployment-Umgebung.
+3. Bereitstellung in einer Cloud-Umgebung für Skalierbarkeit und Zuverlässigkeit.
+4. Regelmäßige Backups und Wiederherstellungstests.
+
+# Dokumentation und Benutzerhandbuch
+
+1. Erstellung eines umfassenden Benutzerhandbuchs mit Schritt-für-Schritt-Anleitungen.
+2. Bereitstellung von API-Dokumentationen für Entwickler.
+3. Erstellen von Video-Tutorials und Demos zur Veranschaulichung der wichtigsten Funktionen.
+4. Einrichten eines Support-Systems für Benutzerfragen und -probleme.
