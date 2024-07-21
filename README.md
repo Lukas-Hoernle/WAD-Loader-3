@@ -2,29 +2,6 @@
 
 Monorepo for online Doom-Wad Management System.
 
-## Todos
-
-Backend:
-* remove created zipfiles periodically (download is valid for x-minutes, maybe 5 or 15 minutes), configurable 
-
-Frontend:
-*  create "Upload-Wad" Page
-*  create "Edit Wad" Page 
-*  create "Create WadPack" Page
-*  create "Edit WadPack" Page
-*  create "Search/Download" Page (one Page for Wads and WadPacks at once should be sufficient)
-  * this page needs a search function for Wads/WadPacks
-    * based on the name
-    * based on the description    
-
-Client-Handler:
-* maybe cleanup of .zip files
-  
-Optional:
-* Possibility to add Tags to Wads and WadPacks
-  * Wads/WadPacks should then be searchable by these packs
-* Comments for Wads/WadPacks 
-
 ## Setup
 
 Necessary setup to run the program.
@@ -32,7 +9,7 @@ Setting localhost:3000 is only necessary if you want to serve the frontend from 
 
 1. Create Authorization Project at auth0
     * create free account at https://auth0.com
-    * Create a new "Regular Web Application"
+    * Create a new "Regular Wnpmeb Application"
     * add "allowed callback urls": http://localhost:8080/login/oauth2/code/okta
     * add "allowed logout urls": http://localhost:3000,http://localhost:8080
     * add "allowed web origins": http://localhost:3000,http://localhost:8080
@@ -82,15 +59,14 @@ All steps assume the repository root as initial dir.
 
 ## Start server
 
-Start the created jar file. No parameters needed.
-
-* java -jar "path/to/jar/from/previous/step.jar"
+Start the application without additional parameters.
 
 ## Setup Application as a User
 
-1. download the setup script (by clicking the download button or calling /download/setup)
-2. run the setup script with admin privileges 
+1. Login
+2. download the setup script (by clicking the download button or calling /download/setup)
+3. run the setup script with admin privileges (it can also elevate itself)
 
 optional (if you don't set these you are asked about their values every time you start a wadpack):
-3. set %GZDOOM_PATH% as the path to your gzdoom.exe
-4. set %IWAD_PATH% to the path of iwad you want to use to start your WadPacks
+4. set %GZDOOM_PATH% as the path to your gzdoom.exe
+5. set %IWAD_PATH% to the path of iwad you want to use to start your WadPacks

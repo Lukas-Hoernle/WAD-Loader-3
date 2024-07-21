@@ -11,11 +11,14 @@ const NavigationPage = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             WAD Loader 3
           </Typography>
+          <Button component={Link} to="/" color="inherit">
+            Home
+          </Button>
           <Button component={Link} to="/createwad" color="inherit">
-            Create Wad
+            Upload Wads
           </Button>
           <Button component={Link} to="/createwadpack" color="inherit">
-            Create WadPack
+            Manage WadPacks
           </Button>
           <Button component={Link} to="/listwad" color="inherit">
             Wad List

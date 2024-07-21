@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, Typography, Box, Button, TextField } from '@mui/material';
 import { useWadApi } from '../api/hooks/useWadApi';
 import { WadDto, GetWadRequest } from 'wadloader3-api';
+import { download } from '../utils/download';
 
 function WadList() {
     const [wads, setWads] = useState<WadDto[]>([]);
@@ -24,13 +25,7 @@ function WadList() {
         const getWadRequest: GetWadRequest = { id: wadId };
         const wad = await wadApi.getWad(getWadRequest);
         const wadBlob = new Blob([JSON.stringify(wad)], { type: 'application/octet-stream' }); 
-        const url = window.URL.createObjectURL(wadBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', wad.name);
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode?.removeChild(link);
+        download(wadBlob, wad.name);
     };
 
     return (
