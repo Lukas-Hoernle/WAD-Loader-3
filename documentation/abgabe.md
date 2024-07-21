@@ -84,33 +84,49 @@ Kann-Kriterien umfassen:
 - Unterstützung für mehrere Benutzerrollen (Administrator, Standardbenutzer)
 - Erweiterte Such- und Filteroptionen für WAD-Dateien
 - Integration von OAuth für externe Anmeldungsoptionen
+- Starten von WAD-Packs aus dem Browser heraus
+
+## Umgesetze Kriterien
+
+Es wurden alle Muss-Kriterien implementiert. Benutzer können sich beim WadLoader registrieren und anmelden [x]. WADs können hochgeladen und mit anderen Nutzern geteilt werden [x]. Es ist möglich WAD-Packs zu Erstellen, zu Bearbeiten und Herunterzuladen [x]. Alle WAD-Packs können mittels einer Suchfunktion gefiltert werden [x]. Alle Änderungen werden durch eine Datenbank persitiert, somit bleiben diese auch nach einem Neustart oder Absturz der Servers erhalten [x].
+
+Zusätzlich wurden auch die meisten Kann-Kriterien erfüllt. Such- und Filterfunktionalität steht auch für WADs zu ferfügunh [x]. Das Anmelden mittels OAuth ist möglich. Zudem können auch bereits existierende Account von externen OAuth-Anbietern (Google, Github, etc.) zum Anmelden und Registieren genutzt werden [x].
 
 # Technologieauswahl
+
+Im folgenden wird der Einsatz der genutzen Technologien begründet.
+
 ## Begründung H2
 
-Eine H2-Datenbank lässt sich dank der Integration in Spring Boot mit minimalem Aufwand einsetzen. Da das zu persistierende Datenmodell klein ist (zwei Entitäten), ist H2 vorerst ausreichend. Zusätzlich haben wir bereits umfangreiche Erfahrung im Umgang mit H2, was die Implementierung und Wartung erleichtert. Bei Bedarf kann die Datenbank einfach durch eine andere ersetzt werden, was uns Flexibilität für zukünftige Erweiterungen bietet. H2 ist zudem ideal für Entwicklungs- und Testumgebungen, da sie schnell und ressourcenschonend ist.
+Eine H2-Datenbank lässt sich, dank bereits existierender Integration in Spring Boot mit minimalem Aufwand einsetzen. Für das benötigte Datenmodell ist eine In-Memory-Datenbank vorerst ausreichend. Die Nutzung einer In-Memory-DB vereinfacht das Aufsetzen der Laufzeitumgebung, da keine eigene Datenbank installiert oder anderweitigt (z.B. über Docker) bereitgestellt werden muss. Durch eine saubere Trennung der Persistenzschciht von der Domände, kann die H2-Datenbank ohne Änderungen am Kern der Anwendung ausgetauscht werden.
 
 ## Begründung Spring Boot
 
-Spring Boot ist für Java-Webanwendungen eine beliebte Wahl, da es plattformunabhängig ist und das Bereitstellen unter verschiedenen Betriebssystemen erleichtert. Unsere Teammitglieder verfügen über fundierte Kenntnisse in Spring Boot, und wir möchten diese weiter ausbauen. In vielen Unternehmen, in denen wir tätig sind, wird Spring Boot aufgrund seiner Robustheit und des umfangreichen Ökosystems verwendet. Dies verschafft uns berufliche Vorteile. Darüber hinaus ermöglicht Spring Boot eine schnelle Entwicklung und Bereitstellung von Anwendungen durch seine konventionen-basierten Konfigurationsmöglichkeiten.
+Spring Boot ist für Java-Webanwendungen eine beliebte Wahl, da es mit geringem Konfigurationsaufwand einsetzbar ist und das schnelle Erstellen komplexer Anwendungen ermöglilcht. Ein breites Spekturm an Spring Integrationen ermöglicht die nathlose Verwendung vieler anderer Frameworks und Bibliotheken. 
 
-## Begründung React/TS
+Die vergleichsweise langsamen Startzeit von Spring Boot sind bei Anwendungen dieser größe noch im einstelligen Sekundenbereich. Das Ausführen des Servers ist also auch auf älteren Geräten möglich. 
 
-React mit TypeScript ermöglicht die Entwicklung moderner Webanwendungen mit Material UI für ein konsistentes Benutzererlebnis. Wir haben bereits umfangreiche Erfahrung in der Entwicklung mit React und TypeScript. React ist in vielen Unternehmen weit verbreitet und verbessert unsere beruflichen Fähigkeiten. TypeScript bietet statische Typisierung, die die Codequalität und Wartbarkeit erhöht. Die Verwendung von Material UI sorgt für ein einheitliches und ansprechendes Design. Diese Kombination ermöglicht uns eine effiziente und fehlerarme Entwicklung.
+## Begründung React mit TypeScript
+
+Eine beliebte Option zum Erstelllen modernen Single Page Applications ist React. Mit Material UI verfügt React über eine möchtige UI Bibliothek zum einfachen Erstellen von optisch ansprechenden Webseiten. 
+
+Die Verwendung von TypeScript fördert die Wartbarkeit von React-Anwendungen ungemein. TypeScript hilft auch bei der Suche und dem Vermeiden von Fehlern.
 
 ## Begründung Haskell
 
-Haskell bietet sich für den Client Handler an, da es plattformunabhängig ist und ohne zusätzliche Interpreter nativ ausführbar ist. Darüber hinaus besteht im Team bereits umfangreiches Vorwissen im Bereich Haskell, was die Entwicklung erleichtert. Die Nutzung von Haskell dient zudem als Prüfungsvorbereitung für die Klausur in der Vorlesung Programmierparadigmen. Haskell's starke Typensicherheit und funktionale Programmierparadigmen ermöglichen eine saubere und wartbare Codebasis, was insbesondere bei komplexen Anwendungen wie dem WadLoader von Vorteil ist.
+Haskell wird in diesem Projekt für den Client Handler verwendet. Dies geschieht hauptsächlich aus Experimientierfreudigkeit heraus. Es soll getestet werden, wie viel Aufwand notwendig ist um stark auf IO basierende Funktionalität in Haskell abzubilden.
 
-## Begründung Haskell
+Die Nutzung von Haskell bietet aber auch Vorteile. Haskell kann als plattformunabhängige Programmiersprache zum Erzeugen von nativ ausführbaren Artefakten genutzt werden. Für die Verwendung des Client Handlers ist also keine Installation von Drittprogammen notwendig.
 
-Haskell bietet sich für den Client Handler an, da es plattformunabhängig ist und ohne zusätzliche Interpreter nativ ausführbar ist. Darüber hinaus besteht im Team bereits umfangreiches Vorwissen im Bereich Haskell, was die Entwicklung erleichtert. Die Nutzung von Haskell dient zudem als Prüfungsvorbereitung für die Klausur in der Vorlesung Programmierparadigmen. Haskell's starke Typensicherheit und funktionale Programmierparadigmen ermöglichen eine saubere und wartbare Codebasis, was insbesondere bei komplexen Anwendungen wie dem WadLoader von Vorteil ist.
+Die Nutzung von Java oder Python würde beispielsweise die Installation einer Java bzw. Python Laufzeit erfordern. Alternativ könnte die Entsprechende Laufzeitumgebung auch mit dem Handler ausgeliefert werden, was den Client Handler jedoch aufblähen würde.
 
 ## Begründung Auth0
 
 Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet. Das Implementieren eines OAuth2 Flows ist nicht trivial. Deswegen wird Auth0, ein Anbieter für Authentication und Authorization als Service, genutzt.
 
 Dadurch müssen vom WadLoader keine Userdaten verwaltet werden. Das Anmelden über bereits bestehende Konten (z.B. GitHub) ist möglich.
+
+Die Nutzung von Auth0 reduziert also den Entwicklungsaufwand und bringt zusätzliche viele Vorteile.
 
 # Architekturmodelle
 
@@ -158,6 +174,8 @@ Der Server antwortet auf diese Anfrage mit einer .zip Datei. Diese enthält alle
 
 ![Haskell Handler Diagramm](https://hackmd.io/_uploads/B11CZioER.png)
 
+Bei der Entwicklung des Client Handlers wurden Best Practices der Funktionalen Programmierung genutzt. Dazu gehört beispielsweise das Schieben von IO Operationen an den Rand der Anwendung. Die meisten Operationen des Kerns der Anwendung sind also pure.
+
 # Screenshots und Zustände
 
 ## Create WAD
@@ -182,7 +200,7 @@ Hier ist die Ansicht der "WAD List", die dem Benutzer ermöglicht, nach WAD-Date
 
 ## Setup
 
-Notwendige Einrichtung, um das Programm auszuführen. Das Festlegen von localhost:3000 ist nur erforderlich, wenn das Frontend von Vite bereitgestellt werden soll.
+Notwendige Einrichtung, um das Programm auszuführen. Das Festlegen von localhost:3000 ist nur erforderlich, wenn das Frontend von Vite bereitgestellt werden soll. Dies bietet sich hauptsächlich während der Entwicklung an.
 
 1. Erstellen eines Authentifizierungsprojekts bei auth0
     * Erstellen eines kostenlosen Kontos unter https://auth0.com
@@ -205,14 +223,16 @@ Notwendige Einrichtung, um das Programm auszuführen. Das Festlegen von localhos
 
 Erforderliche Werkzeuge:
 * Java: 21
-* Haskell: GHC2021
+* Haskell: GHC2021 (\*)
 * Node: 20 (niedrigere Versionen sollten auch funktionieren)
 * npm (js/ts-Build-Tool)
 * yalc (Manager für lokale npm-Pakete, kann über npm installiert werden)
 * Maven (Java-Build-Tool)
-* Cabal (Haskell-Build-Tool, empfohlene Installation über ghcup)
+* Cabal (Haskell-Build-Tool, empfohlene Installation über ghcup, \*)
 
-Diese Schritte helfen Ihnen, eine ausführbare Jar-Datei zu erstellen. Alle Schritte setzen das Stammverzeichnis des Repositories als Startverzeichnis voraus.
+\* nur notwendig, wenn Änderungen am Haskell Code vorliegen
+Die folgenden Schritte helfen Ihnen, eine ausführbare Jar-Datei zu erstellen. Alle Schritte setzen das Stammverzeichnis des Repositories als Startverzeichnis voraus. 
+
 
 ### API bauen
 
