@@ -4,6 +4,7 @@ import CreateWadPack from "./CreateWadPack";
 import { LoginLayout } from "./LoginLayout";
 import NavigationPage from "./NavigationPage";
 import WadList from "./WadList";
+import { HomePage } from "./HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -24,11 +25,3 @@ export const router = createBrowserRouter([
   },
 ]);
 
-function HomePage() {
-  return (
-    <div>
-      <h1>Herzlich willkommmen beim wadloader3,</h1>
-      <p>bitte navigieren Sie mit der oberen Leiste.</p>
-    </div>
-  );
-}
