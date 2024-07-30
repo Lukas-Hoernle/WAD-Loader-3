@@ -117,12 +117,11 @@ Haskell wird in diesem Projekt für den Client Handler verwendet. Dies geschieht
 ### Begründung Auth0
 
 Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet. Das Implementieren eines OAuth2-Flows ist nicht trivial. Deswegen wird Auth0, ein Anbieter für Authentication und Authorization als Service, genutzt. Dadurch müssen vom WadLoader keine Userdaten verwaltet werden. Das Anmelden über bereits bestehende Konten (z.B. GitHub) ist möglich. Die Nutzung von Auth0 reduziert also den Entwicklungsaufwand und bringt zusätzlich viele Vorteile.
-
 # Architekturmodelle
 
 ## Spring-Boot-Backend
 
-![Spring-Boot-Backend](https://hackmd.io/_uploads/rkhSzEYI0.png)
+![image](https://hackmd.io/_uploads/rkhSzEYI0.png)
 
 Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
@@ -136,21 +135,17 @@ In der API-Schicht werden die Controller definiert, die die REST-Schnittstellen 
 
 ### Domain/Core
 
-Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschäftslogik sowie die zentralen Entitäten wie Wads und WadPacks. Hier werden die Kernoperationen definiert, die die Anwendungslogik implementieren und auf die Infrastrukturschicht zugreifen.
+Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschäftslogik sowie die zentralen Entitäten wie WADs und WAD-Packs. Hier werden die Kernoperationen definiert, die die Anwendungslogik implementieren und auf die Infrastrukturschicht zugreifen.
 
 ### Abstraktion
 
-Die Abstraktionsschicht bietet allgemeine Schnittstellen und abstrakte Klassen, die die Kommunikation zwischen der Domänenschicht und der Infrastrukturschicht ermöglichen. Dies fördert die Austauschbarkeit und Testbarkeit der Infrastruktur
+Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt an eine spezifische Domänenlogik gebunden sind.
 
-komponenten.
+![Onion Architecture Diagramm](https://imgopt.infoq.com/fit-in/3000x4000/filters:quality(85)/filters:no_upscale()/news/2014/10/ddd-onion-architecture/en/resources/onion-architecture.png)
 
 ## Datenbankmodell
 
 Die H2-Datenbank wird genutzt, um die Daten der WAD-Dateien und der WAD-Packs zu speichern. Eine einfache Tabellenstruktur wird verwendet, um die Beziehungen zwischen den verschiedenen Entitäten zu verwalten. Durch die Nutzung der JPA (Java Persistence API) wird die Datenpersistenz abstrahiert, was die Wartung und Weiterentwicklung erleichtert.
-
-## React/TypeScript-Frontend
-
-![React-TS-Frontend](https://hackmd.io/_uploads/B1oSOtY2A.png)
 
 ### Benutzeroberfläche
 
