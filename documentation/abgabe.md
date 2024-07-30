@@ -178,10 +178,6 @@ Integrationstests überprüfen die Zusammenarbeit mehrerer Komponenten. Beispiel
 
 End-to-End-Tests überprüfen das gesamte System vom Frontend bis zum Backend. Sie simulieren Benutzerinteraktionen und stellen sicher, dass die Anwendung als Ganzes korrekt funktioniert. Tools wie Cypress oder Selenium können verwendet werden, um diese Tests zu automatisieren.
 
-### Akzeptanztests
-
-Akzeptanztests validieren, ob die Anwendung die Geschäftsanforderungen erfüllt. Diese Tests werden häufig in Zusammenarbeit mit Stakeholdern erstellt und überprüft. Sie fokussieren sich darauf, reale Anwendungsfälle abzudecken und sicherzustellen, dass die Benutzeranforderungen vollständig umgesetzt sind.
-
 ### Manuelle Tests
 
 Manuelle Tests ergänzen die automatisierten Tests und werden für exploratives Testen und zur Überprüfung von Benutzeroberflächen verwendet. Diese Tests helfen dabei, unerwartete Probleme zu entdecken und sicherzustellen, dass die Benutzererfahrung reibungslos ist.
@@ -192,9 +188,7 @@ Zur Umsetzung dieser Teststrategien werden verschiedene Werkzeuge eingesetzt:
 
 - **JUnit**: Für Unit- und Integrationstests im Spring Boot Backend.
 - **Mockito**: Für das Mocking von Abhängigkeiten in Unit-Tests.
-- **Cypress/Selenium**: Für End-to-End-Tests der Webanwendung.
 - **Postman**: Für manuelle Tests der API-Endpunkte.
-- **Jenkins**: Für kontinuierliche Integration und automatisierte Ausführung der Tests.
 
 # Fazit
 
