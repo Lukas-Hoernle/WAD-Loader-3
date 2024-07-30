@@ -106,7 +106,7 @@ Spring Boot ist für Java-Webanwendungen eine beliebte Wahl, da es plattformunab
 
 ## Begründung React/TS
 
-React mit TypeScript ermöglicht die Entwicklung moderner Webanwendungen mit Material UI für ein konsistentes Benutzererlebnis. Wir haben bereits umfangreiche Erfahrung in der Entwicklung mit React und TypeScript. React ist in vielen Unternehmen weit verbreitet und verbessert unsere beruflichen Fähigkeiten. TypeScript bietet statische Typisierung, die die Codequalität und Wartbarkeit erhöht. Die Verwendung von Material UI sorgt für ein einheitliches und ansprechendes Design. Diese Kombination ermöglicht uns eine effiziente und fehlerarme Entwicklung. 
+React mit TypeScript ermöglicht die Entwicklung moderner Webanwendungen mit Material UI für ein konsistentes Benutzererlebnis. Wir haben bereits umfangreiche Erfahrung in der Entwicklung mit React und TypeScript. React ist in vielen Unternehmen weit verbreitet und verbessert unsere beruflichen Fähigkeiten. TypeScript bietet statische Typisierung, die die Codequalität und Wartbarkeit erhöht. Die Verwendung von Material UI sorgt für ein einheitliches und ansprechendes Design. Diese Kombination ermöglicht uns eine effiziente und fehlerarme Entwicklung.
 
 ## Begründung Haskell
 
@@ -120,7 +120,7 @@ Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet.
 
 ## Spring-Boot-Backend
 
-![image](https://hackmd.io/_uploads/rkhSzEYI0.png)
+![Spring-Boot-Backend](https://hackmd.io/_uploads/rkhSzEYI0.png)
 
 Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
@@ -138,209 +138,64 @@ Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschä
 
 ### Abstraktion
 
-Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt an eine spezifische Domänenlogik gebunden sind.
+Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt zur Geschäftslogik gehören.
 
-![Onion Architecture Diagramm](https://imgopt.infoq.com/fit-in/3000x
+## React/Typescript-Frontend
 
-3000/filters:quality(80)/articles/onion-architecture-in-action/pt1.onionarchitecture.png)
+Das Frontend ist in React mit TypeScript implementiert und nutzt Material UI für die Gestaltung der Benutzeroberfläche. Es gibt verschiedene Komponenten und Services, die für die unterschiedlichen Funktionalitäten zuständig sind.
 
-## React/TS Frontend
+### Components
 
-Das React-Frontend verwendet React Hooks und Context API, um eine modulare und erweiterbare Architektur zu gewährleisten. Diese Struktur fördert die Wiederverwendbarkeit von Komponenten und ermöglicht eine klare Trennung von Zustandsverwaltung und Darstellung.
-
-### Komponenten
-
-Die Komponentenschicht enthält die visuellen Bausteine der Benutzeroberfläche, die die Interaktion der Benutzer mit der Anwendung ermöglichen. Diese Komponenten sind in kleinere, wiederverwendbare Einheiten unterteilt, die zusammen die gesamte Benutzeroberfläche bilden.
-
-### Hooks
-
-In der Hooks-Schicht werden benutzerdefinierte Hooks definiert, die häufige Zustands- und Logikoperationen kapseln. Diese Hooks ermöglichen es, Geschäftslogik aus den Komponenten herauszulösen und wiederverwendbare Logikbausteine zu schaffen.
-
-### Context
-
-Die Context-Schicht verwaltet den globalen Zustand der Anwendung und stellt diesen Zustand den Komponenten über die Context API zur Verfügung. Dies ermöglicht eine zentrale Zustandsverwaltung und erleichtert die Weitergabe von Daten durch die Komponentenhierarchie.
+Die Komponenten sind die Bausteine der Benutzeroberfläche. Sie repräsentieren verschiedene Teile der Anwendung wie das Hochladen von WAD-Dateien, das Erstellen von WAD-Packs oder die Benutzeranmeldung. Jede Komponente ist in sich abgeschlossen und kann bei Bedarf wiederverwendet werden.
 
 ### Services
 
-Die Service-Schicht enthält Funktionen für die Kommunikation mit dem Backend und die Verarbeitung von Daten. Diese Schicht abstrahiert die Backend-Aufrufe und ermöglicht es, die Geschäftslogik aus den Komponenten herauszuhalten. Sie bietet auch eine zentrale Stelle für die Fehlerbehandlung und das Caching von Daten.
+Die Services sind für die Kommunikation mit dem Backend und das Management der Applikationslogik zuständig. Sie stellen Methoden bereit, um API-Aufrufe zu tätigen, Benutzerdaten zu verwalten und die Anwendungskonfiguration zu handhaben.
 
-![Frontend Architektur](https://imgur.com/qMc71A8.png)
+### Router
 
-### Client-Handler
+Der Router verwaltet die Navigation innerhalb der Anwendung. Er stellt sicher, dass Benutzer zu den verschiedenen Ansichten der Anwendung navigieren können, z.B. zum Hochladen von WADs oder zum Durchsuchen von WAD-Packs.
 
-Der Client-Handler, entwickelt in Haskell, ist eine unabhängige Komponente, die für die direkte Interaktion mit dem Doom-Spiel verantwortlich ist. Er kommuniziert mit dem Backend und führt Befehle aus, um WADs in das Spiel zu laden und zu verwalten.
+## Client-Handler
 
-# Klassenmodelle
+Der Client-Handler, implementiert in Haskell, übernimmt die Kommunikation mit dem WadLoader-Backend. Er fungiert als Proxy zwischen dem Benutzer und dem Backend und kümmert sich um Aufgaben wie das Hochladen und Herunterladen von WAD-Dateien. Die Nutzung von Haskell ermöglicht es, die robusten und sicheren funktionalen Programmierparadigmen zu nutzen, was insbesondere bei der Entwicklung von Netzwerkdiensten von Vorteil ist.
 
-## Backend
+# Testkonzept
 
-Die Klassenstruktur des Backends folgt einer strengen Trennung von Domänen- und Infrastrukturklassen. Die wichtigsten Klassen sind:
+## Teststrategien
 
-- **User**: Repräsentiert einen Benutzer des WadLoader-Dienstes und enthält Informationen wie Benutzernamen, Passwort und Rollen.
-- **Wad**: Repräsentiert eine hochgeladene WAD-Datei und enthält Informationen wie Dateiname, Pfad und zugehöriger Benutzer.
-- **WadPack**: Repräsentiert ein WAD-Paket und enthält eine Liste von WADs sowie Metadaten wie Name und Erstellungsdatum.
+Für die Sicherstellung der Qualität der WadLoader-Anwendung werden verschiedene Teststrategien eingesetzt:
 
-Die folgenden Klassendiagramme illustrieren die Beziehungen zwischen den wichtigsten Klassen des Backends:
+### Unit-Tests
 
-![Backend Klassendiagramm](https://imgur.com/mgAEaj8.png)
+Unit-Tests sind klein und isoliert. Sie testen einzelne Komponenten der Anwendung, wie z.B. Services und Controller. Jeder Unit-Test konzentriert sich auf eine spezifische Funktionalität und überprüft deren Verhalten anhand von Mock-Objekten und Stubs, um Abhängigkeiten zu isolieren.
 
-## Frontend
+### Integrationstests
 
-Die Klassenstruktur des Frontends ist in Komponenten unterteilt, die jeweils eine spezifische Funktionalität der Benutzeroberfläche kapseln. Die wichtigsten Klassen sind:
+Integrationstests überprüfen die Zusammenarbeit mehrerer Komponenten. Beispielsweise wird getestet, ob die Interaktion zwischen dem Spring Boot Backend und der H2-Datenbank korrekt funktioniert. Diese Tests verwenden in der Regel eine in-memory H2-Datenbank, um eine realistische Testumgebung zu schaffen, ohne externe Ressourcen zu benötigen.
 
-- **App**: Die Haupteinstiegspunkt der Anwendung, der die globalen Zustände und Routen verwaltet.
-- **WadList**: Eine Komponente, die eine Liste der hochgeladenen WAD-Dateien anzeigt und deren Verwaltung ermöglicht.
-- **WadPackList**: Eine Komponente, die eine Liste der erstellten WAD-Pakete anzeigt und deren Verwaltung ermöglicht.
+### End-to-End-Tests (E2E)
 
-Die folgenden Klassendiagramme illustrieren die Beziehungen zwischen den wichtigsten Klassen des Frontends:
+End-to-End-Tests überprüfen das gesamte System vom Frontend bis zum Backend. Sie simulieren Benutzerinteraktionen und stellen sicher, dass die Anwendung als Ganzes korrekt funktioniert. Tools wie Cypress oder Selenium können verwendet werden, um diese Tests zu automatisieren.
 
-![Frontend Klassendiagramm](https://imgur.com/Qi5kV1S.png)
+### Akzeptanztests
 
-# Komponentenmodelle
+Akzeptanztests validieren, ob die Anwendung die Geschäftsanforderungen erfüllt. Diese Tests werden häufig in Zusammenarbeit mit Stakeholdern erstellt und überprüft. Sie fokussieren sich darauf, reale Anwendungsfälle abzudecken und sicherzustellen, dass die Benutzeranforderungen vollständig umgesetzt sind.
 
-Die Anwendung ist in verschiedene Komponenten unterteilt, die jeweils eine spezifische Funktionalität kapseln. Diese Struktur ermöglicht eine modulare und erweiterbare Architektur.
+### Manuelle Tests
 
-## Backend-Komponenten
+Manuelle Tests ergänzen die automatisierten Tests und werden für exploratives Testen und zur Überprüfung von Benutzeroberflächen verwendet. Diese Tests helfen dabei, unerwartete Probleme zu entdecken und sicherzustellen, dass die Benutzererfahrung reibungslos ist.
 
-- **UserService**: Verwaltet die Benutzerregistrierung und -authentifizierung.
-- **WadService**: Verwaltet das Hochladen, Speichern und Abrufen von WAD-Dateien.
-- **WadPackService**: Verwaltet das Erstellen, Bearbeiten und Herunterladen von WAD-Paketen.
+## Testwerkzeuge
 
-![Backend Komponenten](https://imgur.com/U5ajETM.png)
+Zur Umsetzung dieser Teststrategien werden verschiedene Werkzeuge eingesetzt:
 
-## Frontend-Komponenten
-
-- **LoginComponent**: Ermöglicht Benutzern die Anmeldung und Registrierung.
-- **UploadComponent**: Ermöglicht Benutzern das Hochladen von WAD-Dateien.
-- **WadPackComponent**: Ermöglicht Benutzern das Erstellen und Verwalten von WAD-Paketen.
-
-![Frontend Komponenten](https://imgur.com/OVY23FL.png)
-
-# Schnittstellenmodelle
-
-Die Kommunikation zwischen den verschiedenen Komponenten der Anwendung erfolgt über definierte Schnittstellen. Diese Schnittstellen sind sowohl für die interne Kommunikation innerhalb der Anwendung als auch für die externe Kommunikation mit dem Client-Handler verantwortlich.
-
-## Backend-APIs
-
-Die Backend-APIs sind RESTful und ermöglichen die Kommunikation zwischen dem Frontend und dem Backend sowie dem Client-Handler. Die wichtigsten Endpunkte sind:
-
-- **/api/users**: Verwalten von Benutzern, einschließlich Registrierung und Authentifizierung.
-- **/api/wads**: Verwalten von WAD-Dateien, einschließlich Hochladen, Abrufen und Löschen.
-- **/api/wadpacks**: Verwalten von WAD-Paketen, einschließlich Erstellen, Bearbeiten und Herunterladen.
-
-![Backend APIs](https://imgur.com/0MN0Uvl.png)
-
-## Frontend-APIs
-
-Die Frontend-APIs sind interne Schnittstellen, die die Kommunikation zwischen den verschiedenen Komponenten des Frontends ermöglichen. Die wichtigsten Schnittstellen sind:
-
-- **UserContext**: Bereitstellen von Benutzerinformationen und Authentifizierungsstatus für die gesamte Anwendung.
-- **WadService**: Bereitstellen von Funktionen zum Hochladen, Abrufen und Löschen von WAD-Dateien.
-- **WadPackService**: Bereitstellen von Funktionen zum Erstellen, Bearbeiten und Herunterladen von WAD-Paketen.
-
-![Frontend APIs](https://imgur.com/mcI5eib.png)
-
-## Client-Handler-APIs
-
-Die Client-Handler-APIs sind RESTful und ermöglichen die Kommunikation zwischen dem Client-Handler und dem Backend. Die wichtigsten Endpunkte sind:
-
-- **/api/client/wads**: Abrufen und Verwalten von WAD-Dateien durch den Client-Handler.
-- **/api/client/wadpacks**: Abrufen und Verwalten von WAD-Paketen durch den Client-Handler.
-
-![Client Handler APIs](https://imgur.com/JcWQ1zr.png)
-
-# Persistenzmodelle
-
-Die Persistenz der Anwendung erfolgt in einer H2-Datenbank, die in das Spring-Boot-Backend integriert ist. Die wichtigsten Tabellen sind:
-
-- **users**: Enthält Benutzerinformationen wie Benutzername, Passwort und Rollen.
-- **wads**: Enthält Informationen zu hochgeladenen WAD-Dateien wie Dateiname, Pfad und zugehöriger Benutzer.
-- **wadpacks**: Enthält Informationen zu erstellten WAD-Paketen wie Name, Erstellungsdatum und enthaltene WADs.
-
-![Persistenz Modelle](https://imgur.com/bZm0Nw8.png)
-
-Die Beziehungen zwischen den Tabellen sind so gestaltet, dass sie eine effiziente und konsistente Datenverwaltung ermöglichen.
-
-# Ablaufmodelle
-
-Die wichtigsten Abläufe in der Anwendung sind:
-
-- **Benutzerregistrierung und -authentifizierung**: Benutzer registrieren sich und melden sich an, um auf die Anwendung zuzugreifen.
-- **Hochladen und Verwalten von WAD-Dateien**: Benutzer laden WAD-Dateien hoch, benennen sie und verwalten sie.
-- **Erstellen und Verwalten von WAD-Paketen**: Benutzer erstellen WAD-Pakete, fügen WAD-Dateien hinzu, benennen sie und laden sie herunter.
-
-## Benutzerregistrierung und -authentifizierung
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant DB
-
-    User->>Frontend: Enter registration details
-    Frontend->>Backend: POST /api/users/register
-    Backend->>DB: Save user details
-    DB-->>Backend: User saved
-    Backend-->>Frontend: Registration success
-    Frontend-->>User: Registration success
-
-    User->>Frontend: Enter login details
-    Frontend->>Backend: POST /api/users/login
-    Backend->>DB: Validate user details
-    DB-->>Backend: User valid
-    Backend-->>Frontend: Login success, return token
-    Frontend-->>User: Login success, token saved
-```
-
-## Hochladen und Verwalten von WAD-Dateien
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant DB
-    participant FileSystem
-
-    User->>Frontend: Select WAD file
-    Frontend->>Backend: POST /api/wads/upload
-    Backend->>FileSystem: Save WAD file
-    FileSystem-->>Backend: File saved
-    Backend->>DB: Save WAD details
-    DB-->>Backend: WAD saved
-    Backend-->>Frontend: Upload success
-    Frontend-->>User: Upload success
-```
-
-## Erstellen und Verwalten von WAD-Paketen
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant DB
-
-    User->>Frontend: Select WAD files for pack
-    Frontend->>Backend: POST /api/wadpacks/create
-    Backend->>DB: Save WAD pack details
-    DB-->>Backend: WAD pack saved
-    Backend-->>Frontend: WAD pack creation success
-    Frontend-->>User: WAD pack creation success
-
-    User->>Frontend: Download WAD pack
-    Frontend
-
-->>Backend: GET /api/wadpacks/download
-    Backend->>DB: Retrieve WAD pack details
-    DB-->>Backend: WAD pack details
-    Backend-->>Frontend: WAD pack file
-    Frontend-->>User: WAD pack downloaded
-```
-
-Diese detaillierten Ablaufmodelle veranschaulichen die verschiedenen Interaktionen und Datenflüsse innerhalb der Anwendung und bieten eine Grundlage für die Implementierung und Optimierung der einzelnen Prozesse.
+- **JUnit**: Für Unit- und Integrationstests im Spring Boot Backend.
+- **Mockito**: Für das Mocking von Abhängigkeiten in Unit-Tests.
+- **Cypress/Selenium**: Für End-to-End-Tests der Webanwendung.
+- **Postman**: Für manuelle Tests der API-Endpunkte.
+- **Jenkins**: Für kontinuierliche Integration und automatisierte Ausführung der Tests.
 
 # Fazit
 
-Die Architektur des WadLoader-Dienstes ist so konzipiert, dass sie eine modulare, erweiterbare und wartbare Anwendung ermöglicht. Durch die Trennung der verschiedenen Schichten und die klare Definition der Schnittstellen kann die Anwendung leicht erweitert und angepasst werden, um den Anforderungen der Benutzer gerecht zu werden. Die Verwendung von Spring Boot, React, TypeScript und Haskell stellt sicher, dass die Anwendung sowohl leistungsfähig als auch benutzerfreundlich ist, während die strenge Trennung von Backend, Frontend und Client-Handler eine klare Struktur und einfache Wartbarkeit gewährleistet.
+Der WadLoader stellt eine umfassende Lösung für das Management von WAD-Dateien dar. Die Kombination aus einem robusten Spring Boot Backend, einem modernen React/TypeScript Frontend und einem effizienten Haskell-basierten Client-Handler gewährleistet eine leistungsstarke und benutzerfreundliche Anwendung. Durch den Einsatz verschiedener Teststrategien und -werkzeuge wird die Qualität und Zuverlässigkeit der Anwendung sichergestellt. Zukünftige Erweiterungen und Anpassungen können dank der modularen Architektur problemlos umgesetzt werden. Die Wahl der Technologien ermöglicht es dem Team, ihre Fähigkeiten weiterzuentwickeln und gleichzeitig eine stabile und skalierbare Lösung bereitzustellen.
