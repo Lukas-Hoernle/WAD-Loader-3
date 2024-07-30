@@ -147,10 +147,6 @@ Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von ver
 
 Die H2-Datenbank wird genutzt, um die Daten der WAD-Dateien und der WAD-Packs zu speichern. Eine einfache Tabellenstruktur wird verwendet, um die Beziehungen zwischen den verschiedenen Entitäten zu verwalten. Durch die Nutzung der JPA (Java Persistence API) wird die Datenpersistenz abstrahiert, was die Wartung und Weiterentwicklung erleichtert.
 
-## React/TypeScript-Frontend
-
-![React-TS-Frontend](https://hackmd.io/_uploads/B1oSOtY2A.png)
-
 ### Benutzeroberfläche
 
 Das Frontend nutzt React und TypeScript, um eine reaktive und interaktive Benutzeroberfläche zu bieten. Material UI wird zur Gestaltung des Layouts und der Komponenten verwendet, um eine konsistente und ansprechende Benutzererfahrung zu gewährleisten.
