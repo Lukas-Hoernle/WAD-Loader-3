@@ -142,10 +142,6 @@ Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von ver
 
 ## React/Typescript-Frontend
 
-
-
-![React-Typescript-Frontend](https://hackmd.io/_uploads/Sk48K7oH0.png)
-
 Das Frontend ist in React mit TypeScript implementiert und nutzt Material UI für die Gestaltung der Benutzeroberfläche. Es gibt verschiedene Komponenten und Services, die für die unterschiedlichen Funktionalitäten zuständig sind.
 
 ### Components
@@ -161,8 +157,6 @@ Die Services sind für die Kommunikation mit dem Backend und das Management der 
 Der Router verwaltet die Navigation innerhalb der Anwendung. Er stellt sicher, dass Benutzer zu den verschiedenen Ansichten der Anwendung navigieren können, z.B. zum Hochladen von WADs oder zum Durchsuchen von WAD-Packs.
 
 ## Client-Handler
-
-![Client-Handler](https://hackmd.io/_uploads/SkwuFMqS0.png)
 
 Der Client-Handler, implementiert in Haskell, übernimmt die Kommunikation mit dem WadLoader-Backend. Er fungiert als Proxy zwischen dem Benutzer und dem Backend und kümmert sich um Aufgaben wie das Hochladen und Herunterladen von WAD-Dateien. Die Nutzung von Haskell ermöglicht es, die robusten und sicheren funktionalen Programmierparadigmen zu nutzen, was insbesondere bei der Entwicklung von Netzwerkdiensten von Vorteil ist.
 
