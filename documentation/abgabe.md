@@ -88,9 +88,9 @@ Kann-Kriterien umfassen:
 
 ## Umgesetzte Kriterien
 
-Es wurden alle Muss-Kriterien implementiert. Benutzer können sich beim WadLoader registrieren und anmelden [x]. WADs können hochgeladen und mit anderen Nutzern geteilt werden [x]. Es ist möglich, WAD-Packs zu erstellen, zu bearbeiten und herunterzuladen [x]. Alle WAD-Packs können mittels einer Suchfunktion gefiltert werden [x]. Alle Änderungen werden durch eine Datenbank persistiert, somit bleiben diese auch nach einem Neustart oder Absturz des Servers erhalten [x].
+Es wurden alle Muss-Kriterien implementiert. Benutzer können sich beim WadLoader registrieren und anmelden. WADs können hochgeladen und mit anderen Nutzern geteilt werden. Es ist möglich, WAD-Packs zu erstellen, zu bearbeiten und herunterzuladen. Alle WAD-Packs können mittels einer Suchfunktion gefiltert werden. Alle Änderungen werden durch eine Datenbank persistiert, somit bleiben diese auch nach einem Neustart oder Absturz des Servers erhalten.
 
-Zusätzlich wurden auch die meisten Kann-Kriterien erfüllt. Such- und Filterfunktionalität steht auch für WADs zur Verfügung [x]. Das Anmelden mittels OAuth ist möglich. Zudem können auch bereits existierende Accounts von externen OAuth-Anbietern (Google, Github, etc.) zum Anmelden und Registrieren genutzt werden [x].
+Zusätzlich wurden auch die meisten Kann-Kriterien erfüllt. Such- und Filterfunktionalität steht auch für WADs zur Verfügung. Das Anmelden mittels OAuth ist möglich. Zudem können auch bereits existierende Accounts von externen OAuth-Anbietern (Google, Github, etc.) zum Anmelden und Registrieren genutzt werden.
 
 # Technologieauswahl
 
@@ -120,8 +120,6 @@ Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet.
 
 ## Spring-Boot-Backend
 
-![image](https://hackmd.io/_uploads/rkhSzEYI0.png)
-
 Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
 ### Infrastruktur
@@ -140,207 +138,106 @@ Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschä
 
 Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt an eine spezifische Domänenlogik gebunden sind.
 
-![Onion Architecture Diagramm](https://imgopt.infoq.com/fit-in/3000x
-
-3000/filters:quality(80)/articles/onion-architecture-in-action/pt1.onionarchitecture.png)
-
 ## React/TS Frontend
 
-Das React-Frontend verwendet React Hooks und Context API, um eine modulare und erweiterbare Architektur zu gewährleisten. Diese Struktur fördert die Wiederverwendbarkeit von Komponenten und ermöglicht eine klare Trennung von Zustandsverwaltung und Darstellung.
+Das React-Frontend verwendet React Hooks und Context API, um eine modulare und erweiterbare Architektur zu gewährleisten. Diese Struktur fördert die Wiederverwend
+
+barkeit von Komponenten und eine klare Trennung von Zuständen und UI-Logik.
 
 ### Komponenten
 
-Die Komponentenschicht enthält die visuellen Bausteine der Benutzeroberfläche, die die Interaktion der Benutzer mit der Anwendung ermöglichen. Diese Komponenten sind in kleinere, wiederverwendbare Einheiten unterteilt, die zusammen die gesamte Benutzeroberfläche bilden.
+Die Komponenten sind in atomare, molekulare und organismische Einheiten unterteilt, um eine Hierarchie der Wiederverwendbarkeit zu fördern. Atomare Komponenten bilden die Basiselemente, während molekulare Komponenten aus diesen zusammengesetzt werden und organismische Komponenten komplexere UI-Elemente darstellen.
 
-### Hooks
+### State Management
 
-In der Hooks-Schicht werden benutzerdefinierte Hooks definiert, die häufige Zustands- und Logikoperationen kapseln. Diese Hooks ermöglichen es, Geschäftslogik aus den Komponenten herauszulösen und wiederverwendbare Logikbausteine zu schaffen.
-
-### Context
-
-Die Context-Schicht verwaltet den globalen Zustand der Anwendung und stellt diesen Zustand den Komponenten über die Context API zur Verfügung. Dies ermöglicht eine zentrale Zustandsverwaltung und erleichtert die Weitergabe von Daten durch die Komponentenhierarchie.
+Das Zustandsmanagement wird hauptsächlich mit der Context API und React Hooks realisiert. Dadurch bleibt die State-Logik übersichtlich und leicht verständlich, und die Komponenten bleiben flexibel und leicht wartbar.
 
 ### Services
 
-Die Service-Schicht enthält Funktionen für die Kommunikation mit dem Backend und die Verarbeitung von Daten. Diese Schicht abstrahiert die Backend-Aufrufe und ermöglicht es, die Geschäftslogik aus den Komponenten herauszuhalten. Sie bietet auch eine zentrale Stelle für die Fehlerbehandlung und das Caching von Daten.
+Die Services-Schicht enthält API-Aufrufe und andere asynchrone Operationen, die von den Komponenten genutzt werden. Diese Trennung sorgt für eine klare Struktur und erleichtert das Testen und Warten der Anwendung.
 
-![Frontend Architektur](https://imgur.com/qMc71A8.png)
+## Haskell Client Handler
 
-### Client-Handler
+Der Haskell-Client-Handler ist nach den Prinzipien der funktionalen Programmierung gestaltet, um eine saubere und wartbare Codebasis zu gewährleisten. Dies fördert die Wiederverwendbarkeit und Testbarkeit von Code.
 
-Der Client-Handler, entwickelt in Haskell, ist eine unabhängige Komponente, die für die direkte Interaktion mit dem Doom-Spiel verantwortlich ist. Er kommuniziert mit dem Backend und führt Befehle aus, um WADs in das Spiel zu laden und zu verwalten.
+### Monadische Struktur
 
-# Klassenmodelle
+Der Client Handler verwendet monadische Strukturen, um IO-Operationen und Nebenläufigkeit zu handhaben. Dies ermöglicht eine sichere und vorhersehbare Handhabung von Seiteneffekten und sorgt für eine klar strukturierte und wartbare Anwendung.
 
-## Backend
+### Modularität
 
-Die Klassenstruktur des Backends folgt einer strengen Trennung von Domänen- und Infrastrukturklassen. Die wichtigsten Klassen sind:
+Die Anwendung ist modular aufgebaut, wobei jede Funktionalität in separaten Modulen implementiert ist. Dies fördert die Wiederverwendbarkeit von Code und erleichtert die Wartung und Erweiterung der Anwendung.
 
-- **User**: Repräsentiert einen Benutzer des WadLoader-Dienstes und enthält Informationen wie Benutzernamen, Passwort und Rollen.
-- **Wad**: Repräsentiert eine hochgeladene WAD-Datei und enthält Informationen wie Dateiname, Pfad und zugehöriger Benutzer.
-- **WadPack**: Repräsentiert ein WAD-Paket und enthält eine Liste von WADs sowie Metadaten wie Name und Erstellungsdatum.
+### Testing
 
-Die folgenden Klassendiagramme illustrieren die Beziehungen zwischen den wichtigsten Klassen des Backends:
+Ein umfassendes Testframework wird verwendet, um die Korrektheit der Anwendung sicherzustellen. Die Tests decken alle wichtigen Funktionen und Module ab, um eine hohe Codequalität zu gewährleisten und Fehler frühzeitig zu erkennen.
 
-![Backend Klassendiagramm](https://imgur.com/mgAEaj8.png)
+## Auth0 Integration
 
-## Frontend
+Die Auth0-Integration ermöglicht eine sichere und skalierbare Authentifizierung und Autorisierung. Die Architektur stellt sicher, dass Auth0 nahtlos in die bestehende Anwendung integriert ist und sowohl die Benutzerverwaltung als auch die Sicherheitsanforderungen erfüllt.
 
-Die Klassenstruktur des Frontends ist in Komponenten unterteilt, die jeweils eine spezifische Funktionalität der Benutzeroberfläche kapseln. Die wichtigsten Klassen sind:
+### Authentifizierung
 
-- **App**: Die Haupteinstiegspunkt der Anwendung, der die globalen Zustände und Routen verwaltet.
-- **WadList**: Eine Komponente, die eine Liste der hochgeladenen WAD-Dateien anzeigt und deren Verwaltung ermöglicht.
-- **WadPackList**: Eine Komponente, die eine Liste der erstellten WAD-Pakete anzeigt und deren Verwaltung ermöglicht.
+Die Authentifizierung erfolgt über Auth0, wobei Benutzer sich über verschiedene OAuth2-Provider anmelden können. Dies reduziert den Implementierungsaufwand und erhöht die Sicherheit, da Auth0 bewährte Sicherheitsmechanismen bietet.
 
-Die folgenden Klassendiagramme illustrieren die Beziehungen zwischen den wichtigsten Klassen des Frontends:
+### Autorisierung
 
-![Frontend Klassendiagramm](https://imgur.com/Qi5kV1S.png)
+Die Autorisierung erfolgt ebenfalls über Auth0, wobei verschiedene Benutzerrollen und Berechtigungen definiert werden können. Dies ermöglicht eine feingranulare Kontrolle über den Zugriff auf verschiedene Teile der Anwendung und gewährleistet eine hohe Sicherheit.
 
-# Komponentenmodelle
+### Token Management
 
-Die Anwendung ist in verschiedene Komponenten unterteilt, die jeweils eine spezifische Funktionalität kapseln. Diese Struktur ermöglicht eine modulare und erweiterbare Architektur.
+Die Verwaltung der Authentifizierungstoken wird von Auth0 übernommen, was den Aufwand für die Implementierung und Verwaltung von Sicherheitstokens reduziert. Dies erhöht die Sicherheit und Zuverlässigkeit der Anwendung.
 
-## Backend-Komponenten
+# Sequenzdiagramme
 
-- **UserService**: Verwaltet die Benutzerregistrierung und -authentifizierung.
-- **WadService**: Verwaltet das Hochladen, Speichern und Abrufen von WAD-Dateien.
-- **WadPackService**: Verwaltet das Erstellen, Bearbeiten und Herunterladen von WAD-Paketen.
-
-![Backend Komponenten](https://imgur.com/U5ajETM.png)
-
-## Frontend-Komponenten
-
-- **LoginComponent**: Ermöglicht Benutzern die Anmeldung und Registrierung.
-- **UploadComponent**: Ermöglicht Benutzern das Hochladen von WAD-Dateien.
-- **WadPackComponent**: Ermöglicht Benutzern das Erstellen und Verwalten von WAD-Paketen.
-
-![Frontend Komponenten](https://imgur.com/OVY23FL.png)
-
-# Schnittstellenmodelle
-
-Die Kommunikation zwischen den verschiedenen Komponenten der Anwendung erfolgt über definierte Schnittstellen. Diese Schnittstellen sind sowohl für die interne Kommunikation innerhalb der Anwendung als auch für die externe Kommunikation mit dem Client-Handler verantwortlich.
-
-## Backend-APIs
-
-Die Backend-APIs sind RESTful und ermöglichen die Kommunikation zwischen dem Frontend und dem Backend sowie dem Client-Handler. Die wichtigsten Endpunkte sind:
-
-- **/api/users**: Verwalten von Benutzern, einschließlich Registrierung und Authentifizierung.
-- **/api/wads**: Verwalten von WAD-Dateien, einschließlich Hochladen, Abrufen und Löschen.
-- **/api/wadpacks**: Verwalten von WAD-Paketen, einschließlich Erstellen, Bearbeiten und Herunterladen.
-
-![Backend APIs](https://imgur.com/0MN0Uvl.png)
-
-## Frontend-APIs
-
-Die Frontend-APIs sind interne Schnittstellen, die die Kommunikation zwischen den verschiedenen Komponenten des Frontends ermöglichen. Die wichtigsten Schnittstellen sind:
-
-- **UserContext**: Bereitstellen von Benutzerinformationen und Authentifizierungsstatus für die gesamte Anwendung.
-- **WadService**: Bereitstellen von Funktionen zum Hochladen, Abrufen und Löschen von WAD-Dateien.
-- **WadPackService**: Bereitstellen von Funktionen zum Erstellen, Bearbeiten und Herunterladen von WAD-Paketen.
-
-![Frontend APIs](https://imgur.com/mcI5eib.png)
-
-## Client-Handler-APIs
-
-Die Client-Handler-APIs sind RESTful und ermöglichen die Kommunikation zwischen dem Client-Handler und dem Backend. Die wichtigsten Endpunkte sind:
-
-- **/api/client/wads**: Abrufen und Verwalten von WAD-Dateien durch den Client-Handler.
-- **/api/client/wadpacks**: Abrufen und Verwalten von WAD-Paketen durch den Client-Handler.
-
-![Client Handler APIs](https://imgur.com/JcWQ1zr.png)
-
-# Persistenzmodelle
-
-Die Persistenz der Anwendung erfolgt in einer H2-Datenbank, die in das Spring-Boot-Backend integriert ist. Die wichtigsten Tabellen sind:
-
-- **users**: Enthält Benutzerinformationen wie Benutzername, Passwort und Rollen.
-- **wads**: Enthält Informationen zu hochgeladenen WAD-Dateien wie Dateiname, Pfad und zugehöriger Benutzer.
-- **wadpacks**: Enthält Informationen zu erstellten WAD-Paketen wie Name, Erstellungsdatum und enthaltene WADs.
-
-![Persistenz Modelle](https://imgur.com/bZm0Nw8.png)
-
-Die Beziehungen zwischen den Tabellen sind so gestaltet, dass sie eine effiziente und konsistente Datenverwaltung ermöglichen.
-
-# Ablaufmodelle
-
-Die wichtigsten Abläufe in der Anwendung sind:
-
-- **Benutzerregistrierung und -authentifizierung**: Benutzer registrieren sich und melden sich an, um auf die Anwendung zuzugreifen.
-- **Hochladen und Verwalten von WAD-Dateien**: Benutzer laden WAD-Dateien hoch, benennen sie und verwalten sie.
-- **Erstellen und Verwalten von WAD-Paketen**: Benutzer erstellen WAD-Pakete, fügen WAD-Dateien hinzu, benennen sie und laden sie herunter.
-
-## Benutzerregistrierung und -authentifizierung
+### WAD hochladen (Upload WAD Sequence)
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Frontend
     participant Backend
-    participant DB
+    participant Database
 
-    User->>Frontend: Enter registration details
-    Frontend->>Backend: POST /api/users/register
-    Backend->>DB: Save user details
-    DB-->>Backend: User saved
-    Backend-->>Frontend: Registration success
-    Frontend-->>User: Registration success
-
-    User->>Frontend: Enter login details
-    Frontend->>Backend: POST /api/users/login
-    Backend->>DB: Validate user details
-    DB-->>Backend: User valid
-    Backend-->>Frontend: Login success, return token
-    Frontend-->>User: Login success, token saved
+    User ->> Frontend: Upload WAD-File
+    Frontend ->> Backend: Send WAD-File
+    Backend ->> Database: Save WAD Metadata
+    Backend ->> Frontend: Confirmation
+    Frontend ->> User: Display Success Message
 ```
 
-## Hochladen und Verwalten von WAD-Dateien
+### WAD-Paket erstellen (Create WAD Pack Sequence)
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Frontend
     participant Backend
-    participant DB
-    participant FileSystem
+    participant Database
 
-    User->>Frontend: Select WAD file
-    Frontend->>Backend: POST /api/wads/upload
-    Backend->>FileSystem: Save WAD file
-    FileSystem-->>Backend: File saved
-    Backend->>DB: Save WAD details
-    DB-->>Backend: WAD saved
-    Backend-->>Frontend: Upload success
-    Frontend-->>User: Upload success
+    User ->> Frontend: Create WAD Pack
+    Frontend ->> Backend: Send WAD Pack Data
+    Backend ->> Database: Save WAD Pack
+    Backend ->> Frontend: Confirmation
+    Frontend ->> User: Display Success Message
 ```
 
-## Erstellen und Verwalten von WAD-Paketen
+### WAD-Paket herunterladen (Download WAD Pack Sequence)
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Frontend
     participant Backend
-    participant DB
+    participant Database
 
-    User->>Frontend: Select WAD files for pack
-    Frontend->>Backend: POST /api/wadpacks/create
-    Backend->>DB: Save WAD pack details
-    DB-->>Backend: WAD pack saved
-    Backend-->>Frontend: WAD pack creation success
-    Frontend-->>User: WAD pack creation success
-
-    User->>Frontend: Download WAD pack
-    Frontend
-
-->>Backend: GET /api/wadpacks/download
-    Backend->>DB: Retrieve WAD pack details
-    DB-->>Backend: WAD pack details
-    Backend-->>Frontend: WAD pack file
-    Frontend-->>User: WAD pack downloaded
+    User ->> Frontend: Request WAD Pack
+    Frontend ->> Backend: Fetch WAD Pack
+    Backend ->> Database: Retrieve WAD Pack Data
+    Backend ->> Frontend: Send WAD Pack Data
+    Frontend ->> User: Download WAD Pack
 ```
-
-Diese detaillierten Ablaufmodelle veranschaulichen die verschiedenen Interaktionen und Datenflüsse innerhalb der Anwendung und bieten eine Grundlage für die Implementierung und Optimierung der einzelnen Prozesse.
 
 # Fazit
 
-Die Architektur des WadLoader-Dienstes ist so konzipiert, dass sie eine modulare, erweiterbare und wartbare Anwendung ermöglicht. Durch die Trennung der verschiedenen Schichten und die klare Definition der Schnittstellen kann die Anwendung leicht erweitert und angepasst werden, um den Anforderungen der Benutzer gerecht zu werden. Die Verwendung von Spring Boot, React, TypeScript und Haskell stellt sicher, dass die Anwendung sowohl leistungsfähig als auch benutzerfreundlich ist, während die strenge Trennung von Backend, Frontend und Client-Handler eine klare Struktur und einfache Wartbarkeit gewährleistet.
+Die Entwicklung des WadLoader bietet eine umfassende Lösung für die Verwaltung und Organisation von WAD-Dateien in der Doom-Engine. Durch die Verwendung moderner Technologien und bewährter Architekturprinzipien gewährleistet die Anwendung eine hohe Skalierbarkeit, Sicherheit und Benutzerfreundlichkeit. Die Implementierung aller Muss- und der meisten Kann-Kriterien zeigt die Leistungsfähigkeit und Flexibilität der gewählten Ansätze und Technologien. Die Anwendung ist bereit für den produktiven Einsatz und kann bei Bedarf leicht erweitert werden. Die gewählte Architektur und Technologie bieten eine solide Grundlage für zukünftige Erweiterungen und Anpassungen.
