@@ -88,9 +88,9 @@ Kann-Kriterien umfassen:
 
 ## Umgesetzte Kriterien
 
-Es wurden alle Muss-Kriterien implementiert. Benutzer können sich beim WadLoader registrieren und anmelden. WADs können hochgeladen und mit anderen Nutzern geteilt werden. Es ist möglich, WAD-Packs zu erstellen, zu bearbeiten und herunterzuladen. Alle WAD-Packs können mittels einer Suchfunktion gefiltert werden. Alle Änderungen werden durch eine Datenbank persistiert, somit bleiben diese auch nach einem Neustart oder Absturz des Servers erhalten.
+Es wurden alle Muss-Kriterien implementiert. Benutzer können sich beim WadLoader registrieren und anmelden [x]. WADs können hochgeladen und mit anderen Nutzern geteilt werden [x]. Es ist möglich, WAD-Packs zu erstellen, zu bearbeiten und herunterzuladen [x]. Alle WAD-Packs können mittels einer Suchfunktion gefiltert werden [x]. Alle Änderungen werden durch eine Datenbank persistiert, somit bleiben diese auch nach einem Neustart oder Absturz des Servers erhalten [x].
 
-Zusätzlich wurden auch die meisten Kann-Kriterien erfüllt. Such- und Filterfunktionalität steht auch für WADs zur Verfügung. Das Anmelden mittels OAuth ist möglich. Zudem können auch bereits existierende Accounts von externen OAuth-Anbietern (Google, Github, etc.) zum Anmelden und Registrieren genutzt werden.
+Zusätzlich wurden auch die meisten Kann-Kriterien erfüllt. Such- und Filterfunktionalität steht auch für WADs zur Verfügung [x]. Das Anmelden mittels OAuth ist möglich. Zudem können auch bereits existierende Accounts von externen OAuth-Anbietern (Google, Github, etc.) zum Anmelden und Registrieren genutzt werden [x].
 
 # Technologieauswahl
 
@@ -120,6 +120,8 @@ Authentifizierung und Autorisierung ist ein sehr komplexes und sensibles Gebiet.
 
 ## Spring-Boot-Backend
 
+![Spring-Boot-Backend](https://hackmd.io/_uploads/rkhSzEYI0.png)
+
 Das Backend ist nach der Onion-Architektur strukturiert, um eine klare Trennung von Geschäftslogik und Infrastruktur zu gewährleisten. Diese Architektur fördert eine modulare und erweiterbare Codebasis, indem sie Schichten definiert, die sich um das zentrale Domänenmodell gruppieren.
 
 ### Infrastruktur
@@ -136,108 +138,70 @@ Die Domänenschicht bildet das Herzstück der Anwendung und enthält die Geschä
 
 ### Abstraktion
 
-Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt an eine spezifische Domänenlogik gebunden sind.
+Die Abstraktionsschicht bietet allgemeine Dienste und Funktionen an, die von verschiedenen Teilen der Anwendung genutzt werden können. Beispielsweise können hier generische Dienste für fehlerresistente Operationen oder Logging implementiert werden, die nicht direkt
 
-## React/TS Frontend
+ zur Geschäftslogik gehören.
 
-Das React-Frontend verwendet React Hooks und Context API, um eine modulare und erweiterbare Architektur zu gewährleisten. Diese Struktur fördert die Wiederverwend
+## React/Typescript-Frontend
 
-barkeit von Komponenten und eine klare Trennung von Zuständen und UI-Logik.
+![React-Typescript-Frontend](https://hackmd.io/_uploads/Sk48K7oH0.png)
 
-### Komponenten
+Das Frontend ist in React mit TypeScript implementiert und nutzt Material UI für die Gestaltung der Benutzeroberfläche. Es gibt verschiedene Komponenten und Services, die für die unterschiedlichen Funktionalitäten zuständig sind.
 
-Die Komponenten sind in atomare, molekulare und organismische Einheiten unterteilt, um eine Hierarchie der Wiederverwendbarkeit zu fördern. Atomare Komponenten bilden die Basiselemente, während molekulare Komponenten aus diesen zusammengesetzt werden und organismische Komponenten komplexere UI-Elemente darstellen.
+### Components
 
-### State Management
-
-Das Zustandsmanagement wird hauptsächlich mit der Context API und React Hooks realisiert. Dadurch bleibt die State-Logik übersichtlich und leicht verständlich, und die Komponenten bleiben flexibel und leicht wartbar.
+Die Komponenten sind die Bausteine der Benutzeroberfläche. Sie repräsentieren verschiedene Teile der Anwendung wie das Hochladen von WAD-Dateien, das Erstellen von WAD-Packs oder die Benutzeranmeldung. Jede Komponente ist in sich abgeschlossen und kann bei Bedarf wiederverwendet werden.
 
 ### Services
 
-Die Services-Schicht enthält API-Aufrufe und andere asynchrone Operationen, die von den Komponenten genutzt werden. Diese Trennung sorgt für eine klare Struktur und erleichtert das Testen und Warten der Anwendung.
+Die Services sind für die Kommunikation mit dem Backend und das Management der Applikationslogik zuständig. Sie stellen Methoden bereit, um API-Aufrufe zu tätigen, Benutzerdaten zu verwalten und die Anwendungskonfiguration zu handhaben.
 
-## Haskell Client Handler
+### Router
 
-Der Haskell-Client-Handler ist nach den Prinzipien der funktionalen Programmierung gestaltet, um eine saubere und wartbare Codebasis zu gewährleisten. Dies fördert die Wiederverwendbarkeit und Testbarkeit von Code.
+Der Router verwaltet die Navigation innerhalb der Anwendung. Er stellt sicher, dass Benutzer zu den verschiedenen Ansichten der Anwendung navigieren können, z.B. zum Hochladen von WADs oder zum Durchsuchen von WAD-Packs.
 
-### Monadische Struktur
+## Client-Handler
 
-Der Client Handler verwendet monadische Strukturen, um IO-Operationen und Nebenläufigkeit zu handhaben. Dies ermöglicht eine sichere und vorhersehbare Handhabung von Seiteneffekten und sorgt für eine klar strukturierte und wartbare Anwendung.
+![Client-Handler](https://hackmd.io/_uploads/SkwuFMqS0.png)
 
-### Modularität
+Der Client-Handler, implementiert in Haskell, übernimmt die Kommunikation mit dem WadLoader-Backend. Er fungiert als Proxy zwischen dem Benutzer und dem Backend und kümmert sich um Aufgaben wie das Hochladen und Herunterladen von WAD-Dateien. Die Nutzung von Haskell ermöglicht es, die robusten und sicheren funktionalen Programmierparadigmen zu nutzen, was insbesondere bei der Entwicklung von Netzwerkdiensten von Vorteil ist.
 
-Die Anwendung ist modular aufgebaut, wobei jede Funktionalität in separaten Modulen implementiert ist. Dies fördert die Wiederverwendbarkeit von Code und erleichtert die Wartung und Erweiterung der Anwendung.
+# Testkonzept
 
-### Testing
+## Teststrategien
 
-Ein umfassendes Testframework wird verwendet, um die Korrektheit der Anwendung sicherzustellen. Die Tests decken alle wichtigen Funktionen und Module ab, um eine hohe Codequalität zu gewährleisten und Fehler frühzeitig zu erkennen.
+Für die Sicherstellung der Qualität der WadLoader-Anwendung werden verschiedene Teststrategien eingesetzt:
 
-## Auth0 Integration
+### Unit-Tests
 
-Die Auth0-Integration ermöglicht eine sichere und skalierbare Authentifizierung und Autorisierung. Die Architektur stellt sicher, dass Auth0 nahtlos in die bestehende Anwendung integriert ist und sowohl die Benutzerverwaltung als auch die Sicherheitsanforderungen erfüllt.
+Unit-Tests sind klein und isoliert. Sie testen einzelne Komponenten der Anwendung, wie z.B. Services und Controller. Jeder Unit-Test konzentriert sich auf eine spezifische Funktionalität und überprüft deren Verhalten anhand von Mock-Objekten und Stubs, um Abhängigkeiten zu isolieren.
 
-### Authentifizierung
+### Integrationstests
 
-Die Authentifizierung erfolgt über Auth0, wobei Benutzer sich über verschiedene OAuth2-Provider anmelden können. Dies reduziert den Implementierungsaufwand und erhöht die Sicherheit, da Auth0 bewährte Sicherheitsmechanismen bietet.
+Integrationstests überprüfen die Zusammenarbeit mehrerer Komponenten. Beispielsweise wird getestet, ob die Interaktion zwischen dem Spring Boot Backend und der H2-Datenbank korrekt funktioniert. Diese Tests verwenden in der Regel eine in-memory H2-Datenbank, um eine realistische Testumgebung zu schaffen, ohne externe Ressourcen zu benötigen.
 
-### Autorisierung
+### End-to-End-Tests (E2E)
 
-Die Autorisierung erfolgt ebenfalls über Auth0, wobei verschiedene Benutzerrollen und Berechtigungen definiert werden können. Dies ermöglicht eine feingranulare Kontrolle über den Zugriff auf verschiedene Teile der Anwendung und gewährleistet eine hohe Sicherheit.
+End-to-End-Tests überprüfen das gesamte System vom Frontend bis zum Backend. Sie simulieren Benutzerinteraktionen und stellen sicher, dass die Anwendung als Ganzes korrekt funktioniert. Tools wie Cypress oder Selenium können verwendet werden, um diese Tests zu automatisieren.
 
-### Token Management
+### Akzeptanztests
 
-Die Verwaltung der Authentifizierungstoken wird von Auth0 übernommen, was den Aufwand für die Implementierung und Verwaltung von Sicherheitstokens reduziert. Dies erhöht die Sicherheit und Zuverlässigkeit der Anwendung.
+Akzeptanztests validieren, ob die Anwendung die Geschäftsanforderungen erfüllt. Diese Tests werden häufig in Zusammenarbeit mit Stakeholdern erstellt und überprüft. Sie fokussieren sich darauf, reale Anwendungsfälle abzudecken und sicherzustellen, dass die Benutzeranforderungen vollständig umgesetzt sind.
 
-# Sequenzdiagramme
+### Manuelle Tests
 
-### WAD hochladen (Upload WAD Sequence)
+Manuelle Tests ergänzen die automatisierten Tests und werden für exploratives Testen und zur Überprüfung von Benutzeroberflächen verwendet. Diese Tests helfen dabei, unerwartete Probleme zu entdecken und sicherzustellen, dass die Benutzererfahrung reibungslos ist.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Database
+## Testwerkzeuge
 
-    User ->> Frontend: Upload WAD-File
-    Frontend ->> Backend: Send WAD-File
-    Backend ->> Database: Save WAD Metadata
-    Backend ->> Frontend: Confirmation
-    Frontend ->> User: Display Success Message
-```
+Zur Umsetzung dieser Teststrategien werden verschiedene Werkzeuge eingesetzt:
 
-### WAD-Paket erstellen (Create WAD Pack Sequence)
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Database
-
-    User ->> Frontend: Create WAD Pack
-    Frontend ->> Backend: Send WAD Pack Data
-    Backend ->> Database: Save WAD Pack
-    Backend ->> Frontend: Confirmation
-    Frontend ->> User: Display Success Message
-```
-
-### WAD-Paket herunterladen (Download WAD Pack Sequence)
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Database
-
-    User ->> Frontend: Request WAD Pack
-    Frontend ->> Backend: Fetch WAD Pack
-    Backend ->> Database: Retrieve WAD Pack Data
-    Backend ->> Frontend: Send WAD Pack Data
-    Frontend ->> User: Download WAD Pack
-```
+- **JUnit**: Für Unit- und Integrationstests im Spring Boot Backend.
+- **Mockito**: Für das Mocking von Abhängigkeiten in Unit-Tests.
+- **Cypress/Selenium**: Für End-to-End-Tests der Webanwendung.
+- **Postman**: Für manuelle Tests der API-Endpunkte.
+- **Jenkins**: Für kontinuierliche Integration und automatisierte Ausführung der Tests.
 
 # Fazit
 
-Die Entwicklung des WadLoader bietet eine umfassende Lösung für die Verwaltung und Organisation von WAD-Dateien in der Doom-Engine. Durch die Verwendung moderner Technologien und bewährter Architekturprinzipien gewährleistet die Anwendung eine hohe Skalierbarkeit, Sicherheit und Benutzerfreundlichkeit. Die Implementierung aller Muss- und der meisten Kann-Kriterien zeigt die Leistungsfähigkeit und Flexibilität der gewählten Ansätze und Technologien. Die Anwendung ist bereit für den produktiven Einsatz und kann bei Bedarf leicht erweitert werden. Die gewählte Architektur und Technologie bieten eine solide Grundlage für zukünftige Erweiterungen und Anpassungen.
+Der WadLoader stellt eine umfassende Lösung für das Management von WAD-Dateien dar. Die Kombination aus einem robusten Spring Boot Backend, einem modernen React/TypeScript Frontend und einem effizienten Haskell-basierten Client-Handler gewährleistet eine leistungsstarke und benutzerfreundliche Anwendung. Durch den Einsatz verschiedener Teststrategien und -werkzeuge wird die Qualität und Zuverlässigkeit der Anwendung sichergestellt. Zukünftige Erweiterungen und Anpassungen können dank der modularen Architektur problemlos umgesetzt werden. Die Wahl der Technologien ermöglicht es dem Team, ihre Fähigkeiten weiterzuentwickeln und gleichzeitig eine stabile und skalierbare Lösung bereitzustellen.
